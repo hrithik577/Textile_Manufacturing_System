@@ -1,0 +1,115 @@
+{
+  "plan_id": "RP-0001",
+  "alert_id": "ALT-0001",
+  "problem_statement": "Order PO-NORM-101 (Nordic Apparel Group) at risk of missing delivery deadline due to mechanical breakdown on Loom M-LOOM-01.",
+  "status": "awaiting_approval",
+  "evidence": [
+    {
+      "type": "machine_breakdown",
+      "description": "Assigned machine M-LOOM-01 is broken down.",
+      "details": {
+        "downtime_reason": "main_drive_motor_bearing_failure"
+      }
+    }
+  ],
+  "options": [
+    {
+      "option_id": "OPT-REASSIGN",
+      "title": "Reassign Order to Idle Machine (M-LOOM-02)",
+      "description": "Immediately transfer remaining weave job from broken M-LOOM-01 to available idle loom M-LOOM-02 (Toyota JAT810 Air-Jet Loom 2).",
+      "category": "reassign",
+      "action_type": "reassign_machine",
+      "action_parameters": {
+        "order_id": "PO-NORM-101",
+        "from_machine_id": "M-LOOM-01",
+        "to_machine_id": "M-LOOM-02"
+      },
+      "feasible": true,
+      "infeasibility_reason": null,
+      "estimated_delay_reduction_minutes": 180.0,
+      "estimated_new_completion": "2026-10-10T22:00:00Z",
+      "estimated_additional_cost": 50.0,
+      "quality_and_safety_risk": "low",
+      "impact_on_other_orders": "none",
+      "assumptions": [
+        "Machine M-LOOM-02 warp beam compatibility is confirmed",
+        "Setup changeover requires 20 minutes"
+      ],
+      "score": 85.75,
+      "score_breakdown": {
+        "delivery_impact": 75.0,
+        "feasibility": 90.0,
+        "cost_efficiency": 95.0,
+        "operational_risk": 90.0,
+        "final_score": 85.75
+      }
+    },
+    {
+      "option_id": "OPT-OVERTIME",
+      "title": "Authorize Overtime Weekend Shift",
+      "description": "Run an extra 4-hour overtime shift after repair to compress schedule backlog.",
+      "category": "overtime",
+      "action_type": "authorize_overtime",
+      "action_parameters": {
+        "hours": 4,
+        "order_id": "PO-NORM-101"
+      },
+      "feasible": true,
+      "infeasibility_reason": null,
+      "estimated_delay_reduction_minutes": 240.0,
+      "estimated_new_completion": "2026-10-10T20:00:00Z",
+      "estimated_additional_cost": 450.0,
+      "quality_and_safety_risk": "medium",
+      "impact_on_other_orders": "none",
+      "assumptions": [
+        "Operator shift union agreement allows overtime hours"
+      ],
+      "score": 80.5,
+      "score_breakdown": {
+        "delivery_impact": 100.0,
+        "feasibility": 90.0,
+        "cost_efficiency": 55.0,
+        "operational_risk": 60.0,
+        "final_score": 80.5
+      }
+    },
+    {
+      "option_id": "OPT-REPAIR",
+      "title": "Expedited Technical Repair on M-LOOM-01",
+      "description": "Deploy emergency maintenance technicians to replace drive motor bearings on M-LOOM-01.",
+      "category": "repair",
+      "action_type": "execute_repair",
+      "action_parameters": {
+        "machine_id": "M-LOOM-01"
+      },
+      "feasible": true,
+      "infeasibility_reason": null,
+      "estimated_delay_reduction_minutes": 90.0,
+      "estimated_new_completion": "2026-10-11T01:00:00Z",
+      "estimated_additional_cost": 300.0,
+      "quality_and_safety_risk": "low",
+      "impact_on_other_orders": "none",
+      "assumptions": [
+        "Replacement drive bearings are available in maintenance spare store",
+        "Technician intervention takes 2.5 hours"
+      ],
+      "score": 67.62,
+      "score_breakdown": {
+        "delivery_impact": 37.5,
+        "feasibility": 90.0,
+        "cost_efficiency": 70.0,
+        "operational_risk": 90.0,
+        "final_score": 67.62
+      }
+    }
+  ],
+  "recommended_option_id": "OPT-REASSIGN",
+  "approval_required": true,
+  "approved_by": null,
+  "approved_at": null,
+  "executed_action": null,
+  "executed_at": null,
+  "idempotency_key": null,
+  "verification_result": null,
+  "verification_details": null
+}

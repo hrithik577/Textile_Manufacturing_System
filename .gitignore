@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # Python & Backend
+=======
+>>>>>>> feature/member-3-intelligence
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,6 +10,7 @@ __pycache__/
 env/
 venv/
 .venv/
+<<<<<<< HEAD
 ENV/
 build/
 develop-eggs/
@@ -61,3 +65,11 @@ out/
 *.swo
 .DS_Store
 Thumbs.db
+=======
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+*.swp
+*.swo
+>>>>>>> feature/member-3-intelligence
