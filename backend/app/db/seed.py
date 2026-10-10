@@ -680,54 +680,182 @@ def seed_database(db: Session):
         )
         db.add(inv_nordic)
 
-    # -------------------------------------------------------------
-    # 11. SYSTEM ALERTS & AI RECOVERY PLANS (RESCUE ENGINE)
-    # -------------------------------------------------------------
+    # MACHINE BREAKDOWN ALERT — Rapier Loom 03
     alert_breakdown = db.query(Alert).filter(Alert.title.contains("Machine Breakdown: Rapier Loom 03")).first()
     if not alert_breakdown:
         alert_breakdown = Alert(
             category=AlertCategory.MACHINE_BREAKDOWN,
-            severity=AlertSeverity.HIGH,
-            title="Machine Breakdown: Rapier Loom 03 (M-003)",
-            description="Weft feeder motor electrical fault detected during shift. Loom is stopped.",
+            severity=AlertSeverity.CRITICAL,
+            title="Machine Breakdown: Rapier Loom 03 (M-003) — Critical SLA Risk",
+            description="Weft feeder motor electrical fault (error code ERR-ELEC-042) detected during Shift B. Loom stopped at 3,200m of 5,000m target. Delivery SLA for SO-2026-001 now at risk (+5.2 day estimated delay).",
             entity_type="machine",
             entity_id="M-003",
             status=AlertStatus.ACTIVE,
         )
         db.add(alert_breakdown)
         db.flush()
+    else:
+        alert_breakdown.severity = AlertSeverity.CRITICAL
+        alert_breakdown.title = "Machine Breakdown: Rapier Loom 03 (M-003) — Critical SLA Risk"
+        alert_breakdown.description = "Weft feeder motor electrical fault (error code ERR-ELEC-042) detected during Shift B. Loom stopped at 3,200m of 5,000m target. Delivery SLA for SO-2026-001 now at risk (+5.2 day estimated delay)."
+        db.flush()
 
+    existing_plans = db.query(RecoveryPlan).filter(RecoveryPlan.alert_id == alert_breakdown.id).all()
+    plan_titles = {p.title for p in existing_plans}
+
+    if "Reallocate PO-2026-001 to High-Speed Airjet Loom M-004 + Overtime Shift" not in plan_titles:
         plan_1 = RecoveryPlan(
             alert_id=alert_breakdown.id,
-            title="Loom Reroute & Technician Dispatch Plan",
-            description="Re-assign PO-2026-001 active yardage to idle Rapier Loom M-004 while maintenance team repairs M-003 motor.",
+            title="Reallocate PO-2026-001 to High-Speed Airjet Loom M-004 + Overtime Shift",
+            description="Transfer active warp beam from Loom M-003 to Toyota JAT810 Airjet (M-004) and authorize 4-hour overtime shift to recover 1,800m deficit.",
             affected_entity_type="machine",
             affected_entity_id="M-003",
             proposed_actions=[
-                {"type": "reroute_production_order", "production_order_number": "PO-2026-001", "target_machine_code": "M-004"},
-                {"type": "dispatch_maintenance_team", "machine_code": "M-003"},
+                {"type": "transfer_warp_beam", "description": "Unload warp beam from M-003, inspect reed alignment, mount on M-004"},
+                {"type": "authorize_overtime", "description": "Authorize 4-hour Weekend Overtime for Weaving Shift B (Senior Operator: Manoj Gupta)"},
+                {"type": "reallocate_production_order", "description": "Re-assign PO-2026-001 to M-004 upon completion of current batch on M-004"},
             ],
-            expected_outcome="Maintains SO-2026-001 delivery schedule with zero cumulative delay.",
-            estimated_delay_reduction_hours=18.5,
-            estimated_cost_impact=150.0,
-            risk_assessment="low - Loom M-004 is calibrated and idle",
+            expected_outcome="Recovers delivery schedule completely. ETA: 2026-10-16 vs. SLA deadline 2026-10-17. Net cost: ₹1,450 (vs. ₹4,800 penalty for SLA breach).",
+            estimated_delay_reduction_hours=108.0,  # 4.5 days
+            estimated_cost_impact=1450.0,
+            risk_assessment="low;pros:Full schedule recovery (ETA meets deadline)|Airjet produces higher pick uniformity on 50D filament|Lower total cost than penalty|cons:2-hour delay on secondary order (3-day buffer available)|approvals:Plant Manager|Production Supervisor",
             approval_status=ApprovalStatus.PENDING,
             execution_status=ExecutionStatus.NOT_STARTED,
         )
         db.add(plan_1)
 
+    if "Emergency Servo Replacement + 24/7 Double Crew on Loom M-003" not in plan_titles:
+        plan_2 = RecoveryPlan(
+            alert_id=alert_breakdown.id,
+            title="Emergency Servo Replacement + 24/7 Double Crew on Loom M-003",
+            description="Dispatch emergency maintenance team to swap inverter module (SKU #DRV-PIC-400) from spare inventory and run continuous double-shift operations on Loom M-003.",
+            affected_entity_type="machine",
+            affected_entity_id="M-003",
+            proposed_actions=[
+                {"type": "issue_spare_parts", "description": "Issue replacement inverter module SKU #DRV-PIC-400 from maintenance warehouse"},
+                {"type": "schedule_maintenance", "description": "Complete installation and 2-hour stress test by 14:00 PM today"},
+                {"type": "run_double_shift", "description": "Run continuous 24-hour double crew on Loom M-003 after repair"},
+            ],
+            expected_outcome="Restores Loom M-003 to service and maintains production velocity. Estimated 3-day delay recovery. Loom M-003 restored to active fleet.",
+            estimated_delay_reduction_hours=72.0,  # 3 days
+            estimated_cost_impact=2800.0,
+            risk_assessment="medium;pros:No disruption to other orders|Restores M-003 to active fleet|cons:Higher maintenance cost (₹2,800)|1-day residual risk if recalibration takes longer|approvals:Plant Manager",
+            approval_status=ApprovalStatus.PENDING,
+            execution_status=ExecutionStatus.NOT_STARTED,
+        )
+        db.add(plan_2)
+
+    if "Split Batch: Ship 5,000m via Express Airfreight + Ship Balance by Sea" not in plan_titles:
+        plan_3 = RecoveryPlan(
+            alert_id=alert_breakdown.id,
+            title="Split Batch: Ship 5,000m via Express Airfreight + Ship Balance by Sea",
+            description="Negotiate partial delivery with Nordic Apparel buyer to satisfy immediate garment factory production line.",
+            affected_entity_type="machine",
+            affected_entity_id="M-003",
+            proposed_actions=[
+                {"type": "negotiate_partial_delivery", "description": "Contact Nordic Apparel sourcing manager for split shipment approval"},
+                {"type": "expedite_finishing", "description": "Expedite finishing on first 5,000m batch available in warehouse"},
+                {"type": "book_airfreight", "description": "Book DHL Express airfreight pallet for 2026-10-14 departure"},
+            ],
+            expected_outcome="Guarantees Nordic Apparel garment factory does not starve. Balance quantity delivered on regular schedule.",
+            estimated_delay_reduction_hours=0.0,
+            estimated_cost_impact=3900.0,
+            risk_assessment="high;pros:Garment line not disrupted|Allows normal maintenance schedule|cons:Highest airfreight cost (₹3,900)|Requires buyer written consent|approvals:Plant Manager|Buyer Contact",
+            approval_status=ApprovalStatus.PENDING,
+            execution_status=ExecutionStatus.NOT_STARTED,
+        )
+        db.add(plan_3)
+
+    # DYE SHADE VARIANCE ALERT — Quality Hold
+    alert_dye = db.query(Alert).filter(Alert.title.contains("Dye Shade Variance")).first()
+    if not alert_dye:
+        alert_dye = Alert(
+            category=AlertCategory.QUALITY_DEFECT_SPIKE,
+            severity=AlertSeverity.HIGH,
+            title="Dye Shade Variance Alert — Batch #DB-841 on Quality Hold",
+            description="Spectrophotometer measured Delta E = 1.45 (tolerance: ≤ 0.8). 4,500m of Organic Cotton Oxford placed on Quality Hold. Center-to-selvedge shade variation detected, likely due to dye liquor pump pressure fluctuation during 90°C fixation ramp.",
+            entity_type="machine",
+            entity_id="M-005",
+            status=AlertStatus.ACTIVE,
+        )
+        db.add(alert_dye)
+        db.flush()
+
+        plan_dye_1 = RecoveryPlan(
+            alert_id=alert_dye.id,
+            title="Mild Reductive Leveling Bath + Top-up Dyeing in DYE Vessel",
+            description="Apply non-destructive specialty leveling agent (1.5 g/L Leveler SF at 80°C) to harmonize selvedge-to-center shade delta. Lab trial shows Delta E reduced to 0.48.",
+            affected_entity_type="machine",
+            affected_entity_id="M-005",
+            proposed_actions=[
+                {"type": "lab_test", "description": "Confirm lab beaker test pass with QA Lead — target Delta E < 0.8"},
+                {"type": "chemical_treatment", "description": "Load 4,500m into Dyeing Vessel for 90-minute leveling cycle at 80°C"},
+                {"type": "re_inspect", "description": "Re-inspect roll spectrophotometer reading and release for finishing"},
+            ],
+            expected_outcome="Saves 100% of fabric batch with zero scrap. Ready for finishing within 18 hours. Net cost ₹650 chemicals.",
+            estimated_delay_reduction_hours=36.0,
+            estimated_cost_impact=650.0,
+            risk_assessment="low;pros:Lowest cost recovery (₹650 chemicals)|Saves 100% of fabric — zero scrap|Ready for finishing in 18 hours|cons:Occupies dyeing vessel for 3 hours|approvals:Quality Lead|Plant Manager",
+            approval_status=ApprovalStatus.PENDING,
+            execution_status=ExecutionStatus.NOT_STARTED,
+        )
+        db.add(plan_dye_1)
+
+    # INVENTORY SHORTAGE ALERT
     alert_stock = db.query(Alert).filter(Alert.title.contains("Low Stock: Modal Spun Yarn")).first()
     if not alert_stock:
         alert_stock = Alert(
             category=AlertCategory.INVENTORY_SHORTAGE,
             severity=AlertSeverity.MEDIUM,
             title="Low Stock Warning: Modal Spun Yarn 40s",
-            description="Current stock (150 kg) is below reorder threshold (300 kg). Safety buffer at risk.",
+            description="Current stock (150 kg) is below reorder threshold (300 kg). At current consumption rate of 35 kg/day, safety buffer depletes in 4.3 days. PO-2026-003 production start is at risk.",
             entity_type="material",
             entity_id="MAT-YRN-003",
             status=AlertStatus.ACTIVE,
         )
         db.add(alert_stock)
+        db.flush()
+
+        plan_stock_1 = RecoveryPlan(
+            alert_id=alert_stock.id,
+            title="Emergency Purchase Order to SilkRoute Yarns + Express Courier",
+            description="Issue emergency PO to primary supplier SilkRoute Yarns for 500 kg Modal 40s at spot rate, with DHL Express delivery (3-day lead time).",
+            affected_entity_type="material",
+            affected_entity_id="MAT-YRN-003",
+            proposed_actions=[
+                {"type": "issue_emergency_po", "description": "Issue Emergency PO #EP-2026-012 to SilkRoute Yarns for 500 kg Modal Spun Yarn 40s"},
+                {"type": "arrange_courier", "description": "Arrange DHL Express courier for 3-day delivery (vs. standard 7-day)"},
+                {"type": "reschedule_po", "description": "Reschedule PO-2026-003 start by 2 days to accommodate delivery timeline"},
+            ],
+            expected_outcome="Stock replenished before critical shortage. Production PO-2026-003 delayed by only 2 days vs. 7-day stoppage. Net cost premium: ₹1,200.",
+            estimated_delay_reduction_hours=120.0,
+            estimated_cost_impact=1200.0,
+            risk_assessment="low;pros:Fastest stock replenishment (3-day vs 7-day standard)|Minimizes production delay|cons:Express courier premium (₹1,200)|Spot rate 8% higher than contract rate|approvals:Plant Manager|Finance",
+            approval_status=ApprovalStatus.PENDING,
+            execution_status=ExecutionStatus.NOT_STARTED,
+        )
+        db.add(plan_stock_1)
+
+    # ADDITIONAL NORDIC APPAREL SHIPMENT (for dispatch records page)
+    shp_nordic = db.query(Shipment).filter(Shipment.shipment_number == "SHP-2026-002").first()
+    if not shp_nordic and "ROL-2026-001" in created_rolls and "ROL-2026-002" in created_rolls:
+        shp_nordic = Shipment(
+            shipment_number="SHP-2026-002",
+            sales_order_id=so_nordic.id,
+            customer_id=c_nordic.id,
+            status=ShipmentStatus.IN_TRANSIT,
+            dispatch_date=now - timedelta(hours=6),
+            tracking_reference="TRK-MSK-EU-99214482",
+            carrier="Maersk Line Integrated Logistics",
+            vehicle_number="KA-04-EV-9821",
+            destination_address="Nordic Apparel Logistics Hub, Frihamnen Gate 4, 417 55 Goteborg, Sweden",
+            notes="High-priority ocean container. Temperature controlled. ETA: 2026-10-20.",
+            items=[
+                ShipmentItem(roll_id=created_rolls["ROL-2026-001"].id, dispatched_quantity=500.0, unit="m"),
+                ShipmentItem(roll_id=created_rolls["ROL-2026-002"].id, dispatched_quantity=500.0, unit="m"),
+            ],
+        )
+        db.add(shp_nordic)
 
     db.commit()
     print("[SUCCESS] Everest Textile OS database seeded successfully with realistic demonstration factory data!")

@@ -14,6 +14,7 @@ from app.api.v1.endpoints import (
     finance,
     alerts,
     recovery_plans,
+    rescue_engine,
     integrations,
     yarniq,
     system,
@@ -35,6 +36,7 @@ api_router.include_router(workforce.router)
 api_router.include_router(finance.router)
 api_router.include_router(alerts.router)
 api_router.include_router(recovery_plans.router)
+api_router.include_router(rescue_engine.router)
 api_router.include_router(integrations.router)
 api_router.include_router(yarniq.router)
 api_router.include_router(system.router)
