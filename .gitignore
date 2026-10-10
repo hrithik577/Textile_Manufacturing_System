@@ -1,4 +1,4 @@
-# Python
+# Python & Backend
 __pycache__/
 *.py[cod]
 *$py.class
@@ -31,34 +31,33 @@ htmlcov/
 .tox/
 .nox/
 
-# Environments & Local Configs
-.env
-.env.local
-.env.*.local
-*.local.env
-
 # Database & SQLite
 *.db
 *.sqlite
 *.sqlite3
 *.db-journal
 
-# IDEs
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Node / Frontend (for Member 1)
+# Node & Frontend
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 .next/
-dist/
 out/
+.tmp/
+*.log
 
-# OS
+# Environment variables & Local Configs
+.env
+.env.local
+.env.*.local
+*.local.env
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
