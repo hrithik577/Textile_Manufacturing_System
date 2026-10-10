@@ -90,6 +90,7 @@ export const yarniqService = {
     return request<CopilotQueryResponse>('/yarniq/copilot', {
       method: 'POST',
       body: JSON.stringify(payload),
+      timeoutMs: 25000,
     });
   },
 

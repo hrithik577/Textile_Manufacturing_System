@@ -1088,7 +1088,7 @@ export const InventoryPage: React.FC = () => {
                       <div className="flex items-center gap-3 mb-1">
                         <span className="font-mono font-bold text-sm text-[var(--color-ink)]">{mov.referenceNumber}</span>
                         <span className="text-[10px] font-mono uppercase px-2 py-0.5 border border-[var(--color-light-border)] font-bold bg-white text-[var(--color-ink)]">
-                          {mov.type.replace(/_/g, ' ')}
+                          {(mov.type || (mov as any).movementType || 'MOVEMENT').replace(/_/g, ' ')}
                         </span>
                       </div>
                       <h4 className="text-sm font-bold text-[var(--color-ink)]">{mov.itemName}</h4>

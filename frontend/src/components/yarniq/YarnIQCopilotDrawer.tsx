@@ -38,6 +38,7 @@ export const YarnIQCopilotDrawer: React.FC<YarnIQCopilotDrawerProps> = ({
 }) => {
  const [inputQuery, setInputQuery] = useState('');
  const [loading, setLoading] = useState(false);
+ const [activePendingQuery, setActivePendingQuery] = useState<string | null>(null);
  const [conversation, setConversation] = useState<CopilotQueryResponse[]>([
  {
  query: 'Initial System Briefing',
@@ -59,15 +60,31 @@ export const YarnIQCopilotDrawer: React.FC<YarnIQCopilotDrawerProps> = ({
  const q = (queryToAsk || inputQuery).trim();
  if (!q || loading) return;
 
+ if (!queryToAsk) setInputQuery('');
+ setActivePendingQuery(q);
  setLoading(true);
+
  try {
  const res = await yarniqService.askCopilot({ query: q });
  setConversation((prev) => [res.data, ...prev]);
- if (!queryToAsk) setInputQuery('');
  } catch (err: any) {
- console.error(err);
+ console.error('[Copilot Error]', err);
+ const fallbackResponse: CopilotQueryResponse = {
+ query: q,
+ answer: `⚠️ Communication note: ${err?.message || 'Unable to reach Copilot engine'}. Please verify backend server is active at http://localhost:8000.`,
+ status: 'AT_RISK',
+ evidence: [
+ { label: 'Connection Status', value: 'Backend Offline/Timeout', source_table: 'api_gateway' }
+ ],
+ recommended_actions: [
+ { action_type: 'inspect', title: 'Check Backend Server', description: 'Ensure uvicorn is running on port 8000.' }
+ ],
+ calculation_basis: 'Local error handler fallback.'
+ };
+ setConversation((prev) => [fallbackResponse, ...prev]);
  } finally {
  setLoading(false);
+ setActivePendingQuery(null);
  }
  };
 
@@ -118,6 +135,17 @@ export const YarnIQCopilotDrawer: React.FC<YarnIQCopilotDrawerProps> = ({
 
  {/* Conversation Thread */}
  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+ {loading && activePendingQuery && (
+ <div className="p-4 bg-indigo-50/50 border border-indigo-200 space-y-2 animate-pulse">
+ <div className="flex items-center gap-2 text-xs font-semibold text-indigo-900 font-display">
+ <Bot className="w-4 h-4 text-indigo-600 animate-spin" />
+ {activePendingQuery}
+ </div>
+ <p className="text-xs text-indigo-700 italic">
+ YarnIQ Copilot is evaluating live stock balances, purchase orders & order allocations...
+ </p>
+ </div>
+ )}
  {conversation.map((msg, idx) => (
  <div
  key={idx}
