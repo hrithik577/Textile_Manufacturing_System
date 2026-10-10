@@ -54,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const intelligenceNavItems = [
     {
-      name: 'Closing the Books',
+      name: 'Financial Close',
       to: '/closing-the-books',
       icon: DollarSign,
       badge: 'Month-End',

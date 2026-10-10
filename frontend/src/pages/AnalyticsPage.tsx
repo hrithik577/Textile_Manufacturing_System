@@ -187,7 +187,7 @@ export const AnalyticsPage: React.FC = () => {
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-ink)] text-white text-xs font-bold uppercase tracking-widest editorial-border hover:bg-black/80 transition-colors"
             >
               <DollarSign className="w-4 h-4" />
-              Owner's Month-End Books
+              Financial Close
             </button>
 
             <button

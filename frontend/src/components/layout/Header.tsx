@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
     { name: 'INVENTORY', to: '/inventory' },
     { name: 'QUALITY', to: '/quality' },
     { name: 'DISPATCH', to: '/dispatch' },
-    { name: 'CLOSING THE BOOKS', to: '/closing-the-books' },
+    { name: 'FINANCIAL CLOSE', to: '/closing-the-books' },
     { name: 'YARNIQ', to: '/yarniq' },
   ];
 

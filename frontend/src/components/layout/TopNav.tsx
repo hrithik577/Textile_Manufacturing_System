@@ -70,7 +70,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     buyer: { title: "Buyer Order Portal", subtitle: "Direct customer tracking, certified test reports & dispatch tracking" },
     'place-order': { title: "B2B Order Placement Studio", subtitle: "Configure fabric batches, calculate transparent pricing in ₹ (INR) & dispatch to mill" },
     yarniq: { title: "YarnIQ Procurement Copilot", subtitle: "Autonomous yarn readiness, stock lot ledger & predictive PO replenishment" },
-    'closing-the-books': { title: "Closing The Books", subtitle: "Authoritative month-end true unit cost, machine yield & financial P&L" },
+    'closing-the-books': { title: "Financial Close", subtitle: "Revenue reconciliation · Production costing · Operating expenses · Margin analysis" },
   };
 
   const currentKey = pathnames[0] || 'dashboard';

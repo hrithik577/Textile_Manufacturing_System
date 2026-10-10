@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DollarSign,
-  TrendingUp,
-  TrendingDown,
   Calendar,
   Layers,
   Cpu,
@@ -30,6 +28,7 @@ import {
   PlusCircle,
   Database,
   X,
+  Info,
 } from 'lucide-react';
 import {
   BarChart,
@@ -44,7 +43,6 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { Button } from '../components/common/Button';
 import { useApp } from '../context/AppContext';
 import { clsx } from 'clsx';
 import {
@@ -53,7 +51,7 @@ import {
   CostEntryPayload,
 } from '../services/finance';
 
-// Format Indian Rupee currency (e.g. ₹52,14,000)
+// Format Indian Rupee currency (e.g. ₹25,73,790)
 export function formatINR(val: number): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -62,11 +60,22 @@ export function formatINR(val: number): string {
   }).format(val || 0);
 }
 
-// Fallback baseline ledger in case of network latency
+// Indian Denomination Context (Lakhs & Crores)
+export function formatLakhsCrores(val: number): string {
+  const abs = Math.abs(val || 0);
+  if (abs >= 10000000) {
+    return `(₹${(val / 10000000).toFixed(2)} Cr)`;
+  } else if (abs >= 100000) {
+    return `(₹${(val / 100000).toFixed(2)} L)`;
+  }
+  return '';
+}
+
+// Fallback baseline ledger in case of initial render / offline dev
 const FALLBACK_DATA: ClosingTheBooksResponse = {
   period: 'October 2026',
   currency: 'INR',
-  verdict: 'YES, THE MILL MADE MONEY THIS MONTH. Net profit of ₹25,73,790 achieved at 33.0% EBITDA margin across all completed production cycles.',
+  verdict: 'YES, THE MILL MADE MONEY THIS MONTH. Net operating profit of ₹25,73,790 achieved at 33.0% EBITDA margin across all completed production cycles.',
   is_profitable: true,
   total_revenue: 7803710,
   total_expenses: 5229920,
@@ -81,7 +90,7 @@ const FALLBACK_DATA: ClosingTheBooksResponse = {
     { code: 'COGS-01', label: 'Raw Material — Cotton, Poly & Blend Yarns', budget: 2180000, actual: 2274120, variance: 94120, variance_pct: 4.3, pct_of_rev: 29.1, status: 'unfavorable' },
     { code: 'COGS-02', label: 'Dyes, Auxiliaries & Processing Chemicals', budget: 450000, actual: 428700, variance: -21300, variance_pct: -4.7, pct_of_rev: 5.5, status: 'favorable' },
     { code: 'COGS-03', label: 'Direct Labor — Weaving, Dyeing & Warping Floor Wages', budget: 950000, actual: 969700, variance: 19700, variance_pct: 2.1, pct_of_rev: 12.4, status: 'unfavorable' },
-    { code: 'OPEX-01', label: 'Electrical Grid (TNEB Industrial Tariff) & Diesel Genset', budget: 1030000, actual: 992400, variance: -37600, variance_pct: -3.7, pct_of_rev: 12.7, status: 'favorable' },
+    { code: 'OPEX-01', label: 'Electrical Grid (Industrial Tariff) & Diesel Genset', budget: 1030000, actual: 992400, variance: -37600, variance_pct: -3.7, pct_of_rev: 12.7, status: 'favorable' },
     { code: 'OPEX-02', label: 'Machine Spares, Overhauls & Loom Greasing', budget: 242000, actual: 255000, variance: 13000, variance_pct: 5.4, pct_of_rev: 3.3, status: 'unfavorable' },
     { code: 'OPEX-03', label: 'Factory Shed Lease, Compliance Audits & ETP Effluent', budget: 310000, actual: 310000, variance: 0, variance_pct: 0.0, pct_of_rev: 4.0, status: 'neutral' },
     { code: 'NET-01', label: 'Net Operating Profit (EBITDA Reconciliation)', budget: 2478000, actual: 2573790, variance: 95790, variance_pct: 3.9, pct_of_rev: 33.0, status: 'favorable', is_total: true },
@@ -138,6 +147,11 @@ export const ClosingTheBooksPage: React.FC = () => {
   const navigate = useNavigate();
   const { addToast } = useApp();
 
+  // Set document title
+  useEffect(() => {
+    document.title = 'Financial Close | Everest Textile OS';
+  }, []);
+
   // State
   const [activeTab, setActiveTab] = useState<'pnl' | 'cost_sheets' | 'machine_yield' | 'worker_wages' | 'raw_materials'>('pnl');
   const [selectedPeriod, setSelectedPeriod] = useState<string>('October 2026');
@@ -165,12 +179,19 @@ export const ClosingTheBooksPage: React.FC = () => {
         setLastSynced(new Date().toLocaleTimeString());
       }
     } catch (err: any) {
-      console.warn('[FinanceService] Could not reach backend, using cached ledger', err);
+      console.warn('[FinanceService] Could not reach backend, retaining cached ledger', err);
+      if (!isSilent) {
+        addToast({
+          type: 'warning',
+          title: 'Reconciliation Network Latency',
+          message: 'Displayed values reflect the last authoritative cached period data.',
+        });
+      }
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, []);
+  }, [addToast]);
 
   useEffect(() => {
     fetchLedger(selectedPeriod);
@@ -198,7 +219,11 @@ export const ClosingTheBooksPage: React.FC = () => {
         sales_order_id: newOrderId ? parseInt(newOrderId, 10) : null,
         description: newDesc.trim(),
       });
-      addToast({ type: 'success', title: 'Expense Recorded', message: `Recorded ₹${amountVal.toLocaleString()} expense in PostgreSQL ledger.` });
+      addToast({
+        type: 'success',
+        title: 'Expense Recorded',
+        message: `Recorded ₹${amountVal.toLocaleString()} expense in PostgreSQL ledger.`,
+      });
       setIsModalOpen(false);
       setNewAmount('');
       setNewDesc('');
@@ -206,21 +231,27 @@ export const ClosingTheBooksPage: React.FC = () => {
       // Re-fetch dynamic books immediately
       await fetchLedger(selectedPeriod, true);
     } catch (err: any) {
-      addToast({ type: 'danger', title: 'Recording Failed', message: err?.message || 'Failed to record cost entry in PostgreSQL.' });
+      addToast({
+        type: 'danger',
+        title: 'Recording Failed',
+        message: err?.message || 'Failed to record cost entry in PostgreSQL.',
+      });
     } finally {
       setIsSubmittingCost(false);
     }
   };
 
+  const hasCompleteData = data.total_revenue > 0 || data.total_expenses > 0;
+
   return (
     <div className="min-h-screen bg-[#F4F2ED] text-[#111111] font-sans">
-      {/* ── TOP AUDIT HEADER ── */}
-      <header className="border-b border-[#111111] bg-[#111111] text-[#F4F2ED] px-6 py-6 sticky top-0 z-20">
+      {/* ── REFINED PAGE HEADING HIERARCHY ── */}
+      <header className="border-b border-[#111111] bg-[#111111] text-[#F4F2ED] px-4 sm:px-6 py-6 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="bg-[#F04424] text-white text-[10px] font-mono tracking-widest uppercase px-2 py-0.5 font-bold">
-                SCENE 6 · FINANCIAL CLOSING
+                FINANCE / MONTH-END RECONCILIATION
               </span>
               <div className="flex items-center gap-2 bg-[#222222] border border-[#333333] px-2 py-0.5 text-[10px] font-mono text-[#10B981]">
                 <Database className="w-3 h-3 text-[#10B981] animate-pulse" />
@@ -228,15 +259,15 @@ export const ClosingTheBooksPage: React.FC = () => {
                 {lastSynced && <span className="text-[#9CA3AF]">· {lastSynced}</span>}
               </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-[#F4F2ED] uppercase">
-              Closing The Books · P&amp;L Reconciliation
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-[#F4F2ED] uppercase font-display">
+              FINANCIAL CLOSE / PROFITABILITY
             </h1>
             <p className="text-xs text-[#9CA3AF] font-mono">
-              PostgreSQL Schema `everest_textile_db` · Authoritative Factory Profit Ledger &amp; Cost Auditing
+              Revenue reconciliation · Production costing · Operating expenses · Margin analysis
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {/* Period Selector */}
             <div className="relative">
               <select
@@ -269,7 +300,7 @@ export const ClosingTheBooksPage: React.FC = () => {
               className="px-3 py-2 bg-[#F04424] text-white hover:bg-[#D03416] text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors shadow-none"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>+ RECORD EXPENSE</span>
+              <span>RECORD EXPENSE</span>
             </button>
 
             {/* Print Statement */}
@@ -285,70 +316,96 @@ export const ClosingTheBooksPage: React.FC = () => {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        {/* ── VERDICT BANNER (SCENE 6 BOTTOM-LINE PROOF) ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* ── AUDITED FINANCIAL SUMMARY BANNER ── */}
         <section className="border-2 border-[#111111] bg-white p-6 md:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#E5E7EB]">
             <div className="space-y-2 max-w-3xl">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#10B981] uppercase tracking-wider">
                 <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
-                <span>SCENE 6 OWNER AUDIT VERDICT · {data.period.toUpperCase()}</span>
+                <span>FINANCIAL CLOSE AUDIT VERDICT · {data.period.toUpperCase()}</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-black text-[#111111] uppercase tracking-tight">
-                {data.is_profitable ? 'YES, THE MILL MADE MONEY THIS MONTH.' : 'FACTORY OPERATING DEFICIT RECORDED.'}
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#111111] uppercase tracking-tight font-display">
+                {!hasCompleteData
+                  ? 'AWAITING RECONCILIATION ENTRIES FOR PERIOD.'
+                  : data.is_profitable
+                  ? 'YES, THE MILL MADE MONEY THIS MONTH.'
+                  : 'FACTORY OPERATING DEFICIT RECORDED.'}
               </h2>
               <p className="text-sm text-[#4B5563] leading-relaxed font-serif">
-                {data.verdict}
+                {!hasCompleteData
+                  ? `No verified invoices or expenses have been posted to the PostgreSQL ledger for ${data.period}. Use 'RECORD EXPENSE' or complete production dispatches to reconcile.`
+                  : data.verdict}
               </p>
             </div>
 
-            {/* Key Bottom-Line Figures */}
+            {/* Key Bottom-Line Figures with Rupee, Lakh, and Crore Context */}
             <div className="flex flex-wrap items-center gap-6 bg-[#F4F2ED] border border-[#111111] p-5">
               <div className="text-right">
-                <div className="text-[10px] font-mono uppercase text-[#6B7280] font-bold">NET OPERATING PROFIT</div>
-                <div className="text-3xl font-mono font-black text-[#10B981]">{formatINR(data.net_profit)}</div>
-                <div className="text-[10px] font-mono text-[#4B5563]">After all COGS &amp; Plant Overheads</div>
+                <div className="text-[10px] font-mono uppercase text-[#6B7280] font-bold">
+                  NET OPERATING PROFIT
+                </div>
+                <div className="text-2xl sm:text-3xl font-mono font-black text-[#10B981]">
+                  {formatINR(data.net_profit)}
+                  <span className="text-xs font-mono text-[#6B7280] ml-1.5 font-bold">
+                    {formatLakhsCrores(data.net_profit)}
+                  </span>
+                </div>
+                <div className="text-[10px] font-mono text-[#4B5563]">
+                  Revenue ({formatINR(data.total_revenue)}) - Expenses ({formatINR(data.total_expenses)})
+                </div>
               </div>
-              <div className="h-12 w-[1px] bg-[#D1D5DB]" />
+              <div className="h-12 w-[1px] bg-[#D1D5DB] hidden sm:block" />
               <div className="text-right">
-                <div className="text-[10px] font-mono uppercase text-[#6B7280] font-bold">EBITDA MARGIN</div>
-                <div className="text-3xl font-mono font-black text-[#111111]">{data.ebitda_margin_pct}%</div>
-                <div className="text-[10px] font-mono text-[#10B981] font-bold">Target: &gt;15.0% · EXCEEDED</div>
+                <div className="text-[10px] font-mono uppercase text-[#6B7280] font-bold">
+                  EBITDA MARGIN
+                </div>
+                <div className="text-2xl sm:text-3xl font-mono font-black text-[#111111]">
+                  {data.ebitda_margin_pct}%
+                </div>
+                <div className="text-[10px] font-mono text-[#10B981] font-bold">
+                  Operating Profit / Gross Revenue
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Reconciliation Narrative */}
+          {/* Reconciliation Narrative & Accounting Formula Disclosure */}
           <div className="pt-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-[#4B5563]">
             <div className="border-l-2 border-[#111111] pl-3 space-y-1">
               <span className="font-mono font-bold text-[#111111] uppercase">01 / ORDER CASH CAPTURE</span>
               <p>
-                {formatINR(data.buyer_payments_total)} collected via RTGS/NEFT clearing. Zero default rate on completed client shipments.
+                {formatINR(data.buyer_payments_total)} {formatLakhsCrores(data.buyer_payments_total)} collected via RTGS/NEFT clearing across reconciled sales shipments.
               </p>
             </div>
             <div className="border-l-2 border-[#F04424] pl-3 space-y-1">
               <span className="font-mono font-bold text-[#111111] uppercase">02 / MATERIAL COST BURN</span>
               <p>
-                Raw material costs totalled {formatINR(data.raw_material_bills_total)}. YarnIQ dynamic procurement optimized dye lots.
+                Raw material costs totalled {formatINR(data.raw_material_bills_total)} {formatLakhsCrores(data.raw_material_bills_total)}. Authoritative YarnIQ yarn consumption matches physical stock issues.
               </p>
             </div>
             <div className="border-l-2 border-[#111111] pl-3 space-y-1">
               <span className="font-mono font-bold text-[#111111] uppercase">03 / FLOOR PAYROLL &amp; POWER</span>
               <p>
-                Plant wages ({formatINR(data.worker_wages_total)}) and utilities/opex ({formatINR(data.machine_opex_total)}) strictly audited against machine telemetry.
+                Workforce wages ({formatINR(data.worker_wages_total)}) and utilities/opex ({formatINR(data.machine_opex_total)}) audited against loom machine telemetry.
               </p>
             </div>
           </div>
         </section>
 
-        {/* ── 4 FINANCIAL PILLARS GRID ── */}
+        {/* ── 4 FINANCIAL PILLARS GRID (REFINED LABELS & INTERACTIVE DRILL-DOWNS) ── */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Pillar 1 */}
-          <div className="border border-[#111111] bg-white p-5 flex flex-col justify-between">
+          <div
+            onClick={() => setActiveTab('cost_sheets')}
+            className="border border-[#111111] bg-white p-5 flex flex-col justify-between hover:border-[#F04424] hover:shadow-sm transition-all cursor-pointer group"
+          >
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider">PILLAR 01 · BUYER COLLECTIONS</span>
-                <Banknote className="w-4 h-4 text-[#111111]" />
+                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider group-hover:text-[#F04424] transition-colors">
+                  PILLAR 01 · BUYER COLLECTIONS
+                </span>
+                <Banknote className="w-4 h-4 text-[#111111] group-hover:text-[#F04424]" />
               </div>
               <div className="text-2xl font-mono font-black text-[#111111] mt-2">
                 {formatINR(data.buyer_payments_total)}
@@ -358,16 +415,22 @@ export const ClosingTheBooksPage: React.FC = () => {
                 <span>100% DISPATCH RECONCILED</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono">
-              Invoiced revenue from active sales orders
+            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono flex justify-between items-center">
+              <span>Invoiced revenue from active sales orders</span>
+              <ChevronRight className="w-3 h-3 text-[#111111]" />
             </div>
           </div>
 
           {/* Pillar 2 */}
-          <div className="border border-[#111111] bg-white p-5 flex flex-col justify-between">
+          <div
+            onClick={() => setActiveTab('raw_materials')}
+            className="border border-[#111111] bg-white p-5 flex flex-col justify-between hover:border-[#F04424] hover:shadow-sm transition-all cursor-pointer group"
+          >
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider">PILLAR 02 · RAW MATERIAL BILLS</span>
+                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider group-hover:text-[#F04424] transition-colors">
+                  PILLAR 02 · RAW MATERIAL COSTS
+                </span>
                 <Package className="w-4 h-4 text-[#F04424]" />
               </div>
               <div className="text-2xl font-mono font-black text-[#111111] mt-2">
@@ -377,17 +440,23 @@ export const ClosingTheBooksPage: React.FC = () => {
                 <span>COTTON, POLY &amp; DYES (COGS)</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono">
-              Supplier invoices matched with POs
+            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono flex justify-between items-center">
+              <span>Supplier invoices matched with PO receipts</span>
+              <ChevronRight className="w-3 h-3 text-[#111111]" />
             </div>
           </div>
 
           {/* Pillar 3 */}
-          <div className="border border-[#111111] bg-white p-5 flex flex-col justify-between">
+          <div
+            onClick={() => setActiveTab('worker_wages')}
+            className="border border-[#111111] bg-white p-5 flex flex-col justify-between hover:border-[#F04424] hover:shadow-sm transition-all cursor-pointer group"
+          >
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider">PILLAR 03 · WORKER WAGES</span>
-                <Users className="w-4 h-4 text-[#111111]" />
+                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider group-hover:text-[#F04424] transition-colors">
+                  PILLAR 03 · WORKFORCE COSTS
+                </span>
+                <Users className="w-4 h-4 text-[#111111] group-hover:text-[#F04424]" />
               </div>
               <div className="text-2xl font-mono font-black text-[#111111] mt-2">
                 {formatINR(data.worker_wages_total)}
@@ -396,17 +465,23 @@ export const ClosingTheBooksPage: React.FC = () => {
                 <span>3 SHIFTS · ZERO ATTENDANCE FINES</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono">
-              Weaving, Dyehouse &amp; Finishing payroll
+            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono flex justify-between items-center">
+              <span>Weaving, Dyehouse &amp; Finishing plant wages</span>
+              <ChevronRight className="w-3 h-3 text-[#111111]" />
             </div>
           </div>
 
           {/* Pillar 4 */}
-          <div className="border border-[#111111] bg-white p-5 flex flex-col justify-between">
+          <div
+            onClick={() => setActiveTab('machine_yield')}
+            className="border border-[#111111] bg-white p-5 flex flex-col justify-between hover:border-[#F04424] hover:shadow-sm transition-all cursor-pointer group"
+          >
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider">PILLAR 04 · MACHINE POWER &amp; OPEX</span>
-                <Cpu className="w-4 h-4 text-[#111111]" />
+                <span className="text-[10px] font-mono text-[#6B7280] font-bold uppercase tracking-wider group-hover:text-[#F04424] transition-colors">
+                  PILLAR 04 · MACHINE POWER &amp; OVERHEADS
+                </span>
+                <Cpu className="w-4 h-4 text-[#111111] group-hover:text-[#F04424]" />
               </div>
               <div className="text-2xl font-mono font-black text-[#111111] mt-2">
                 {formatINR(data.machine_opex_total)}
@@ -415,8 +490,9 @@ export const ClosingTheBooksPage: React.FC = () => {
                 <span>ELECTRICITY &amp; PREVENTATIVE SPARES</span>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono">
-              Grid power, diesel genset &amp; loom maintenance
+            <div className="mt-4 pt-3 border-t border-[#E5E7EB] text-[11px] text-[#6B7280] font-mono flex justify-between items-center">
+              <span>Grid power, diesel genset &amp; loom maintenance</span>
+              <ChevronRight className="w-3 h-3 text-[#111111]" />
             </div>
           </div>
         </section>
@@ -424,11 +500,11 @@ export const ClosingTheBooksPage: React.FC = () => {
         {/* ── NAVIGATION TABS ── */}
         <nav className="border border-[#111111] bg-white grid grid-cols-2 md:grid-cols-5 text-center">
           {[
-            { id: 'pnl', label: '01 / MONTH-END P&L' },
+            { id: 'pnl', label: '01 / P&L RECONCILIATION' },
             { id: 'cost_sheets', label: '02 / ORDER COST SHEETS' },
-            { id: 'machine_yield', label: '03 / MACHINE YIELD & OPEX' },
-            { id: 'worker_wages', label: '04 / WORKER WAGES' },
-            { id: 'raw_materials', label: '05 / RAW MATERIAL BILLS' },
+            { id: 'machine_yield', label: '03 / MACHINE POWER & OVERHEADS' },
+            { id: 'worker_wages', label: '04 / WORKFORCE COSTS' },
+            { id: 'raw_materials', label: '05 / RAW MATERIAL COSTS' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -445,7 +521,7 @@ export const ClosingTheBooksPage: React.FC = () => {
           ))}
         </nav>
 
-        {/* ── TAB 1: MONTH-END P&L ── */}
+        {/* ── TAB 1: P&L RECONCILIATION ── */}
         {activeTab === 'pnl' && (
           <div className="space-y-8">
             {/* Visual Charts Row */}
@@ -720,20 +796,20 @@ export const ClosingTheBooksPage: React.FC = () => {
           </div>
         )}
 
-        {/* ── TAB 3: MACHINE YIELD & OPEX ── */}
+        {/* ── TAB 3: MACHINE POWER & OVERHEADS ── */}
         {activeTab === 'machine_yield' && (
           <div className="border border-[#111111] bg-white">
             <div className="p-4 bg-[#F4F2ED] border-b border-[#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-mono font-black uppercase text-[#111111]">
-                  Machine Telemetry &amp; Energy OPEX Audit
+                  Machine Telemetry &amp; Energy Overhead Audit
                 </h3>
                 <p className="text-[11px] text-[#6B7280] font-mono">
                   Direct electrical kWh consumption, spares amortisation &amp; cost-per-meter
                 </p>
               </div>
               <span className="text-[10px] font-mono uppercase bg-white px-2.5 py-1 border border-[#111111] font-bold">
-                6 PRODUCTION FRAMES
+                6 PRODUCTION ASSETS AUDITED
               </span>
             </div>
 
@@ -772,7 +848,7 @@ export const ClosingTheBooksPage: React.FC = () => {
           </div>
         )}
 
-        {/* ── TAB 4: WORKER WAGES ── */}
+        {/* ── TAB 4: WORKFORCE COSTS ── */}
         {activeTab === 'worker_wages' && (
           <div className="border border-[#111111] bg-white">
             <div className="p-4 bg-[#F4F2ED] border-b border-[#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -785,7 +861,7 @@ export const ClosingTheBooksPage: React.FC = () => {
                 </p>
               </div>
               <span className="text-[10px] font-mono uppercase bg-white px-2.5 py-1 border border-[#111111] font-bold">
-                MONTHLY PAYROLL
+                MONTHLY PAYROLL AUDIT
               </span>
             </div>
 
@@ -834,7 +910,7 @@ export const ClosingTheBooksPage: React.FC = () => {
           </div>
         )}
 
-        {/* ── TAB 5: RAW MATERIAL BILLS ── */}
+        {/* ── TAB 5: RAW MATERIAL COSTS ── */}
         {activeTab === 'raw_materials' && (
           <div className="border border-[#111111] bg-white">
             <div className="p-4 bg-[#F4F2ED] border-b border-[#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -899,91 +975,98 @@ export const ClosingTheBooksPage: React.FC = () => {
           <div className="bg-white border-2 border-[#111111] max-w-lg w-full p-6 shadow-2xl relative">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-[#6B7280] hover:text-[#111111] cursor-pointer"
+              className="absolute top-4 right-4 text-[#6B7280] hover:text-[#111111]"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="space-y-1 mb-6">
-              <span className="text-[10px] font-mono uppercase bg-[#111111] text-white px-2 py-0.5 font-bold">
-                POSTGRESQL TRANSACTION WRITE
+            <div className="border-b border-[#111111] pb-3 mb-4">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#F04424] block">
+                POSTGRESQL AUDIT TRANSACTION
               </span>
-              <h3 className="text-xl font-mono font-black text-[#111111] uppercase">
-                Record New Cost Entry
+              <h3 className="text-xl font-mono font-black uppercase text-[#111111]">
+                Record Factory Operating Expense
               </h3>
-              <p className="text-xs text-[#6B7280] font-mono">
-                Directly writes to table `cost_entries` in `everest_textile_db`. Books will recompute instantly.
+              <p className="text-xs text-[#6B7280] font-mono mt-1">
+                Persists cost entry directly into `cost_entries` table for job costing reconciliation.
               </p>
             </div>
 
-            <form onSubmit={handleRecordCost} className="space-y-4 text-xs font-mono">
-              <div className="space-y-1">
-                <label className="font-bold text-[#111111] uppercase">Cost Category</label>
+            <form onSubmit={handleRecordCost} className="space-y-4 font-mono text-xs">
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-[#111111] mb-1">
+                  Cost Category
+                </label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as any)}
-                  className="w-full bg-[#F4F2ED] border border-[#111111] p-2 font-mono text-xs focus:outline-none focus:border-[#F04424]"
+                  className="w-full bg-[#F4F2ED] border border-[#111111] px-3 py-2 text-[#111111] focus:outline-none focus:border-[#F04424]"
                 >
-                  <option value="electricity">ELECTRICITY / GRID POWER</option>
-                  <option value="raw_material">RAW MATERIAL (COTTON / YARN)</option>
-                  <option value="dye_chemical">DYES &amp; PROCESSING CHEMICALS</option>
-                  <option value="labor">DIRECT FLOOR LABOR</option>
-                  <option value="maintenance">MACHINE MAINTENANCE &amp; SPARES</option>
-                  <option value="overhead">PLANT OVERHEAD &amp; COMPLIANCE</option>
+                  <option value="raw_material">Raw Material (Yarns / Blends)</option>
+                  <option value="dye_chemical">Dyes &amp; Processing Chemicals</option>
+                  <option value="electricity">Machine Electricity &amp; Fuel</option>
+                  <option value="labor">Direct Shift Floor Labor</option>
+                  <option value="maintenance">Preventative Loom Maintenance / Spares</option>
+                  <option value="overhead">Factory Overheads &amp; Shed Lease</option>
                 </select>
               </div>
 
-              <div className="space-y-1">
-                <label className="font-bold text-[#111111] uppercase">Amount in INR (₹)</label>
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-[#111111] mb-1">
+                  Amount in Indian Rupees (INR ₹)
+                </label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="any"
                   required
-                  placeholder="e.g. 45000"
+                  placeholder="e.g. 85000"
                   value={newAmount}
                   onChange={(e) => setNewAmount(e.target.value)}
-                  className="w-full bg-[#F4F2ED] border border-[#111111] p-2 font-mono text-xs focus:outline-none focus:border-[#F04424]"
+                  className="w-full bg-[#F4F2ED] border border-[#111111] px-3 py-2 text-[#111111] focus:outline-none focus:border-[#F04424]"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="font-bold text-[#111111] uppercase">Transaction Description</label>
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-[#111111] mb-1">
+                  Description / Audit Narrative
+                </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. TNEB Peak Surcharge or Airjet Nozzle Spares"
+                  placeholder="e.g. EB Power Bill - Oct 2026 Shift Units"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full bg-[#F4F2ED] border border-[#111111] p-2 font-mono text-xs focus:outline-none focus:border-[#F04424]"
+                  className="w-full bg-[#F4F2ED] border border-[#111111] px-3 py-2 text-[#111111] focus:outline-none focus:border-[#F04424]"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="font-bold text-[#111111] uppercase">Sales Order ID (Optional)</label>
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-[#111111] mb-1">
+                  Sales Order ID (Optional for Job Absorption)
+                </label>
                 <input
                   type="number"
-                  placeholder="Leave blank for general factory overhead"
+                  placeholder="e.g. 1 (Leave blank for plant-wide overhead)"
                   value={newOrderId}
                   onChange={(e) => setNewOrderId(e.target.value)}
-                  className="w-full bg-[#F4F2ED] border border-[#111111] p-2 font-mono text-xs focus:outline-none focus:border-[#F04424]"
+                  className="w-full bg-[#F4F2ED] border border-[#111111] px-3 py-2 text-[#111111] focus:outline-none focus:border-[#F04424]"
                 />
               </div>
 
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-[#E5E7EB]">
+              <div className="pt-3 border-t border-[#E5E7EB] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-[#111111] text-[#111111] hover:bg-[#F4F2ED] uppercase font-bold text-xs"
+                  className="px-4 py-2 border border-[#111111] text-[#111111] hover:bg-[#F4F2ED] text-xs font-mono uppercase font-bold"
                 >
-                  CANCEL
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingCost}
-                  className="px-4 py-2 bg-[#F04424] text-white hover:bg-[#D03416] uppercase font-bold text-xs flex items-center gap-2"
+                  className="px-4 py-2 bg-[#F04424] text-white hover:bg-[#D03416] text-xs font-mono uppercase font-bold flex items-center gap-2"
                 >
-                  {isSubmittingCost ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <PlusCircle className="w-3.5 h-3.5" />}
-                  <span>COMMIT TO POSTGRESQL</span>
+                  {isSubmittingCost ? 'Persisting...' : 'Post to Ledger'}
                 </button>
               </div>
             </form>
@@ -993,3 +1076,5 @@ export const ClosingTheBooksPage: React.FC = () => {
     </div>
   );
 };
+
+export default ClosingTheBooksPage;
