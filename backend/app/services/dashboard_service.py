@@ -59,13 +59,7 @@ def get_dashboard_summary(db: Session) -> DashboardSummaryResponse:
     # Machines
     total_machines = db.query(Machine).count()
     running_machines = db.query(Machine).filter(Machine.status == MachineStatus.RUNNING).count()
-    
-    # OEE calculation: Availability (~88%) * Performance (~92%) * Quality (~96%)
-    availability = (running_machines / total_machines) if total_machines > 0 else 0.85
-    performance = 0.92
-    quality_rate = 0.97
-    oee = round(availability * performance * quality_rate * 100, 1)
-    
+
     # Today's production output
     today_start = datetime.combine(today, datetime.min.time()).replace(tzinfo=timezone.utc)
     today_output = (
@@ -75,7 +69,18 @@ def get_dashboard_summary(db: Session) -> DashboardSummaryResponse:
         or 0.0
     )
     if today_output == 0.0:
-        today_output = sum(m.shift_output_m for m in db.query(Machine).all())
+        # Sum shift output from machine telemetry if present
+        today_output = sum(float(m.shift_output_m or 0.0) for m in db.query(Machine).all())
+
+    # Deterministic OEE calculation: Availability * Performance * Quality
+    availability = (running_machines / total_machines) if total_machines > 0 else 0.0
+    passed_rolls = db.query(FabricRoll).filter(FabricRoll.current_status == RollStatus.PASS).count()
+    total_rolls = db.query(FabricRoll).count()
+    quality_rate = (passed_rolls / total_rolls) if total_rolls > 0 else 1.0
+
+    planned_daily_target = 3500.0
+    performance = min(today_output / planned_daily_target, 1.0) if today_output > 0 else 0.0
+    oee = round(availability * performance * quality_rate * 100, 1) if (total_machines > 0 and today_output > 0) else 0.0
 
     # Financials
     monthly_revenue = (
@@ -85,8 +90,8 @@ def get_dashboard_summary(db: Session) -> DashboardSummaryResponse:
         or 0.0
     )
     monthly_collected = db.query(func.sum(Invoice.paid_amount)).scalar() or 0.0
-    
-    # Active workers
+
+    # Active workers from actual attendance records
     active_workers = (
         db.query(AttendanceRecord)
         .filter(AttendanceRecord.date == today, AttendanceRecord.status == "present")
@@ -103,59 +108,51 @@ def get_dashboard_summary(db: Session) -> DashboardSummaryResponse:
         running_machines_count=running_machines,
         total_machines_count=total_machines,
         overall_oee_percentage=oee,
-        today_production_output_m=round(today_output, 1),
-        monthly_revenue_booked=round(monthly_revenue, 2),
-        monthly_collected_cash=round(monthly_collected, 2),
-        active_workers_on_shift=active_workers or 12,
+        today_production_output_m=round(float(today_output), 1),
+        monthly_revenue_booked=round(float(monthly_revenue), 2),
+        monthly_collected_cash=round(float(monthly_collected), 2),
+        active_workers_on_shift=active_workers,
     )
 
 
 def get_production_trend(db: Session, days: int = 7) -> ProductionTrendResponse:
     today = date.today()
     trend_points: List[ProductionTrendPoint] = []
-    
+
     total_target = 0.0
     total_actual = 0.0
-    
+
     for i in range(days - 1, -1, -1):
         d = today - timedelta(days=i)
         day_start = datetime.combine(d, datetime.min.time()).replace(tzinfo=timezone.utc)
         day_end = datetime.combine(d, datetime.max.time()).replace(tzinfo=timezone.utc)
-        
+
         actual_output = (
             db.query(func.sum(ProductionEvent.quantity))
             .filter(ProductionEvent.event_timestamp >= day_start, ProductionEvent.event_timestamp <= day_end)
             .scalar()
             or 0.0
         )
-        
-        # If no events on that historical day, provide plausible realistic curve
-        if actual_output == 0.0:
-            base_target = 3500.0
-            variance_factor = 0.90 + ((i * 17 + 5) % 15) / 100.0
-            actual_output = round(base_target * variance_factor, 1)
-            target = base_target
-        else:
-            target = 3500.0
 
-        scrap = round(actual_output * 0.025, 1) # ~2.5% scrap rate
-        eff = round((actual_output / target * 100.0), 1) if target > 0 else 90.0
-        
+        target = 3500.0
+        scrap = round(float(actual_output) * 0.02, 1) if actual_output > 0 else 0.0
+        eff = round((float(actual_output) / target * 100.0), 1) if (target > 0 and actual_output > 0) else 0.0
+
         total_target += target
-        total_actual += actual_output
-        
+        total_actual += float(actual_output)
+
         trend_points.append(
             ProductionTrendPoint(
                 date=d.isoformat(),
                 target_meterage=target,
-                actual_meterage=actual_output,
+                actual_meterage=round(float(actual_output), 1),
                 efficiency_pct=eff,
                 scrap_meterage=scrap,
             )
         )
 
-    avg_eff = round((total_actual / total_target * 100.0) if total_target > 0 else 92.0, 1)
-    
+    avg_eff = round((total_actual / total_target * 100.0) if total_target > 0 else 0.0, 1)
+
     return ProductionTrendResponse(
         trend_data=trend_points,
         total_actual_m=round(total_actual, 1),

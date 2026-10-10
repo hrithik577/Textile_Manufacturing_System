@@ -1,10 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { UserProfile, UserRole } from '../types';
-import { currentUserProfiles } from '../services/mock-data';
-
-// ─── Demo Credential Store ──────────────────────────────────────────────────
-// Each credential maps to a UserProfile via role. Passwords are intentionally
-// visible because this is a demo-mode frontend (no real secrets involved).
 
 export interface DemoCredential {
   email: string;
@@ -16,56 +11,84 @@ export interface DemoCredential {
   allowedRoutes: string[];
 }
 
+// ─── Real Seed Credentials Configured in PostgreSQL ────────────────────────
 export const DEMO_CREDENTIALS: DemoCredential[] = [
   {
-    email: 'vikram.mehta@everesttextiles.com',
-    password: 'PlantMgr@2026',
-    role: 'plant_manager',
-    displayRole: 'Plant Manager',
-    description: 'Full access — dashboard, production, orders, inventory, dispatch, analytics',
+    email: 'manager@everest.com',
+    password: 'Everest@2026!',
+    role: 'manager',
+    displayRole: 'Plant Operations Manager',
+    description: 'Full plant oversight — dashboard, production floor, orders, inventory, dispatch',
     accessLevel: 'admin',
-    allowedRoutes: ['*'], // all routes
+    allowedRoutes: ['*'],
   },
   {
-    email: 'anjali.s@everesttextiles.com',
-    password: 'ProdSup@2026',
-    role: 'production_supervisor',
+    email: 'production@everest.com',
+    password: 'Everest@2026!',
+    role: 'production',
     displayRole: 'Production Supervisor',
-    description: 'Production floor, orders, inventory, quality, workforce',
+    description: 'Floor looms, batch runs, shifts, workforce attendance',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/closing-the-books'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce'],
   },
   {
-    email: 'david.chen@everesttextiles.com',
-    password: 'QALab@2026',
-    role: 'quality_inspector',
-    displayRole: 'QA Inspector',
-    description: 'Quality control, finished goods, production view',
+    email: 'quality@everest.com',
+    password: 'Everest@2026!',
+    role: 'quality',
+    displayRole: 'QA & Inspection Lead',
+    description: 'Fabric inspection, 4-point defect grading, roll genealogy',
     accessLevel: 'operator',
     allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders'],
   },
   {
-    email: 'fatima@everesttextiles.com',
-    password: 'Stores@2026',
-    role: 'inventory_lead',
-    displayRole: 'Inventory & Stores Lead',
-    description: 'Inventory, dispatch, orders — gate entry and yarn feasibility',
+    email: 'inventory@everest.com',
+    password: 'Everest@2026!',
+    role: 'inventory',
+    displayRole: 'Stores & Yarn Inventory Lead',
+    description: 'Yarn gate receipts, warehouse bins, stock movements',
     accessLevel: 'manager',
     allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods'],
   },
   {
-    email: 'sarah.j@nordicapparel.com',
-    password: 'Buyer@2026',
+    email: 'dispatch@everest.com',
+    password: 'Everest@2026!',
+    role: 'dispatch',
+    displayRole: 'Dispatch & Logistics Lead',
+    description: 'Delivery challans, packaging, duplicate dispatch prevention',
+    accessLevel: 'operator',
+    allowedRoutes: ['/dashboard', '/dispatch', '/finished-goods', '/orders'],
+  },
+  {
+    email: 'finance@everest.com',
+    password: 'Everest@2026!',
+    role: 'finance',
+    displayRole: 'Finance & Controller',
+    description: 'Financial close, month-end P&L reconciliation, order cost absorption',
+    accessLevel: 'admin',
+    allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics'],
+  },
+  {
+    email: 'buyer@nordic.com',
+    password: 'Everest@2026!',
     role: 'buyer',
-    displayRole: 'B2B Buyer / Partner',
-    description: 'Buyer portal, place orders, track order status',
+    displayRole: 'Nordic Apparel Partner',
+    description: 'Buyer portal, purchase order placement, real-time dispatch tracking',
     accessLevel: 'viewer',
-    allowedRoutes: ['/buyer/orders', '/place-order', '/buyer', '/orders'],
+    allowedRoutes: ['/buyer/orders', '/place-order', '/buyer'],
+  },
+  {
+    email: 'owner@everest.com',
+    password: 'Everest@2026!',
+    role: 'owner',
+    displayRole: 'Mill Executive / Owner',
+    description: 'Executive control tower, audit logs, financials, full system permissions',
+    accessLevel: 'admin',
+    allowedRoutes: ['*'],
   },
 ];
 
-// ─── Auth Session Storage Key ────────────────────────────────────────────────
 const AUTH_SESSION_KEY = 'everest_auth_session';
+const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || 'http://localhost:8000/api/v1';
 
 export interface AuthSession {
   userProfile: UserProfile;
@@ -84,6 +107,50 @@ interface AuthContextType {
   canAccessRoute: (path: string) => boolean;
 }
 
+function resolveRolePermissions(role: string): { accessLevel: 'admin' | 'manager' | 'operator' | 'viewer'; allowedRoutes: string[] } {
+  const normRole = role.toLowerCase();
+  if (normRole === 'owner' || normRole === 'manager' || normRole === 'plant_manager') {
+    return { accessLevel: 'admin', allowedRoutes: ['*'] };
+  }
+  if (normRole === 'finance') {
+    return {
+      accessLevel: 'admin',
+      allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics'],
+    };
+  }
+  if (normRole === 'production' || normRole === 'production_supervisor') {
+    return {
+      accessLevel: 'manager',
+      allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce'],
+    };
+  }
+  if (normRole === 'quality' || normRole === 'quality_inspector') {
+    return {
+      accessLevel: 'operator',
+      allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders'],
+    };
+  }
+  if (normRole === 'inventory' || normRole === 'inventory_lead') {
+    return {
+      accessLevel: 'manager',
+      allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods'],
+    };
+  }
+  if (normRole === 'dispatch') {
+    return {
+      accessLevel: 'operator',
+      allowedRoutes: ['/dashboard', '/dispatch', '/finished-goods', '/orders'],
+    };
+  }
+  if (normRole === 'buyer') {
+    return {
+      accessLevel: 'viewer',
+      allowedRoutes: ['/buyer/orders', '/place-order', '/buyer'],
+    };
+  }
+  return { accessLevel: 'viewer', allowedRoutes: ['/dashboard'] };
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -91,126 +158,205 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Restore session from localStorage on mount (or seed default Plant Manager)
+  // Validate session against real backend identity on mount
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(AUTH_SESSION_KEY);
-      if (stored) {
-        const parsed: AuthSession = JSON.parse(stored);
-        const eightHours = 8 * 60 * 60 * 1000;
-        if (Date.now() - parsed.loginTimestamp < eightHours) {
-          setSession(parsed);
+    let isMounted = true;
+
+    async function restoreAuthSession() {
+      try {
+        const token = localStorage.getItem('everest_auth_token');
+        if (!token) {
+          if (isMounted) {
+            setSession(null);
+            setIsLoading(false);
+          }
           return;
         }
-      }
-      // If user is visiting /login directly, keep session empty so login portal renders directly
-      if (window.location.pathname === '/login') {
-        setSession(null);
-        return;
-      }
-      // If no valid session, default-initialize with Plant Manager so direct URL navigation works seamlessly
-      const defaultCred = DEMO_CREDENTIALS[0];
-      const defaultProfile = currentUserProfiles[0];
-      const defaultSession: AuthSession = {
-        userProfile: defaultProfile,
-        credential: defaultCred,
-        loginTimestamp: Date.now(),
-      };
-      setSession(defaultSession);
-      // Ensure backend JWT token is primed for PostgreSQL communication
-      if (!localStorage.getItem('everest_auth_token')) {
-        fetch('http://localhost:8000/api/v1/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: 'owner@everest.com', password: 'Everest@2026!' }),
-        })
-          .then((res) => (res.ok ? res.json() : null))
-          .then((authData) => {
-            if (authData?.access_token) {
-              localStorage.setItem('everest_auth_token', authData.access_token);
+
+        // Verify token with backend /api/v1/auth/me
+        const res = await fetch(`${API_BASE_URL}/auth/me`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+          },
+        });
+
+        if (res.ok) {
+          const user = await res.json();
+          const { accessLevel, allowedRoutes } = resolveRolePermissions(user.role);
+          const matchedCred = DEMO_CREDENTIALS.find((c) => c.email.toLowerCase() === user.email.toLowerCase());
+
+          const userProfile: UserProfile = {
+            id: String(user.id),
+            name: user.name,
+            email: user.email,
+            role: user.role as UserRole,
+            department: user.role.toUpperCase(),
+            avatarInitials: user.name
+              .split(' ')
+              .map((n: string) => n[0])
+              .join('')
+              .toUpperCase(),
+          };
+
+          const activeSession: AuthSession = {
+            userProfile,
+            credential: matchedCred || {
+              email: user.email,
+              password: '',
+              role: user.role as UserRole,
+              displayRole: user.role.toUpperCase(),
+              description: `Authenticated as ${user.role}`,
+              accessLevel,
+              allowedRoutes,
+            },
+            loginTimestamp: Date.now(),
+          };
+
+          if (isMounted) {
+            setSession(activeSession);
+            localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(activeSession));
+          }
+        } else {
+          // Token is invalid, expired, or account disabled
+          localStorage.removeItem('everest_auth_token');
+          localStorage.removeItem(AUTH_SESSION_KEY);
+          if (isMounted) setSession(null);
+        }
+      } catch (err) {
+        // Network failure while verifying token — if cached session exists, retain temporarily or prompt login
+        const stored = localStorage.getItem(AUTH_SESSION_KEY);
+        if (stored) {
+          try {
+            const parsed: AuthSession = JSON.parse(stored);
+            if (Date.now() - parsed.loginTimestamp < 8 * 60 * 60 * 1000) {
+              if (isMounted) setSession(parsed);
+              return;
             }
-          })
-          .catch(() => {});
+          } catch {
+            localStorage.removeItem(AUTH_SESSION_KEY);
+          }
+        }
+        if (isMounted) setSession(null);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-    } catch {
-      localStorage.removeItem(AUTH_SESSION_KEY);
-    } finally {
-      setIsLoading(false);
     }
+
+    restoreAuthSession();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     setLoginError(null);
     setIsLoading(true);
 
-    // Try backend JWT login if backend is live
     try {
-      const backendEmail = email.includes('@everest')
-        ? (email.includes('vikram') ? 'manager@everest.com' : email.includes('anjali') ? 'production@everest.com' : email.includes('david') ? 'quality@everest.com' : email.includes('fatima') ? 'inventory@everest.com' : 'owner@everest.com')
-        : 'buyer@nordic.com';
-      const res = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: backendEmail, password: 'Everest@2026!' }),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password }),
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.access_token) {
-          localStorage.setItem('everest_auth_token', data.access_token);
-        }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        const msg = err?.detail || 'Invalid email or password.';
+        setLoginError(msg);
+        setIsLoading(false);
+        return false;
       }
-    } catch {
-      // Backend optional / offline fallback
-    }
 
-    // Simulate small UI auth verification latency (200ms)
-    await new Promise((r) => setTimeout(r, 200));
+      const data = await res.json();
+      if (!data.access_token || !data.user) {
+        setLoginError('Authentication response missing access credentials.');
+        setIsLoading(false);
+        return false;
+      }
 
-    const cred = DEMO_CREDENTIALS.find(
-      (c) => c.email.toLowerCase() === email.toLowerCase() && (c.password === password || password === 'Everest@2026!')
-    );
+      localStorage.setItem('everest_auth_token', data.access_token);
 
-    if (!cred) {
-      setLoginError('Invalid email or password. Select one of the demo roles.');
+      const user = data.user;
+      const { accessLevel, allowedRoutes } = resolveRolePermissions(user.role);
+      const matchedCred = DEMO_CREDENTIALS.find((c) => c.email.toLowerCase() === user.email.toLowerCase());
+
+      const userProfile: UserProfile = {
+        id: String(user.id),
+        name: user.name,
+        email: user.email,
+        role: user.role as UserRole,
+        department: user.role.toUpperCase(),
+        avatarInitials: user.name
+          .split(' ')
+          .map((n: string) => n[0])
+          .join('')
+          .toUpperCase(),
+      };
+
+      const newSession: AuthSession = {
+        userProfile,
+        credential: matchedCred || {
+          email: user.email,
+          password: '',
+          role: user.role as UserRole,
+          displayRole: user.role.toUpperCase(),
+          description: `Authenticated as ${user.role}`,
+          accessLevel,
+          allowedRoutes,
+        },
+        loginTimestamp: Date.now(),
+      };
+
+      setSession(newSession);
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newSession));
+      setIsLoading(false);
+      return true;
+    } catch (err: any) {
+      setLoginError(`Unable to reach authentication server: ${err.message || 'Network error'}`);
       setIsLoading(false);
       return false;
     }
-
-    const profile = currentUserProfiles.find((u) => u.role === cred.role);
-    if (!profile) {
-      setLoginError('User profile not found. Contact administrator.');
-      setIsLoading(false);
-      return false;
-    }
-
-    const newSession: AuthSession = {
-      userProfile: profile,
-      credential: cred,
-      loginTimestamp: Date.now(),
-    };
-
-    setSession(newSession);
-    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newSession));
-    setIsLoading(false);
-    return true;
   }, []);
 
   const logout = useCallback(() => {
+    const token = localStorage.getItem('everest_auth_token');
+    if (token) {
+      fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
     setSession(null);
     localStorage.removeItem(AUTH_SESSION_KEY);
     localStorage.removeItem('everest_auth_token');
   }, []);
 
   const switchRole = useCallback((role: UserRole) => {
+    // Role switching in demo/development only updates local display context
+    // Real permissions remain governed by the backend token
     const cred = DEMO_CREDENTIALS.find((c) => c.role === role) || DEMO_CREDENTIALS[0];
-    const profile = currentUserProfiles.find((u) => u.role === role) || currentUserProfiles[0];
-    const newSession: AuthSession = {
-      userProfile: profile,
-      credential: cred,
+    const { accessLevel, allowedRoutes } = resolveRolePermissions(role);
+    const updatedSession: AuthSession = {
+      userProfile: {
+        id: '1',
+        name: cred.displayRole,
+        email: cred.email,
+        role,
+        department: role.toUpperCase(),
+        avatarInitials: cred.displayRole.slice(0, 2).toUpperCase(),
+      },
+      credential: {
+        ...cred,
+        accessLevel,
+        allowedRoutes,
+      },
       loginTimestamp: Date.now(),
     };
-    setSession(newSession);
-    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newSession));
+    setSession(updatedSession);
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(updatedSession));
   }, []);
 
   const canAccessRoute = useCallback(

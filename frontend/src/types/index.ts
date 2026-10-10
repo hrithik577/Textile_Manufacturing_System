@@ -337,7 +337,19 @@ export interface ShiftWorker {
   efficiencyRate?: number;
 }
 
-export type UserRole = 'plant_manager' | 'production_supervisor' | 'quality_inspector' | 'inventory_lead' | 'buyer';
+export type UserRole =
+  | 'owner'
+  | 'manager'
+  | 'plant_manager'
+  | 'production'
+  | 'production_supervisor'
+  | 'quality'
+  | 'quality_inspector'
+  | 'inventory'
+  | 'inventory_lead'
+  | 'dispatch'
+  | 'finance'
+  | 'buyer';
 
 export interface UserProfile {
   id: string;

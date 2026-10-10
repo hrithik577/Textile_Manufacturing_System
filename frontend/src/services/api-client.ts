@@ -78,10 +78,9 @@ export async function request<T>(
 
     const isTimeout = err?.name === 'AbortError' || controller.signal.aborted;
 
-    // Only for read-only queries in dev mode when backend is unreachable, optionally permit fallback if specified
-    const isDev = (typeof import.meta !== 'undefined' && import.meta.env?.DEV) || (typeof window !== 'undefined' && window.location.hostname === 'localhost');
-    if (!isMutation && fallbackData !== undefined && (options.allowReadFallback ?? isDev)) {
-      console.warn(`[Everest API] Backend unreachable for read endpoint ${endpoint}. Returning marked simulated data.`);
+    // Only for read-only queries when explicit demo mode is active or allowReadFallback is explicitly requested
+    if (!isMutation && fallbackData !== undefined && (options.allowReadFallback === true || isForceDemo)) {
+      console.warn(`[Everest API] Returning simulated fallback data for ${endpoint}`);
       return { data: fallbackData, isSimulated: true };
     }
 

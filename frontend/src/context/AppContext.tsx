@@ -84,7 +84,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [session]);
   const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
-    return localStorage.getItem('everest_force_demo') !== 'false';
+    return localStorage.getItem('everest_force_demo') === 'true';
   });
   const [alerts, setAlerts] = useState<OperationalAlert[]>(mockOperationalAlerts);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);

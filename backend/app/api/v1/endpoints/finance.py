@@ -41,7 +41,7 @@ def get_summary(
 def get_closing_the_books(
     period: str = Query("October 2026"),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(require_roles([UserRole.OWNER, UserRole.MANAGER, UserRole.FINANCE])),
 ):
     """Authoritative P&L, order margins, machine yields, and worker payroll queried from live PostgreSQL."""
     return get_closing_the_books_data(db, current_user, period=period)
