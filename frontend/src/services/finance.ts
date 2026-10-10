@@ -1,6 +1,6 @@
 /**
- * Everest Textile OS — Finance & Financial Closing Service
- * Connects directly to backend FastAPI PostgreSQL endpoints for Scene 6 Closing The Books.
+ * Everest Textile OS — Finance & Financial Close Service
+ * Connects directly to backend FastAPI PostgreSQL endpoints for Scene 6 Financial Close.
  */
 
 import { request } from './api-client';
