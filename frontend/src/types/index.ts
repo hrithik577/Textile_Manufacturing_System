@@ -179,7 +179,7 @@ export interface YarnFeasibilityResult {
 
 export type QualityDecision = 'pass' | 'rework' | 'hold' | 'reject';
 export type DefectCategory = 'none' | 'weft_bar' | 'warp_streak' | 'color_shade_variance' | 'hole_snag' | 'oil_stain' | 'gsm_variance' | 'bowing_skewing' | 'selvedge_defect';
-export type QualityGrade = 'Grade A (Export)' | 'Grade B' | 'Commercial' | 'Reject';
+export type QualityGrade = 'Grade A (Export)' | 'Grade B' | 'Grade B (Quality Hold)' | 'Commercial' | 'Reject';
 
 export interface QualityInspection {
   id: string;
