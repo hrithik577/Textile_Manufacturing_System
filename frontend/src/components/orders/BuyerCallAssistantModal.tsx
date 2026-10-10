@@ -376,7 +376,8 @@ export const BuyerCallAssistantModal: React.FC = () => {
         </div>
 
         {/* MODAL BODY (SCROLLABLE) */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6"          {/* THE 3 CORE QUESTIONS DIRECT ANSWER BANNER */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* THE 3 CORE QUESTIONS DIRECT ANSWER BANNER */}
           <div className={clsx(
             'p-6 bg-white editorial-border flex flex-col md:flex-row md:items-start justify-between gap-6 transition-all',
             floorTelemetry.exactStageCategory === 'ready_to_ship'
