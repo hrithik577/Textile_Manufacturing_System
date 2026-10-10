@@ -168,18 +168,18 @@ export const WorkforcePage: React.FC = () => {
                     <span
                       className={clsx(
                         'px-1.5 py-0.5 text-[9px] font-bold uppercase',
-                        worker.status === 'On Duty'
+                        (worker.status === 'On Duty' || worker.attendanceStatus === 'present')
                           ? 'bg-[var(--color-success-green)] text-white'
-                          : worker.status === 'On Break'
+                          : (worker.status === 'On Break' || worker.attendanceStatus === 'on_break')
                           ? 'bg-amber-100 text-amber-800'
                           : 'bg-gray-100 text-gray-800'
                       )}
                     >
-                      {worker.status}
+                      {worker.status || worker.attendanceStatus}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right font-bold text-sm text-[var(--color-vermilion)]">
-                    {worker.efficiencyRate}%
+                    {worker.efficiencyRate ?? worker.efficiencyScore}%
                   </td>
                 </tr>
               ))}

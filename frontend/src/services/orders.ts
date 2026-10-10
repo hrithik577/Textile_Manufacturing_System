@@ -3,28 +3,43 @@ import { CustomerOrder, OrderStatus, PriorityLevel } from '../types';
 import { mockOrders } from './mock-data';
 
 export interface PortalOrderPayload {
-  customerCompany: string;
-  customerName: string;
-  customerEmail: string;
+  customerCompany?: string;
+  customerName?: string;
+  customerEmail?: string;
   customerPhone?: string;
   customerPo?: string;
   deliveryDestination?: string;
-  fabricType: string;
-  gsm: number;
-  widthInches: number;
-  weaveType: string;
-  color: string;
+  fabricType?: string;
+  gsm?: number;
+  widthInches?: number;
+  weaveType?: string;
+  color?: string;
   pantoneCode?: string;
-  finishType: string;
-  orderedQuantity: number;
+  finishType?: string;
+  orderedQuantity?: number;
   unit?: 'meters' | 'yards' | 'kg';
-  requiredDeliveryDate: string;
-  priority: PriorityLevel;
+  requiredDeliveryDate?: string;
+  priority?: PriorityLevel;
   packagingPreference?: string;
   certifications?: string[];
-  unitPriceInr: number;
-  totalAmountInr: number;
+  unitPriceInr?: number;
+  totalAmountInr?: number;
   notes?: string;
+  buyer_name?: string;
+  company_name?: string;
+  buyer_email?: string;
+  buyer_phone?: string;
+  shipping_address?: string;
+  fabric_type?: string;
+  weave_type?: string;
+  color_name?: string;
+  color_hex?: string;
+  pantone_ref?: string;
+  width_inches?: number;
+  quantity_meters?: number;
+  target_delivery_date?: string;
+  special_finishes?: string[];
+  unit_price_inr?: number;
 }
 
 // Global cross-tab and in-window broadcast channel
@@ -125,8 +140,9 @@ export const ordersService = {
         requiredDeliveryDate: o.required_delivery_date || '2026-10-25',
         unitPriceInr: o.items?.[0]?.unit_price || 370,
         totalAmountInr: o.total_amount || 1850000,
+        totalValueUsd: o.total_amount || (o.items?.[0]?.quantity ? (o.items[0].quantity * (o.items[0].unit_price || 370)) : 1850000),
         orderDate: o.order_date || '2026-10-01',
-      } as CustomerOrder;
+      } as unknown as CustomerOrder;
     });
 
     return { data: mapped, isSimulated: res.isSimulated };
@@ -207,22 +223,24 @@ export const ordersService = {
 
   async placePortalOrder(payload: PortalOrderPayload): Promise<{ data: CustomerOrder; isSimulated: boolean }> {
     const orderNumber = `SO-2026-${Math.floor(100 + Math.random() * 900)}`;
-    const unitPrice = payload.unitPriceInr || 280.0;
-    const totalValue = payload.totalAmountInr || payload.orderedQuantity * unitPrice;
+    const orderedQuantity = payload.orderedQuantity || payload.quantity_meters || 1000;
+    const unitPrice = payload.unitPriceInr || payload.unit_price_inr || 280.0;
+    const totalValue = payload.totalAmountInr || orderedQuantity * unitPrice;
+    const deliveryDate = payload.requiredDeliveryDate || payload.target_delivery_date || '2026-11-20';
 
     const newCustomerOrder: CustomerOrder = {
       id: `ord-portal-${Date.now()}`,
       orderNumber,
-      customerName: payload.customerName,
-      customerEmail: payload.customerEmail,
-      customerCompany: payload.customerCompany,
+      customerName: payload.customerName || payload.buyer_name || 'Commercial Client',
+      customerEmail: payload.customerEmail || payload.buyer_email || 'client@example.com',
+      customerCompany: payload.customerCompany || payload.company_name || 'B2B Partner Ltd',
       customerPo: payload.customerPo || `PO-${Math.floor(1000 + Math.random() * 9000)}`,
-      fabricType: `${payload.fabricType} (${payload.gsm} GSM, ${payload.widthInches}")`,
-      yarnSpecs: `${payload.weaveType} • Finish: ${payload.finishType}`,
-      gsm: payload.gsm,
-      color: payload.color,
-      pantoneCode: payload.pantoneCode || 'PANTONE 19-4024 TCX',
-      orderedQuantity: payload.orderedQuantity,
+      fabricType: `${payload.fabricType || payload.fabric_type || 'Cotton Poplin'} (${payload.gsm || 135} GSM, ${payload.widthInches || payload.width_inches || 58}")`,
+      yarnSpecs: `${payload.weaveType || payload.weave_type || 'Plain'} • Finish: ${payload.finishType || 'Standard'}`,
+      gsm: payload.gsm || 135,
+      color: payload.color || payload.color_name || 'Navy Blue',
+      pantoneCode: payload.pantoneCode || payload.pantone_ref || 'PANTONE 19-4024 TCX',
+      orderedQuantity,
       completedQuantity: 0,
       allocatedRollsCount: 0,
       unit: payload.unit || 'meters',
@@ -237,8 +255,8 @@ export const ordersService = {
         dispatched: 0,
       },
       orderDate: new Date().toISOString().split('T')[0],
-      deadlineDate: payload.requiredDeliveryDate,
-      estimatedCompletionDate: payload.requiredDeliveryDate,
+      deadlineDate: deliveryDate,
+      estimatedCompletionDate: deliveryDate,
       priority: payload.priority || 'standard',
       totalValueUsd: totalValue,
       costBreakdown: {
@@ -321,5 +339,36 @@ export const ordersService = {
       { success: true }
     );
     return { success: res.data.success, isSimulated: res.isSimulated };
+  },
+
+  async createPortalOrder(payload: any): Promise<any> {
+    const qty = payload.quantity_meters || payload.orderedQuantity || 1000;
+    const rate = payload.unit_price_inr || payload.unitPriceInr || 280;
+    const normalized: PortalOrderPayload = {
+      customerCompany: payload.company_name || payload.customerCompany || 'Commercial Client',
+      customerName: payload.buyer_name || payload.customerName || 'Buyer',
+      customerEmail: payload.buyer_email || payload.customerEmail || 'buyer@example.com',
+      customerPhone: payload.buyer_phone || payload.customerPhone || '',
+      deliveryDestination: payload.shipping_address || payload.deliveryDestination || 'Factory Port',
+      fabricType: payload.fabric_type || payload.fabricType || 'Cotton Poplin',
+      gsm: payload.gsm || 135,
+      widthInches: payload.width_inches || payload.widthInches || 58,
+      weaveType: payload.weave_type || payload.weaveType || 'Plain',
+      color: payload.color_name || payload.color || 'Royal Blue',
+      pantoneCode: payload.pantone_ref || payload.pantoneCode || '',
+      finishType: (payload.special_finishes && payload.special_finishes.join(', ')) || payload.finishType || 'Standard',
+      orderedQuantity: qty,
+      requiredDeliveryDate: payload.target_delivery_date || payload.requiredDeliveryDate || '2026-11-15',
+      priority: payload.priority || 'standard',
+      unitPriceInr: rate,
+      totalAmountInr: payload.totalAmountInr || (rate * qty),
+      notes: payload.notes,
+    };
+    const res = await this.placePortalOrder(normalized);
+    return {
+      order_number: res.data.orderNumber,
+      order: res.data,
+      isSimulated: res.isSimulated,
+    };
   },
 };

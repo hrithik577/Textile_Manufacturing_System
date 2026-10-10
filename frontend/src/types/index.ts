@@ -37,7 +37,7 @@ export interface MachineLog {
 
 export type OrderStatus = 'draft' | 'in_production' | 'at_risk' | 'quality_hold' | 'ready_to_dispatch' | 'partially_dispatched' | 'completed' | 'cancelled';
 export type ProductionStage = 'yarn_spinning' | 'fabric_weaving' | 'dyeing_finishing' | 'quality_inspection' | 'packing_storage' | 'dispatched';
-export type PriorityLevel = 'standard' | 'high' | 'urgent';
+export type PriorityLevel = 'standard' | 'high' | 'urgent' | 'normal' | 'medium' | 'critical';
 
 export interface CustomerOrder {
   id: string;
@@ -63,6 +63,8 @@ export interface CustomerOrder {
   estimatedCompletionDate: string;
   priority: PriorityLevel;
   totalValueUsd: number;
+  totalAmountInr?: number;
+  unitPriceInr?: number;
   costBreakdown: {
     rawMaterialCostUsd: number;
     weavingCostUsd: number;
@@ -318,6 +320,7 @@ export interface OperationalAlert {
   timestamp: string;
   actionUrl: string;
   actionLabel: string;
+  severity?: string;
 }
 
 export interface ShiftWorker {
@@ -330,6 +333,8 @@ export interface ShiftWorker {
   skillLevel: 'Master Technician' | 'Senior Operator' | 'Junior Operator' | 'Trainee';
   attendanceStatus: 'present' | 'absent' | 'on_break';
   efficiencyScore: number;
+  status?: string;
+  efficiencyRate?: number;
 }
 
 export type UserRole = 'plant_manager' | 'production_supervisor' | 'quality_inspector' | 'inventory_lead' | 'buyer';

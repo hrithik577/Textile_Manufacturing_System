@@ -181,11 +181,11 @@ export const ClosingTheBooksPage: React.FC = () => {
     e.preventDefault();
     const amountVal = parseFloat(newAmount);
     if (isNaN(amountVal) || amountVal <= 0) {
-      addToast('Please enter a valid expense amount in INR.', 'error');
+      addToast({ type: 'danger', title: 'Invalid Amount', message: 'Please enter a valid expense amount in INR.' });
       return;
     }
     if (!newDesc.trim()) {
-      addToast('Please enter a transaction description.', 'error');
+      addToast({ type: 'danger', title: 'Missing Description', message: 'Please enter a transaction description.' });
       return;
     }
 
@@ -198,7 +198,7 @@ export const ClosingTheBooksPage: React.FC = () => {
         sales_order_id: newOrderId ? parseInt(newOrderId, 10) : null,
         description: newDesc.trim(),
       });
-      addToast(`Recorded ₹${amountVal.toLocaleString()} expense in PostgreSQL ledger.`, 'success');
+      addToast({ type: 'success', title: 'Expense Recorded', message: `Recorded ₹${amountVal.toLocaleString()} expense in PostgreSQL ledger.` });
       setIsModalOpen(false);
       setNewAmount('');
       setNewDesc('');
@@ -206,7 +206,7 @@ export const ClosingTheBooksPage: React.FC = () => {
       // Re-fetch dynamic books immediately
       await fetchLedger(selectedPeriod, true);
     } catch (err: any) {
-      addToast(err?.message || 'Failed to record cost entry in PostgreSQL.', 'error');
+      addToast({ type: 'danger', title: 'Recording Failed', message: err?.message || 'Failed to record cost entry in PostgreSQL.' });
     } finally {
       setIsSubmittingCost(false);
     }

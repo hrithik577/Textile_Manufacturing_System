@@ -152,7 +152,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addToast({
       type: 'success',
       title: `🔔 New Order Received: ${order.orderNumber}`,
-      message: `${order.customerCompany} placed ${order.orderedQuantity.toLocaleString()}m (${order.fabricType}) for ₹${order.totalValueUsd.toLocaleString()}`,
+      message: `${order.customerCompany} placed ${(order.orderedQuantity || 0).toLocaleString()}m (${order.fabricType}) for ₹${(order.totalValueUsd ?? order.totalAmountInr ?? 0).toLocaleString()}`,
       actionUrl: `/orders?orderId=${order.id}`,
       actionLabel: 'View in Orders',
     });

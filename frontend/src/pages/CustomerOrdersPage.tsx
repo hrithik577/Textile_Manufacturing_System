@@ -373,7 +373,7 @@ export const CustomerOrdersPage: React.FC = () => {
 
                     <td className="px-4 py-3 text-right">
                       <div className="font-mono font-bold text-sm mb-2">
-                        ₹{o.totalValueUsd.toLocaleString()}
+                        ₹{(o.totalValueUsd ?? o.totalAmountInr ?? 0).toLocaleString()}
                       </div>
                       <div className="flex items-center justify-end gap-2">
                         <button
@@ -421,7 +421,7 @@ export const CustomerOrdersPage: React.FC = () => {
               <div className="text-right">
                 <span className="text-[10px] uppercase font-mono text-slate-400 block">TOTAL CONTRACT VALUE</span>
                 <span className="text-lg font-bold font-mono text-teal-400">
-                  ₹{selectedOrder.totalValueUsd.toLocaleString()}
+                  ₹{(selectedOrder.totalValueUsd ?? selectedOrder.totalAmountInr ?? 0).toLocaleString()}
                 </span>
               </div>
             </div>

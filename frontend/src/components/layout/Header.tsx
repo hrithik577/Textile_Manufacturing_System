@@ -198,8 +198,8 @@ export const Header: React.FC = () => {
                     </div>
                   ) : (
                     alerts.map((alert) => {
-                      const isCritical = alert.severity === 'critical';
-                      const isWarning = alert.severity === 'warning';
+                      const isCritical = alert.type === 'danger' || alert.severity === 'critical';
+                      const isWarning = alert.type === 'warning' || alert.severity === 'warning';
                       return (
                         <div key={alert.id} className="pt-2.5 first:pt-0 space-y-1.5">
                           <div className="flex items-start justify-between gap-2">
