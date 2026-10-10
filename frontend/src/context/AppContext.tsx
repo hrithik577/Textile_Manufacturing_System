@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { UserProfile, UserRole, OperationalAlert, CustomerOrder } from '../types';
 import { currentUserProfiles, mockOperationalAlerts } from '../services/mock-data';
+import { useAuth } from './AuthContext';
 
 export interface ToastMessage {
   id: string;
@@ -67,7 +68,17 @@ function playNotificationChime() {
 }
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<UserProfile>(currentUserProfiles[0]);
+  const { session } = useAuth();
+  const initialUser = session ? currentUserProfiles.find(u => u.role === session.credential.role) ?? currentUserProfiles[0] : currentUserProfiles[0];
+  const [currentUser, setCurrentUser] = useState<UserProfile>(initialUser);
+
+  // Keep currentUser in sync when the auth session changes (e.g., after login)
+  useEffect(() => {
+    if (session) {
+      const matched = currentUserProfiles.find(u => u.role === session.credential.role);
+      if (matched) setCurrentUser(matched);
+    }
+  }, [session]);
   const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
     return localStorage.getItem('everest_force_demo') !== 'false';
   });

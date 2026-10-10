@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   Menu,
   Search,
@@ -15,6 +16,7 @@ import {
   Sparkles,
   RefreshCw,
   ExternalLink,
+  LogOut,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { DataSourceBadge } from '../common/DataSourceBadge';
@@ -37,9 +39,16 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     dismissAlert,
     setSearchModalOpen,
   } = useApp();
+  const { logout, session } = useAuth();
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  const handleLogout = () => {
+    setProfileOpen(false);
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   // Generate breadcrumb info
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -242,6 +251,15 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                   <p className="text-[10px] text-teal-400 font-mono mt-0.5">{currentUser.department}</p>
                 </div>
 
+                {/* Auth session info */}
+                {session && (
+                  <div className="mb-2 px-1">
+                    <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded px-2 py-0.5">
+                      {session.credential.accessLevel.toUpperCase()} ACCESS
+                    </span>
+                  </div>
+                )}
+
                 <p className="text-[10px] font-mono uppercase text-slate-400 px-1 mb-1.5">
                   Switch Active Role:
                 </p>
@@ -267,6 +285,18 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                       {currentUser.id === user.id && <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />}
                     </button>
                   ))}
+                </div>
+
+                {/* Logout */}
+                <div className="mt-2 pt-2 border-t border-slate-800">
+                  <button
+                    id="btn-logout"
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 p-2 rounded-lg text-xs text-left text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    Sign Out
+                  </button>
                 </div>
               </div>
             </>
