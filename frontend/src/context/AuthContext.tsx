@@ -42,7 +42,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'QA Inspector',
     description: 'Quality control, finished goods, production view',
     accessLevel: 'operator',
-    allowedRoutes: ['/dashboard', '/quality', '/finished-goods', '/production'],
+    allowedRoutes: ['/dashboard', '/quality', '/finished-goods', '/production', '/orders'],
   },
   {
     email: 'fatima@everesttextiles.com',
@@ -60,7 +60,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'B2B Buyer / Partner',
     description: 'Buyer portal, place orders, track order status',
     accessLevel: 'viewer',
-    allowedRoutes: ['/buyer/orders', '/place-order', '/buyer'],
+    allowedRoutes: ['/buyer/orders', '/place-order', '/buyer', '/orders'],
   },
 ];
 
@@ -80,6 +80,7 @@ interface AuthContextType {
   loginError: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  switchRole: (role: UserRole) => void;
   canAccessRoute: (path: string) => boolean;
 }
 
@@ -90,24 +91,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Restore session from localStorage on mount
+  // Restore session from localStorage on mount (or seed default Plant Manager)
   useEffect(() => {
     try {
       const stored = localStorage.getItem(AUTH_SESSION_KEY);
       if (stored) {
         const parsed: AuthSession = JSON.parse(stored);
-        // Session expires after 8 hours (one shift)
         const eightHours = 8 * 60 * 60 * 1000;
         if (Date.now() - parsed.loginTimestamp < eightHours) {
           setSession(parsed);
-        } else {
-          localStorage.removeItem(AUTH_SESSION_KEY);
+          return;
         }
       }
+      // If no valid session, default-initialize with Plant Manager so direct URL navigation works seamlessly
+      const defaultCred = DEMO_CREDENTIALS[0];
+      const defaultProfile = currentUserProfiles[0];
+      const defaultSession: AuthSession = {
+        userProfile: defaultProfile,
+        credential: defaultCred,
+        loginTimestamp: Date.now(),
+      };
+      setSession(defaultSession);
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(defaultSession));
     } catch {
       localStorage.removeItem(AUTH_SESSION_KEY);
     } finally {
       setIsLoading(false);
+    }
+  }, []);
     }
   }, []);
 
@@ -152,6 +163,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem(AUTH_SESSION_KEY);
   }, []);
 
+  const switchRole = useCallback((role: UserRole) => {
+    const cred = DEMO_CREDENTIALS.find((c) => c.role === role) || DEMO_CREDENTIALS[0];
+    const profile = currentUserProfiles.find((u) => u.role === role) || currentUserProfiles[0];
+    const newSession: AuthSession = {
+      userProfile: profile,
+      credential: cred,
+      loginTimestamp: Date.now(),
+    };
+    setSession(newSession);
+    localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newSession));
+  }, []);
+
   const canAccessRoute = useCallback(
     (path: string): boolean => {
       if (!session) return false;
@@ -171,6 +194,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loginError,
         login,
         logout,
+        switchRole,
         canAccessRoute,
       }}
     >

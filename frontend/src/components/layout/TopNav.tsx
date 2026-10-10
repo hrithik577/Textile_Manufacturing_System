@@ -41,7 +41,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     setSearchModalOpen,
     openBuyerCallModal,
   } = useApp();
-  const { logout, session } = useAuth();
+  const { logout, session, switchRole } = useAuth();
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -284,6 +284,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                       key={user.id}
                       onClick={() => {
                         setUserRole(user.role);
+                        switchRole(user.role);
                         setProfileOpen(false);
                       }}
                       className={clsx(

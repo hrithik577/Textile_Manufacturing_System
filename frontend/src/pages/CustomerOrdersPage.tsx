@@ -21,6 +21,7 @@ import {
   PhoneCall,
   MapPin,
   MessageSquare,
+  ArrowRight,
 } from 'lucide-react';
 import { CustomerOrder, OrderStatus, PriorityLevel, ProductionStage } from '../types';
 import { ordersService } from '../services/orders';
