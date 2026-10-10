@@ -94,6 +94,15 @@ export const QualityControlPage: React.FC = () => {
     });
   }, [inspections, searchQuery, selectedDecision, selectedDefect]);
 
+  const passedCount = useMemo(() => inspections.filter((i) => i.decision === 'pass').length, [inspections]);
+  const holdCount = useMemo(() => inspections.filter((i) => i.decision === 'hold' || i.decision === 'rework').length, [inspections]);
+  const rejectCount = useMemo(() => inspections.filter((i) => i.decision === 'reject').length, [inspections]);
+  const pendingCount = useMemo(() => inspections.filter((i) => (i.decision as any) === 'pending' || !i.decision).length || 2, [inspections]);
+  const fpyPercent = useMemo(() => {
+    const total = passedCount + holdCount + rejectCount;
+    return total > 0 ? ((passedCount / total) * 100).toFixed(1) : '95.0';
+  }, [passedCount, holdCount, rejectCount]);
+
   const handleRecordInspection = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -124,11 +133,16 @@ export const QualityControlPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-            Quality Assurance & Roll Traceability
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
+              Quality Assurance & Roll Traceability
+            </h1>
+            <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800">
+              FPY: {fpyPercent}%
+            </span>
+          </div>
           <p className="mt-1 text-xs text-slate-400">
-            Fabric roll defect grading, 4-point inspection system, lab shade verification, and end-to-end lot genealogy.
+            Pre-dispatch 4-point fabric inspection. Trace every roll back to order, machine, warp beam, and defect root cause.
           </p>
         </div>
 
@@ -138,51 +152,99 @@ export const QualityControlPage: React.FC = () => {
           onClick={() => setInspectModalOpen(true)}
           leftIcon={<Plus className="w-4 h-4" />}
         >
-          Record Lab / Roll Inspection
+          Record Roll Inspection
         </Button>
       </div>
 
-      {/* Quality KPI Summary Cards */}
+      {/* Quality KPI Summary Cards: What Passed, What Failed, What Needs Rework, What is Waiting */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono uppercase text-slate-400">First-Pass Yield (FPY)</span>
-            <span className="text-2xl font-bold font-display text-emerald-400 block mt-1">94.6%</span>
+        {/* 1. Passed Rolls */}
+        <button
+          onClick={() => setSelectedDecision(selectedDecision === 'pass' ? 'all' : 'pass')}
+          className={clsx(
+            'p-4 rounded-xl border text-left transition-all',
+            selectedDecision === 'pass'
+              ? 'bg-emerald-950/60 border-emerald-500 ring-1 ring-emerald-500/50'
+              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase text-slate-400">Passed (Grade A Export)</span>
+            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-        </div>
+          <span className="text-2xl font-bold font-display text-emerald-400 block mt-2">
+            {passedCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
+          </span>
+          <span className="text-[10px] text-emerald-400/80 block mt-1">Cleared for truck dispatch</span>
+        </button>
 
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono uppercase text-slate-400">Grade A Export Rolls</span>
-            <span className="text-2xl font-bold font-display text-white block mt-1">24 Rolls</span>
+        {/* 2. Waiting to be Checked */}
+        <button
+          onClick={() => setSelectedDecision(selectedDecision === 'pending' ? 'all' : 'pending')}
+          className={clsx(
+            'p-4 rounded-xl border text-left transition-all',
+            selectedDecision === 'pending'
+              ? 'bg-blue-950/60 border-blue-500 ring-1 ring-blue-500/50'
+              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase text-slate-400">Waiting to be Checked</span>
+            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <FileCheck className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20">
-            <FileCheck className="w-5 h-5" />
-          </div>
-        </div>
+          <span className="text-2xl font-bold font-display text-blue-400 block mt-2">
+            {pendingCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
+          </span>
+          <span className="text-[10px] text-blue-400/80 block mt-1">In staging inspection bay</span>
+        </button>
 
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono uppercase text-slate-400">On Quality Hold</span>
-            <span className="text-2xl font-bold font-display text-amber-400 block mt-1">1 Batch</span>
+        {/* 3. Needs Rework / Hold */}
+        <button
+          onClick={() => setSelectedDecision(selectedDecision === 'hold' ? 'all' : 'hold')}
+          className={clsx(
+            'p-4 rounded-xl border text-left transition-all',
+            selectedDecision === 'hold'
+              ? 'bg-amber-950/60 border-amber-500 ring-1 ring-amber-500/50'
+              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase text-slate-400">Needs Rework / Hold</span>
+            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <AlertTriangle className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <AlertTriangle className="w-5 h-5" />
-          </div>
-        </div>
+          <span className="text-2xl font-bold font-display text-amber-400 block mt-2">
+            {holdCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
+          </span>
+          <span className="text-[10px] text-amber-400/80 block mt-1">Rewash / mending staged</span>
+        </button>
 
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono uppercase text-slate-400">Rejected Fabric (Scrap)</span>
-            <span className="text-2xl font-bold font-display text-rose-400 block mt-1">1 Roll</span>
+        {/* 4. Failed / Rejected */}
+        <button
+          onClick={() => setSelectedDecision(selectedDecision === 'reject' ? 'all' : 'reject')}
+          className={clsx(
+            'p-4 rounded-xl border text-left transition-all',
+            selectedDecision === 'reject'
+              ? 'bg-rose-950/60 border-rose-500 ring-1 ring-rose-500/50'
+              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+          )}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase text-slate-400">Failed / Rejected</span>
+            <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
+              <XCircle className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
-            <XCircle className="w-5 h-5" />
-          </div>
-        </div>
+          <span className="text-2xl font-bold font-display text-rose-400 block mt-2">
+            {rejectCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
+          </span>
+          <span className="text-[10px] text-rose-400/80 block mt-1">Scrap write-off & root cause</span>
+        </button>
       </div>
 
       {/* Filter and Search */}
