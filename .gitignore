@@ -1,0 +1,16 @@
+# Node & Bundler
+node_modules/
+dist/
+build/
+.tmp/
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
