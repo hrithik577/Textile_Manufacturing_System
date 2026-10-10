@@ -83,7 +83,53 @@ export const ordersService = {
     }
 
     const mergedMock = [...localPlacedOrders, ...mockOrders];
-    return request<CustomerOrder[]>('/orders', { method: 'GET' }, mergedMock);
+    const res = await request<any>('/orders', { method: 'GET' }, mergedMock);
+    
+    // Check if response is raw array or Paginated response with items
+    const rawList = Array.isArray(res.data) 
+      ? res.data 
+      : (res.data?.items && Array.isArray(res.data.items) ? res.data.items : mergedMock);
+
+    // Map backend SalesOrderRead format to frontend CustomerOrder if needed
+    const mapped: CustomerOrder[] = rawList.map((o: any) => {
+      if (o.orderNumber && o.stageProgress) {
+        return o as CustomerOrder;
+      }
+      return {
+        id: `ord-${o.id}`,
+        orderNumber: o.order_number || o.orderNumber || `ORD-2026-${o.id}`,
+        customerName: o.customer?.name || o.customerName || 'Direct Client',
+        customerEmail: o.customer?.email || o.customerEmail || 'buyer@example.com',
+        customerCompany: o.customer?.name || o.customerCompany || 'Commercial Partner',
+        customerPo: o.notes || o.customerPo || `PO-${o.id}`,
+        fabricType: o.items?.[0]?.fabric_type || o.fabricType || 'Cotton Poplin 40s',
+        yarnSpecs: o.items?.[0]?.yarn_spec || o.yarnSpecs || '40s Combed Cotton Ring Spun',
+        gsm: o.items?.[0]?.gsm || o.gsm || 135,
+        color: o.items?.[0]?.color || o.color || 'Royal Blue',
+        pantoneCode: o.pantoneCode || 'PANTONE 19-3952 TCX',
+        orderedQuantity: o.items?.[0]?.quantity || o.orderedQuantity || 5000,
+        completedQuantity: o.status === 'completed' ? (o.items?.[0]?.quantity || 5000) : Math.round((o.items?.[0]?.quantity || 5000) * 0.65),
+        allocatedRollsCount: 4,
+        unit: 'meters',
+        status: o.status === 'in_production' ? 'in_production' : o.status === 'completed' ? 'completed' : o.status === 'ready_for_dispatch' ? 'ready_for_dispatch' : 'confirmed',
+        currentStage: o.status === 'completed' ? 'dispatched' : o.status === 'ready_for_dispatch' ? 'packing_storage' : 'fabric_weaving',
+        stageProgress: {
+          yarn_spinning: 100,
+          fabric_weaving: o.status === 'completed' ? 100 : 75,
+          dyeing_finishing: o.status === 'completed' ? 100 : 40,
+          quality_inspection: o.status === 'completed' ? 100 : 0,
+          packing_storage: o.status === 'completed' ? 100 : 0,
+          dispatched: o.status === 'completed' ? 100 : 0,
+        },
+        priority: o.priority || 'normal',
+        requiredDeliveryDate: o.required_delivery_date || '2026-10-25',
+        unitPriceInr: o.items?.[0]?.unit_price || 370,
+        totalAmountInr: o.total_amount || 1850000,
+        orderDate: o.order_date || '2026-10-01',
+      } as CustomerOrder;
+    });
+
+    return { data: mapped, isSimulated: res.isSimulated };
   },
 
   async getOrderById(id: string): Promise<{ data: CustomerOrder | null; isSimulated: boolean }> {

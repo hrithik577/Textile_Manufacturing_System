@@ -149,7 +149,8 @@ export const InventoryPage: React.FC = () => {
 
   // Current Feasibility Result
   const feasibilityResult: YarnFeasibilityResult = useMemo(() => {
-    const matchedOrder = orders.find((o) => o.id === selectedOrderForCheck);
+    const ordersList = Array.isArray(orders) ? orders : [];
+    const matchedOrder = ordersList.find((o) => o.id === selectedOrderForCheck);
     if (matchedOrder) {
       return inventoryService.calculateYarnFeasibility(
         {
