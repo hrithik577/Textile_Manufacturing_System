@@ -26,7 +26,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Production Supervisor',
     description: 'Floor looms, batch runs, shifts, workforce attendance',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/rescue-engine'],
   },
   {
     email: 'quality@everest.com',
@@ -34,7 +34,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'QA & Inspection Lead',
     description: 'Fabric inspection, 4-point defect grading, roll genealogy',
     accessLevel: 'operator',
-    allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders', '/rescue-engine'],
   },
   {
     email: 'inventory@everest.com',
@@ -42,7 +42,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Stores & Yarn Inventory Lead',
     description: 'Yarn gate receipts, warehouse bins, stock movements',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods', '/rescue-engine'],
   },
   {
     email: 'dispatch@everest.com',
@@ -58,7 +58,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Finance & Controller',
     description: 'Financial close, month-end P&L reconciliation, order cost absorption',
     accessLevel: 'admin',
-    allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics'],
+    allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics', '/rescue-engine'],
   },
   {
     email: 'buyer@nordic.com',
@@ -106,25 +106,25 @@ function resolveRolePermissions(role: string): { accessLevel: 'admin' | 'manager
   if (normRole === 'finance') {
     return {
       accessLevel: 'admin',
-      allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics'],
+      allowedRoutes: ['/dashboard', '/closing-the-books', '/orders', '/inventory', '/workforce', '/analytics', '/rescue-engine'],
     };
   }
   if (normRole === 'production' || normRole === 'production_supervisor') {
     return {
       accessLevel: 'manager',
-      allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce'],
+      allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/rescue-engine'],
     };
   }
   if (normRole === 'quality' || normRole === 'quality_inspector') {
     return {
       accessLevel: 'operator',
-      allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders'],
+      allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders', '/rescue-engine'],
     };
   }
   if (normRole === 'inventory' || normRole === 'inventory_lead') {
     return {
       accessLevel: 'manager',
-      allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods'],
+      allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods', '/rescue-engine'],
     };
   }
   if (normRole === 'dispatch') {

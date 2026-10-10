@@ -34,25 +34,46 @@ def register_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(auth_scheme),
 ):
     """
-    Register a new user account.
-    - If 0 users exist in the system, allow first-time initial bootstrap.
-    - Otherwise, strictly requires an authenticated Owner or Manager.
-    - Managers cannot create Owner accounts.
+    Register a new user account with strict role-based access control:
+    - Initial Bootstrap: If 0 users exist in the system, allow first-time admin bootstrap.
+    - Public Registration: Unauthenticated users may ONLY self-register as BUYER (customer portal).
+    - Internal Roles: Assigning privileged roles (OWNER, MANAGER, PRODUCTION, QUALITY, INVENTORY, DISPATCH, FINANCE)
+      strictly requires an active authenticated OWNER or MANAGER session.
+    - Privilege Escalation Guard: MANAGERs cannot create OWNER accounts.
     """
     total_users = db.query(User).count()
-    if total_users > 0:
-        if not credentials or not credentials.credentials:
-            raise UnauthenticatedException("Authentication required to create user accounts.")
-        payload = decode_token(credentials.credentials)
-        if not payload or not payload.get("sub"):
-            raise UnauthenticatedException("Invalid or expired session credentials.")
-        caller = db.query(User).filter(User.id == int(payload["sub"])).first()
-        if not caller or not caller.is_active:
-            raise UnauthorizedAccessException("Inactive or non-existent caller account.")
-        if caller.role not in (UserRole.OWNER, UserRole.MANAGER):
-            raise UnauthorizedAccessException("Administrative privileges required to register users.")
-        if caller.role == UserRole.MANAGER and user_in.role == UserRole.OWNER:
-            raise UnauthorizedAccessException("Managers cannot grant Owner privileges.")
+    
+    # 1. Allow initial system bootstrap if no users exist
+    if total_users == 0:
+        return create_user(db, user_in)
+
+    # 2. If unauthenticated, only BUYER self-registration is permitted
+    if not credentials or not credentials.credentials:
+        if user_in.role != UserRole.BUYER:
+            raise UnauthorizedAccessException(
+                f"Unauthorized role assignment. Internal roles ({user_in.role.value}) can only be created by an authenticated Owner or Manager."
+            )
+        return create_user(db, user_in)
+
+    # 3. Authenticated registration: Validate token and caller privileges
+    payload = decode_token(credentials.credentials)
+    if not payload or not payload.get("sub"):
+        raise UnauthenticatedException("Invalid or expired session credentials.")
+    
+    caller = db.query(User).filter(User.id == int(payload["sub"])).first()
+    if not caller or not caller.is_active:
+        raise UnauthorizedAccessException("Inactive or non-existent caller account.")
+
+    # Only OWNER and MANAGER can create internal roles
+    if caller.role not in (UserRole.OWNER, UserRole.MANAGER):
+        if user_in.role != UserRole.BUYER:
+            raise UnauthorizedAccessException(
+                "Administrative privileges (Owner or Manager) required to register internal staff accounts."
+            )
+
+    # Privilege escalation guard: Managers cannot create Owners
+    if caller.role == UserRole.MANAGER and user_in.role == UserRole.OWNER:
+        raise UnauthorizedAccessException("Plant Managers cannot create accounts with Owner privileges.")
 
     return create_user(db, user_in)
 

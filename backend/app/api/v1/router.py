@@ -17,6 +17,7 @@ from app.api.v1.endpoints import (
     rescue_engine,
     integrations,
     yarniq,
+    analytics,
     system,
 )
 
@@ -39,5 +40,6 @@ api_router.include_router(recovery_plans.router)
 api_router.include_router(rescue_engine.router)
 api_router.include_router(integrations.router)
 api_router.include_router(yarniq.router)
+api_router.include_router(analytics.router)
 api_router.include_router(system.router)
 

@@ -72,23 +72,32 @@ export const AnalyticsPage: React.FC = () => {
   const [plantOee, setPlantOee] = useState<any>(null);
   const [qualitySummary, setQualitySummary] = useState<any>(null);
   const [financeSummary, setFinanceSummary] = useState<any>(null);
+  const [downtimePareto, setDowntimePareto] = useState<any[]>([]);
+  const [defectBreakdown, setDefectBreakdown] = useState<any[]>([]);
+  const [orderMarginData, setOrderMarginData] = useState<any[]>([]);
 
   const loadAnalytics = async () => {
     setIsLoading(true);
     try {
       const days = timeRange === 'week' ? 7 : timeRange === 'month' ? 30 : 60;
-      const [sumRes, trendRes, oeeRes, qcRes, finRes] = await Promise.all([
-        request<DashboardSummary>('/dashboard/summary', { method: 'GET' }),
-        request<ProductionTrendResponse>(`/dashboard/production-trend?days=${days}`, { method: 'GET' }),
-        request<any>('/production/oee', { method: 'GET' }).catch(() => ({ data: null })),
-        request<any>('/quality/summary', { method: 'GET' }).catch(() => ({ data: null })),
-        request<any>('/finance/close-summary', { method: 'GET' }).catch(() => ({ data: null })),
+      const [sumRes, trendRes, oeeRes, qcRes, finRes, downRes, defRes, margRes] = await Promise.all([
+        request<DashboardSummary>('/dashboard/summary', { method: 'GET', allowReadFallback: true }),
+        request<ProductionTrendResponse>(`/dashboard/production-trend?days=${days}`, { method: 'GET', allowReadFallback: true }),
+        request<any>('/production/oee', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: null })),
+        request<any>('/quality/summary', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: null })),
+        request<any>('/finance/close-summary', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: null })),
+        request<any[]>('/analytics/downtime-pareto', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: [] })),
+        request<any[]>('/analytics/defect-distribution', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: [] })),
+        request<any[]>('/analytics/customer-margins', { method: 'GET', allowReadFallback: true }).catch(() => ({ data: [] })),
       ]);
       setSummary(sumRes.data);
       setTrendData(trendRes.data);
       if (oeeRes.data) setPlantOee(oeeRes.data);
       if (qcRes.data) setQualitySummary(qcRes.data);
       if (finRes.data) setFinanceSummary(finRes.data);
+      if (downRes.data && downRes.data.length > 0) setDowntimePareto(downRes.data);
+      if (defRes.data && defRes.data.length > 0) setDefectBreakdown(defRes.data);
+      if (margRes.data && margRes.data.length > 0) setOrderMarginData(margRes.data);
     } catch {
       // Keep previous data on network failure
     } finally {
@@ -113,33 +122,6 @@ export const AnalyticsPage: React.FC = () => {
         };
       })
     : [];
-
-  // Downtime Reasons Pareto
-  const downtimePareto = [
-    { reason: 'Rapier Drive / Motor Overheat', minutes: 285, percentage: 38 },
-    { reason: 'Weft Insertion Breakage', minutes: 165, percentage: 22 },
-    { reason: 'Dye Staging / Liquor Wait', minutes: 120, percentage: 16 },
-    { reason: 'Pin-chain Lubrication / Cleaning', minutes: 90, percentage: 12 },
-    { reason: 'Doffing & Beam Mounting', minutes: 90, percentage: 12 },
-  ];
-
-  // Defect Pareto Breakdown
-  const defectBreakdown = [
-    { name: 'Weft Bar (Starting Mark)', count: 42, color: '#f43f5e' },
-    { name: 'Color Shade Variance (Delta E > 0.8)', count: 28, color: '#f59e0b' },
-    { name: 'Hole / Snag / Needle Mark', count: 18, color: '#3b82f6' },
-    { name: 'Oil & Grease Contamination', count: 12, color: '#8b5cf6' },
-    { name: 'GSM / Dimensional Variance', count: 8, color: '#06b6d4' },
-  ];
-
-  // Order Margin Analysis
-  const orderMarginData = [
-    { customer: 'Zara Inditex', revenue: 79200, cost: 67400, margin: 14.9 },
-    { customer: 'Patagonia Ripstop', revenue: 82500, cost: 74000, margin: 10.3 },
-    { customer: 'H&M Oxford', revenue: 92400, cost: 81800, margin: 11.5 },
-    { customer: 'Levi Denim', revenue: 137500, cost: 122300, margin: 11.1 },
-    { customer: 'Nordic Basic', revenue: 45600, cost: 37700, margin: 17.3 },
-  ];
 
   return (
     <div className="space-y-6">
