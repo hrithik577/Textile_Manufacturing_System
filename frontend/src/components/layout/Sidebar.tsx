@@ -18,6 +18,7 @@ import {
   ExternalLink,
   DollarSign,
   Radar,
+  LogIn,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useApp } from '../../context/AppContext';
@@ -222,7 +223,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer info in sidebar */}
-        <div className="p-3 border-t border-slate-800/80 bg-slate-950/80">
+        <div className="p-3 border-t border-slate-800/80 bg-slate-950/80 space-y-2">
+          <NavLink
+            to="/login"
+            onClick={closeMobile}
+            className={({ isActive }) =>
+              clsx(
+                'flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold transition-all border',
+                isActive
+                  ? 'bg-rose-950/40 text-rose-300 border-rose-800'
+                  : 'bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border-slate-700/80'
+              )
+            }
+            title="Access Login & Role Switcher"
+          >
+            <LogIn className="w-3.5 h-3.5 text-[#F04424] shrink-0" />
+            {!collapsed && (
+              <div className="flex items-center justify-between w-full">
+                <span>Switch Role / Login</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 font-mono">
+                  AUTH
+                </span>
+              </div>
+            )}
+          </NavLink>
+
           {!collapsed ? (
             <div className="rounded-lg bg-slate-900/80 border border-slate-800 p-2.5 text-[11px] text-slate-400">
               <div className="flex items-center justify-between text-slate-300 font-semibold mb-1">

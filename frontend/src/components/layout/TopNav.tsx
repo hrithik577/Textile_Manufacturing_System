@@ -17,6 +17,7 @@ import {
   RefreshCw,
   ExternalLink,
   LogOut,
+  LogIn,
   PhoneCall,
 } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -303,8 +304,18 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                   ))}
                 </div>
 
-                {/* Logout */}
-                <div className="mt-2 pt-2 border-t border-slate-800">
+                {/* Login & Logout actions */}
+                <div className="mt-2 pt-2 border-t border-slate-800 space-y-1">
+                  <button
+                    onClick={() => {
+                      setProfileOpen(false);
+                      navigate('/login');
+                    }}
+                    className="w-full flex items-center gap-2 p-2 rounded-lg text-xs text-left text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-[#F04424]" />
+                    <span>Open Login / Role Portal</span>
+                  </button>
                   <button
                     id="btn-logout"
                     onClick={handleLogout}

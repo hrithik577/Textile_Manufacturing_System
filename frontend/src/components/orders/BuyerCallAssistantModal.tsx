@@ -438,8 +438,8 @@ export const BuyerCallAssistantModal: React.FC = () => {
                 )}
               </div>
             </div>
-          </div>iv>
           </div>
+
 
           {/* VERBAL TELEPHONY PROMPT BOX ("SAY THIS TO THE BUYER RIGHT NOW") */}
           <div className="p-6 bg-white editorial-border">
