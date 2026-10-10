@@ -45,6 +45,50 @@ export const inventoryService = {
     return { success: res.data.success, isSimulated: res.isSimulated };
   },
 
+  async reserveYarnForOrder(payload: {
+    orderId: string;
+    orderNumber?: string;
+    yarnSku: string;
+    quantityKg: number;
+  }): Promise<{ success: boolean; message: string; isSimulated: boolean }> {
+    const res = await request<{ success: boolean; message: string }>(
+      '/inventory/reserve-for-order',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      },
+      { success: true, message: `Reserved ${payload.quantityKg} kg for order ${payload.orderNumber}` }
+    );
+    return { success: res.data.success, message: res.data.message, isSimulated: res.isSimulated };
+  },
+
+  async createPurchaseRequisition(payload: {
+    materialCode?: string;
+    yarnSku?: string;
+    quantityKg: number;
+    supplierName?: string;
+    orderNumber?: string;
+  }): Promise<{ success: boolean; poNumber: string; message: string; isSimulated: boolean }> {
+    const res = await request<{ success: boolean; poNumber: string; message: string }>(
+      '/inventory/purchase-requisition',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      },
+      {
+        success: true,
+        poNumber: `PO-REQ-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        message: `Purchase requisition created for ${payload.quantityKg} kg from ${payload.supplierName || 'supplier'}.`,
+      }
+    );
+    return {
+      success: res.data.success,
+      poNumber: res.data.poNumber,
+      message: res.data.message,
+      isSimulated: res.isSimulated,
+    };
+  },
+
   /**
    * Pre-production Yarn Feasibility & Bill-of-Materials Calculation:
    * Formula: Yarn (kg) = (Length (m) * Width (m) * GSM / 1000) * (1 + Loom Crimp/Wastage factor ~5%)
