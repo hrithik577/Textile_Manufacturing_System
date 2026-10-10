@@ -425,37 +425,46 @@ export const CustomerOrdersPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Material Readiness */}
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono mb-3">
-                Material Readiness Audit
-              </h4>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[11px] text-slate-400">Yarn Stock Allocation</span>
-                    <span className="text-xs font-bold font-mono text-emerald-400">
-                      {selectedOrder.materialReadiness.yarnStockPercent}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 w-full" />
-                  </div>
+              {/* Material Readiness */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Material Readiness & Yarn Allocation
+                  </h4>
+                  <Link
+                    to="/inventory"
+                    className="text-[11px] font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1"
+                  >
+                    <span>Check Live Warehouse Stock</span>
+                    <ChevronRight className="w-3 h-3" />
+                  </Link>
                 </div>
-
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[11px] text-slate-400">Dye / Chemical Recipe</span>
-                    <span className="text-xs font-bold font-mono text-teal-400">
-                      {selectedOrder.materialReadiness.dyesChemicalsPercent}%
-                    </span>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[11px] text-slate-400">Yarn Stock Allocation</span>
+                      <span className="text-xs font-bold font-mono text-emerald-400">
+                        {selectedOrder.materialReadiness.yarnStockPercent}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 w-full" />
+                    </div>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-teal-500" style={{ width: `${selectedOrder.materialReadiness.dyesChemicalsPercent}%` }} />
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[11px] text-slate-400">Dye / Chemical Recipe</span>
+                      <span className="text-xs font-bold font-mono text-teal-400">
+                        {selectedOrder.materialReadiness.dyesChemicalsPercent}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-teal-500" style={{ width: `${selectedOrder.materialReadiness.dyesChemicalsPercent}%` }} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
             {/* Specifications Card */}
             <div>

@@ -119,6 +119,64 @@ export interface StockMovement {
   notes?: string;
 }
 
+export interface InwardGateEntry {
+  id: string;
+  gatePassNumber: string;
+  vehicleNumber: string;
+  driverName: string;
+  driverPhone?: string;
+  supplierName: string;
+  challanInvoiceNumber: string;
+  yarnSku: string;
+  yarnName: string;
+  yarnType: string;
+  yarnColor: string;
+  yarnColorHex?: string;
+  lotNumber: string;
+  bagCount: number;
+  coneCount?: number;
+  grossWeightKg: number;
+  tareWeightKg: number;
+  netWeightKg: number;
+  moisturePercent: number;
+  earmarkedOrderId?: string;
+  earmarkedOrderNumber?: string;
+  earmarkedCustomer?: string;
+  allocatedStorageLocation: string;
+  entryTimestamp: string;
+  receivedBy: string;
+  inspectionStatus: 'passed' | 'quarantine' | 'rejected';
+  notes?: string;
+}
+
+export interface YarnFeasibilityResult {
+  orderId?: string;
+  orderNumber?: string;
+  customerName?: string;
+  fabricType: string;
+  lengthMeters: number;
+  widthInches: number;
+  gsm: number;
+  yarnSpecs: string;
+  calculatedYarnNeededKg: number;
+  warpYarnKg: number;
+  weftYarnKg: number;
+  wastageFactorPercent: number;
+  matchingInventoryItemId: string;
+  matchingYarnSku: string;
+  matchingYarnName: string;
+  totalStockKg: number;
+  reservedStockKg: number;
+  availableStockKg: number;
+  deficitKg: number;
+  feasibilityStatus: 'ready' | 'partial' | 'deficit';
+  readyToStartPercent: number;
+  dailyBurnRateKg: number;
+  runwayDays: number;
+  recommendedSupplier: string;
+  estimatedLeadTimeDays: number;
+}
+
 export type QualityDecision = 'pass' | 'rework' | 'hold' | 'reject';
 export type DefectCategory = 'none' | 'weft_bar' | 'warp_streak' | 'color_shade_variance' | 'hole_snag' | 'oil_stain' | 'gsm_variance' | 'bowing_skewing' | 'selvedge_defect';
 export type QualityGrade = 'Grade A (Export)' | 'Grade B' | 'Commercial' | 'Reject';
