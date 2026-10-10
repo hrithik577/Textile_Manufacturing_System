@@ -13,6 +13,7 @@ from app.schemas.finance import (
     PaymentRead,
     PaymentCreate,
     FinanceSummaryResponse,
+    ClosingTheBooksResponse,
 )
 from app.services.finance_service import (
     get_cost_entries,
@@ -21,6 +22,7 @@ from app.services.finance_service import (
     create_invoice,
     record_payment,
     get_finance_summary,
+    get_closing_the_books_data,
 )
 
 router = APIRouter(prefix="/finance", tags=["Finance & Invoicing"])
@@ -33,6 +35,16 @@ def get_summary(
 ):
     """Calculates total revenue, invoicing, cash collected, production costs, and factory margins."""
     return get_finance_summary(db, current_user)
+
+
+@router.get("/closing-the-books", response_model=ClosingTheBooksResponse, summary="Get dynamic Month-End Financial Closing & P&L Reconciliation")
+def get_closing_the_books(
+    period: str = Query("October 2026"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Authoritative P&L, order margins, machine yields, and worker payroll queried from live PostgreSQL."""
+    return get_closing_the_books_data(db, current_user, period=period)
 
 
 @router.get("/cost-entries", response_model=List[CostEntryRead], summary="List production and operational cost entries")

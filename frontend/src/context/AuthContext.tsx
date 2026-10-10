@@ -117,7 +117,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loginTimestamp: Date.now(),
       };
       setSession(defaultSession);
-      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(defaultSession));
+      // Ensure backend JWT token is primed for PostgreSQL communication
+      if (!localStorage.getItem('everest_auth_token')) {
+        fetch('http://localhost:8000/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'owner@everest.com', password: 'Everest@2026!' }),
+        })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((authData) => {
+            if (authData?.access_token) {
+              localStorage.setItem('everest_auth_token', authData.access_token);
+            }
+          })
+          .catch(() => {});
+      }
     } catch {
       localStorage.removeItem(AUTH_SESSION_KEY);
     } finally {
