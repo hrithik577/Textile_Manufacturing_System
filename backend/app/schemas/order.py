@@ -43,6 +43,20 @@ class SalesOrderCreate(SalesOrderBase):
     items: List[SalesOrderItemCreate] = Field(min_length=1, description="Order must contain at least one item")
 
 
+class PortalOrderPlacementCreate(BaseModel):
+    customer_company: str = Field(min_length=2, description="Buyer company name")
+    customer_name: str = Field(min_length=2, description="Contact person name")
+    customer_email: str = Field(min_length=5, description="Contact email address")
+    customer_phone: Optional[str] = None
+    customer_po: Optional[str] = None
+    delivery_destination: Optional[str] = None
+    required_delivery_date: date
+    priority: OrderPriority = OrderPriority.NORMAL
+    currency: str = "INR"
+    notes: Optional[str] = None
+    items: List[SalesOrderItemCreate] = Field(min_length=1, description="Line items to order")
+
+
 class SalesOrderUpdate(BaseModel):
     status: Optional[OrderStatus] = None
     priority: Optional[OrderPriority] = None

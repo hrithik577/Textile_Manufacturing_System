@@ -6,6 +6,7 @@ import {
   Search,
   Bell,
   Cpu,
+  ShoppingBag,
   ChevronDown,
   User,
   CheckCircle2,
@@ -55,6 +56,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     analytics: { title: "Manufacturing Analytics", subtitle: "OEE utilization, First-Pass Yield (FPY), downtime Pareto & unit profitability" },
     settings: { title: "System Configuration", subtitle: "Factory tolerances, API endpoints & simulation parameters" },
     buyer: { title: "Buyer Order Portal", subtitle: "Direct customer tracking, certified test reports & dispatch tracking" },
+    'place-order': { title: "B2B Order Placement Studio", subtitle: "Configure fabric batches, calculate transparent pricing in ₹ (INR) & dispatch to mill" },
   };
 
   const currentKey = pathnames[0] || 'dashboard';
@@ -102,6 +104,16 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
             Ctrl+K
           </kbd>
         </button>
+
+        {/* Place Order Studio Quick Action */}
+        <Link
+          to="/place-order"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/40 border border-teal-500/50 hover:scale-105 duration-150"
+          title="Open Buyer B2B Order Placement Studio"
+        >
+          <ShoppingBag className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Place Order</span>
+        </Link>
 
         {/* Demo Mode / Live Badge & Switch */}
         <div className="flex items-center gap-2">

@@ -38,8 +38,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const mainNavItems = [
     { name: 'Overview', to: '/dashboard', icon: LayoutDashboard },
+    { name: 'Place B2B Order', to: '/place-order', icon: ShoppingBag, badge: 'Studio', badgeColor: 'teal' },
     { name: 'Production Floor', to: '/production', icon: Cpu, badge: 'Live Grid' },
-    { name: 'Customer Orders', to: '/orders', icon: ShoppingBag },
+    { name: 'Customer Orders', to: '/orders', icon: Package },
     { name: 'Inventory', to: '/inventory', icon: Layers },
     { name: 'Quality Control', to: '/quality', icon: ShieldCheck },
     { name: 'Finished Goods', to: '/finished-goods', icon: Package },

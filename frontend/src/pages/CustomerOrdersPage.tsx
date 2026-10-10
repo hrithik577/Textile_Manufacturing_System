@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import {
   ShoppingBag,
   Search,
@@ -31,7 +31,7 @@ import { clsx } from 'clsx';
 
 export const CustomerOrdersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { addToast } = useApp();
+  const { addToast, lastOrderEvent } = useApp();
 
   const [orders, setOrders] = useState<CustomerOrder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,6 +66,17 @@ export const CustomerOrdersPage: React.FC = () => {
   useEffect(() => {
     loadOrders();
   }, []);
+
+  // Real-time synchronization whenever a new order is received from buyer portal
+  useEffect(() => {
+    if (lastOrderEvent && lastOrderEvent.order) {
+      setOrders((prev) => {
+        const exists = prev.some((o) => o.id === lastOrderEvent.order.id || o.orderNumber === lastOrderEvent.order.orderNumber);
+        if (exists) return prev;
+        return [lastOrderEvent.order, ...prev];
+      });
+    }
+  }, [lastOrderEvent]);
 
   const loadOrders = async () => {
     setLoading(true);
@@ -155,14 +166,23 @@ export const CustomerOrdersPage: React.FC = () => {
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="md"
-          onClick={() => setCreateModalOpen(true)}
-          leftIcon={<Plus className="w-4 h-4" />}
-        >
-          New Customer Order
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/place-order"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/40 border border-teal-500/50"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>Open B2B Order Studio</span>
+          </Link>
+          <Button
+            variant="outline"
+            size="md"
+            onClick={loadOrders}
+            leftIcon={<Clock className="w-4 h-4" />}
+          >
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -225,16 +245,27 @@ export const CustomerOrdersPage: React.FC = () => {
               {filteredOrders.map((o) => {
                 const isOverdue = new Date(o.estimatedCompletionDate) > new Date(o.deadlineDate);
                 const percentCompleted = Math.round((o.completedQuantity / o.orderedQuantity) * 100);
+                const isRecentlyPlaced = lastOrderEvent?.order && (lastOrderEvent.order.id === o.id || lastOrderEvent.order.orderNumber === o.orderNumber);
 
                 return (
                   <tr
                     key={o.id}
                     onClick={() => setSelectedOrder(o)}
-                    className="hover:bg-slate-800/60 cursor-pointer transition-colors"
+                    className={clsx(
+                      'cursor-pointer transition-all duration-300',
+                      isRecentlyPlaced
+                        ? 'bg-teal-950/40 hover:bg-teal-950/60 ring-1 ring-teal-500/50'
+                        : 'hover:bg-slate-800/60'
+                    )}
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="font-mono font-bold text-white text-xs">{o.orderNumber}</span>
+                        {isRecentlyPlaced && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 animate-pulse font-bold">
+                            ✨ LIVE ORDER
+                          </span>
+                        )}
                         {o.priority === 'urgent' && (
                           <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
                             URGENT

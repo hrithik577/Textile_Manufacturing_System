@@ -123,3 +123,38 @@ def test_order_timeline_and_cost_summary(client: TestClient, auth_headers, seede
     # Check cost summary as buyer -> 403 Forbidden (confidential factory data)
     buyer_cost = client.get(f"/api/v1/orders/{order_id}/cost-summary", headers=auth_headers["buyer1"])
     assert buyer_cost.status_code == 403
+
+
+def test_portal_order_placement(client: TestClient):
+    delivery = date.today() + timedelta(days=20)
+    res = client.post(
+        "/api/v1/orders/place",
+        json={
+            "customer_company": "Patagonia Sourcing Ltd",
+            "customer_name": "Sarah Jenkins",
+            "customer_email": "sarah.j@patagonia-demo.com",
+            "customer_phone": "+1-415-555-0199",
+            "customer_po": "PO-PAT-2026-99",
+            "delivery_destination": "Port of Los Angeles, USA",
+            "required_delivery_date": str(delivery),
+            "priority": "urgent",
+            "currency": "INR",
+            "items": [
+                {
+                    "fabric_type": "100% Organic Cotton Twill 210 GSM",
+                    "color_code": "NAVY-01",
+                    "gsm": 210,
+                    "width_inches": 58.0,
+                    "target_quantity": 4000.0,
+                    "unit": "m",
+                    "unit_price": 280.0,
+                }
+            ],
+        },
+    )
+    assert res.status_code == 201
+    data = res.json()
+    assert data["order_number"].startswith("SO-2026-")
+    assert data["total_amount"] == 1120000.0
+    assert data["currency"] == "INR"
+    assert data["status"] == "confirmed"

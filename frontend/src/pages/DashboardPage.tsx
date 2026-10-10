@@ -40,7 +40,7 @@ import {
 import { mockMachines, mockOrders, mockRescueIssues } from '../services/mock-data';
 
 export const DashboardPage: React.FC = () => {
-  const { alerts, isDemoMode, addToast } = useApp();
+  const { alerts, isDemoMode, addToast, lastOrderEvent } = useApp();
   const navigate = useNavigate();
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month'>('today');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -207,6 +207,42 @@ export const DashboardPage: React.FC = () => {
           onClick={() => navigate('/finished-goods')}
         />
       </div>
+
+      {/* Live Incoming Order Banner (Triggered when orders are placed in portal) */}
+      {lastOrderEvent && (
+        <div className="rounded-xl bg-gradient-to-r from-teal-950/60 via-slate-900 to-slate-900 border border-teal-500/50 p-4 sm:p-5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in slide-in-from-top-3">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 rounded-lg bg-teal-500/20 text-teal-400 border border-teal-500/40 shrink-0 shadow-[0_0_15px_rgba(20,184,166,0.3)]">
+              <ShoppingBag className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold uppercase text-teal-300 bg-teal-950 px-2 py-0.5 rounded border border-teal-800 animate-pulse">
+                  Live B2B Order Received
+                </span>
+                <span className="text-xs font-mono font-bold text-white">{lastOrderEvent.order.orderNumber}</span>
+                <span className="text-xs text-slate-400">Just now via Buyer Studio</span>
+              </div>
+              <h3 className="text-sm sm:text-base font-bold text-white font-display mt-1">
+                {lastOrderEvent.order.customerCompany} — {lastOrderEvent.order.orderedQuantity.toLocaleString()}m ({lastOrderEvent.order.fabricType})
+              </h3>
+              <p className="text-xs text-slate-300 mt-0.5 font-mono">
+                Contract Total: ₹{lastOrderEvent.order.totalValueUsd.toLocaleString()} • Delivery Target: {lastOrderEvent.order.deadlineDate}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => navigate(`/orders?orderId=${lastOrderEvent.order.id}`)}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+            >
+              Inspect Order
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Critical Operational Banner (Rescue Engine Quick Bar) */}
       <div className="rounded-xl bg-gradient-to-r from-rose-950/50 via-slate-900 to-slate-900 border border-rose-500/40 p-4 sm:p-5 shadow-lg">
