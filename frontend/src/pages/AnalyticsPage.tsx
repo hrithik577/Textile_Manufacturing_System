@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   BarChart3,
   TrendingUp,
@@ -29,6 +30,7 @@ import {
 } from 'recharts';
 
 export const AnalyticsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'quarter'>('month');
 
   // Weekly Production & OEE trend
@@ -99,6 +101,15 @@ export const AnalyticsPage: React.FC = () => {
               </button>
             ))}
           </div>
+
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate('/closing-the-books')}
+            leftIcon={<DollarSign className="w-3.5 h-3.5" />}
+          >
+            Owner's Month-End Books
+          </Button>
 
           <Button
             variant="outline"

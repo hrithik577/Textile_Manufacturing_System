@@ -21,6 +21,7 @@ import { BuyerPortalPage } from './pages/BuyerPortalPage';
 import { WorkforcePage } from './pages/WorkforcePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { OrderPlacementApp } from './pages/OrderPlacementApp';
+import { ClosingTheBooksPage } from './pages/ClosingTheBooksPage';
 
 export const App: React.FC = () => {
   return (
@@ -61,6 +62,8 @@ export const App: React.FC = () => {
               <Route path="rescue-engine" element={<ProtectedRoute requiredPath="/rescue-engine"><RescueEnginePage /></ProtectedRoute>} />
               <Route path="analytics" element={<ProtectedRoute requiredPath="/analytics"><AnalyticsPage /></ProtectedRoute>} />
               <Route path="workforce" element={<ProtectedRoute requiredPath="/workforce"><WorkforcePage /></ProtectedRoute>} />
+              <Route path="closing-the-books" element={<ProtectedRoute requiredPath="/closing-the-books"><ClosingTheBooksPage /></ProtectedRoute>} />
+              <Route path="owner-pnl" element={<Navigate to="/closing-the-books" replace />} />
               <Route path="settings" element={<ProtectedRoute requiredPath="/settings"><SettingsPage /></ProtectedRoute>} />
 
               {/* Buyer routes */}

@@ -33,7 +33,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Production Supervisor',
     description: 'Production floor, orders, inventory, quality, workforce',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce'],
+    allowedRoutes: ['/dashboard', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/closing-the-books'],
   },
   {
     email: 'david.chen@everesttextiles.com',

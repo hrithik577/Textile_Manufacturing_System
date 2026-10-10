@@ -15,6 +15,7 @@ import {
   ExternalLink,
   RefreshCw,
   Activity,
+  DollarSign,
 } from 'lucide-react';
 import { KPICard } from '../components/common/KPICard';
 import { Button } from '../components/common/Button';
@@ -127,6 +128,15 @@ export const DashboardPage: React.FC = () => {
               </button>
             ))}
           </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/closing-the-books')}
+            leftIcon={<DollarSign className="w-3.5 h-3.5 text-emerald-400" />}
+          >
+            Closing the Books (P&L)
+          </Button>
 
           <Button
             variant="outline"

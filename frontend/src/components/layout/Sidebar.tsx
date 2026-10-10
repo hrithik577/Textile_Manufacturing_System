@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  DollarSign,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useApp } from '../../context/AppContext';
@@ -49,6 +50,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const intelligenceNavItems = [
+    {
+      name: 'Closing the Books',
+      to: '/closing-the-books',
+      icon: DollarSign,
+      badge: 'Month-End P&L',
+      badgeColor: 'emerald',
+      highlight: true,
+    },
     {
       name: 'Rescue Engine',
       to: '/rescue-engine',
