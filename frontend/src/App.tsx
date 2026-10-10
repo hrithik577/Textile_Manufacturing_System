@@ -22,6 +22,7 @@ import { WorkforcePage } from './pages/WorkforcePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { OrderPlacementApp } from './pages/OrderPlacementApp';
 import { ClosingTheBooksPage } from './pages/ClosingTheBooksPage';
+import { YarnIQPage } from './pages/YarnIQPage';
 
 export const App: React.FC = () => {
   return (
@@ -49,6 +50,7 @@ export const App: React.FC = () => {
               <Route path="dashboard" element={<ProtectedRoute requiredPath="/dashboard"><DashboardPage /></ProtectedRoute>} />
 
               {/* Operations routes */}
+              <Route path="yarniq" element={<ProtectedRoute requiredPath="/yarniq"><YarnIQPage /></ProtectedRoute>} />
               <Route path="production" element={<ProtectedRoute requiredPath="/production"><ProductionFloorPage /></ProtectedRoute>} />
               <Route path="orders" element={<ProtectedRoute requiredPath="/orders"><CustomerOrdersPage /></ProtectedRoute>} />
               <Route path="place-order" element={<ProtectedRoute requiredPath="/place-order"><OrderPlacementApp /></ProtectedRoute>} />

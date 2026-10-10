@@ -17,6 +17,7 @@ import {
   ChevronRight,
   ExternalLink,
   DollarSign,
+  Radar,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useApp } from '../../context/AppContext';
@@ -39,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const mainNavItems = [
     { name: 'Overview', to: '/dashboard', icon: LayoutDashboard },
+    { name: 'YarnIQ Engine', to: '/yarniq', icon: Radar, badge: 'AI Ready', badgeColor: 'indigo', highlight: true },
     { name: 'Place B2B Order', to: '/place-order', icon: ShoppingBag, badge: 'Studio', badgeColor: 'teal' },
     { name: 'Production Floor', to: '/production', icon: Cpu, badge: 'Live Grid' },
     { name: 'Customer Orders', to: '/orders', icon: Package },

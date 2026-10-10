@@ -297,37 +297,37 @@ export const BuyerCallAssistantModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-150">
-      <div className="relative w-full max-w-5xl max-h-[92vh] flex flex-col rounded-2xl bg-slate-900 border border-teal-500/40 shadow-[0_25px_70px_rgba(0,0,0,0.85)] text-slate-100 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white editorial-border text-[var(--color-ink)] overflow-hidden">
         
         {/* MODAL HEADER */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/50 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/40 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(20,184,166,0.3)]">
-              <PhoneCall className="w-5 h-5 animate-pulse" />
+        <div className="flex items-center justify-between p-6 border-b border-[var(--color-light-border)] bg-white shrink-0">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 editorial-border flex items-center justify-center bg-[var(--color-paper)] text-[var(--color-ink)] shrink-0">
+              <PhoneCall className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold font-display text-white tracking-tight">
-                  Buyer Call Assistant · Live Floor Status Desk
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-black font-display uppercase tracking-tight">
+                  Buyer Call Assistant
                 </h2>
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-teal-950 text-teal-300 border border-teal-700">
-                  Zero Floor Walk Required
+                <span className="text-[10px] font-bold font-mono uppercase px-2 py-1 bg-[var(--color-ink)] text-white editorial-border tracking-widest">
+                  Live Floor Status Desk
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
-                Answer buyer phone calls in seconds: whether fabric is still being woven, being checked, or ready to ship.
+              <p className="text-[10px] font-bold font-mono uppercase text-[var(--color-industrial-grey)] tracking-widest mt-1">
+                Answer buyer phone calls in seconds. Zero floor walk required.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <kbd className="hidden sm:inline-block px-2 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400">
+          <div className="flex items-center gap-4">
+            <kbd className="hidden sm:inline-block px-2 py-1 bg-[var(--color-paper)] text-[10px] font-bold font-mono uppercase text-[var(--color-industrial-grey)] tracking-widest editorial-border">
               Esc to close
             </kbd>
             <button
               onClick={() => setBuyerCallModalOpen(false)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 text-[var(--color-ink)] hover:bg-[var(--color-paper)] transition-colors editorial-border"
             >
               <X className="w-5 h-5" />
             </button>
@@ -335,22 +335,22 @@ export const BuyerCallAssistantModal: React.FC = () => {
         </div>
 
         {/* TOP SEARCH & RECENT CALLER QUICK-BAR */}
-        <div className="px-6 py-3 border-b border-slate-800/80 bg-slate-950/70 shrink-0 space-y-2.5">
+        <div className="p-4 border-b border-[var(--color-light-border)] bg-[var(--color-paper)] shrink-0 space-y-4">
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-industrial-grey)]" />
             <input
               type="text"
-              placeholder="Search by Buyer Company (e.g. Nordic, Patagonia, Zara), PO #, Order ID (ORD-2026-084), or Fabric..."
+              placeholder="SEARCH BY BUYER COMPANY, PO #, ORDER ID, OR FABRIC..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 focus:border-teal-500 text-sm text-slate-100 placeholder-slate-500 focus:outline-none transition-colors"
+              className="w-full pl-12 pr-4 py-3 bg-white border border-[var(--color-light-border)] focus:border-[var(--color-ink)] text-xs font-bold font-mono text-[var(--color-ink)] placeholder:text-[var(--color-industrial-grey)] uppercase tracking-widest focus:outline-none transition-colors editorial-border"
               autoFocus
             />
           </div>
 
           {/* Quick-select pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-            <span className="text-[11px] font-medium text-slate-400 shrink-0">Frequent Callers:</span>
+          <div className="flex items-center gap-3 overflow-x-auto pb-1">
+            <span className="text-[10px] font-bold font-mono uppercase text-[var(--color-industrial-grey)] tracking-widest shrink-0">Frequent Callers:</span>
             {allOrders.slice(0, 5).map((order) => {
               const isSelected = order.id === activeOrder.id;
               return (
@@ -358,23 +358,17 @@ export const BuyerCallAssistantModal: React.FC = () => {
                   key={order.id}
                   onClick={() => setSelectedOrderId(order.id)}
                   className={clsx(
-                    'px-2.5 py-1 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1.5 transition-all border',
+                    'px-3 py-1.5 text-[10px] font-bold font-mono uppercase tracking-widest shrink-0 flex items-center gap-2 transition-all editorial-border',
                     isSelected
-                      ? 'bg-teal-600/30 text-teal-200 border-teal-500/50 shadow-sm'
-                      : 'bg-slate-900 text-slate-300 border-slate-800 hover:bg-slate-800'
+                      ? 'bg-[var(--color-ink)] text-white'
+                      : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
                   )}
                 >
-                  <span className="font-semibold">{order.orderNumber}</span>
-                  <span className="text-[11px] text-slate-400 truncate max-w-[120px]">
+                  <span className={clsx("w-2 h-2 border border-current", order.status === 'ready_to_dispatch' ? 'bg-[var(--color-success-green)]' : order.status === 'at_risk' ? 'bg-[var(--color-vermilion)]' : 'bg-transparent')} />
+                  <span>{order.orderNumber}</span>
+                  <span className="opacity-75">
                     {order.customerCompany.split(' ')[0]}
                   </span>
-                  {order.status === 'ready_to_dispatch' ? (
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                  ) : order.status === 'at_risk' ? (
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0" />
-                  ) : (
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
-                  )}
                 </button>
               );
             })}
@@ -382,162 +376,149 @@ export const BuyerCallAssistantModal: React.FC = () => {
         </div>
 
         {/* MODAL BODY (SCROLLABLE) */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          
-          {/* THE 3 CORE QUESTIONS DIRECT ANSWER BANNER */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6"          {/* THE 3 CORE QUESTIONS DIRECT ANSWER BANNER */}
           <div className={clsx(
-            'p-5 rounded-2xl border transition-all',
+            'p-6 bg-white editorial-border flex flex-col md:flex-row md:items-start justify-between gap-6 transition-all',
             floorTelemetry.exactStageCategory === 'ready_to_ship'
-              ? 'bg-emerald-950/30 border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
-              : floorTelemetry.exactStageCategory === 'quality'
-              ? 'bg-blue-950/30 border-blue-500/50 shadow-[0_0_25px_rgba(59,130,246,0.15)]'
-              : floorTelemetry.exactStageCategory === 'dyeing'
-              ? 'bg-purple-950/30 border-purple-500/50 shadow-[0_0_25px_rgba(168,85,247,0.15)]'
-              : floorTelemetry.exactStageCategory === 'weaving'
-              ? 'bg-amber-950/30 border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.15)]'
-              : 'bg-teal-950/30 border-teal-500/50'
+              ? 'ring-2 ring-[var(--color-success-green)]'
+              : floorTelemetry.exactStageCategory === 'weaving' && activeOrder.status === 'at_risk'
+              ? 'ring-2 ring-[var(--color-vermilion)]'
+              : ''
           )}>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="flex h-2.5 w-2.5 rounded-full bg-current animate-ping opacity-75" />
-                  <span className="text-[11px] font-mono uppercase tracking-wider font-bold">
-                    EXACT LIVE STATUS FOR BUYER CALL
-                  </span>
-                  <span className="text-slate-400">·</span>
-                  <span className="text-xs font-mono text-slate-300">
-                    PO: <strong className="text-white">{activeOrder.customerPo}</strong>
-                  </span>
-                </div>
-
-                <h3 className="text-2xl font-black font-display tracking-tight text-white flex items-center gap-3">
-                  {floorTelemetry.exactStageCategory === 'ready_to_ship' && (
-                    <CheckCircle2 className="w-7 h-7 text-emerald-400 shrink-0" />
-                  )}
-                  {floorTelemetry.exactStageCategory === 'quality' && (
-                    <ShieldCheck className="w-7 h-7 text-blue-400 shrink-0" />
-                  )}
-                  {floorTelemetry.exactStageCategory === 'dyeing' && (
-                    <Sparkles className="w-7 h-7 text-purple-400 shrink-0" />
-                  )}
-                  {floorTelemetry.exactStageCategory === 'weaving' && (
-                    <Layers className="w-7 h-7 text-amber-400 shrink-0" />
-                  )}
-                  {floorTelemetry.exactStageCategory === 'dispatched' && (
-                    <Truck className="w-7 h-7 text-teal-400 shrink-0" />
-                  )}
-                  <span>{floorTelemetry.exactStageLabel}</span>
-                </h3>
-
-                <p className="text-xs text-slate-300 mt-1 flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                  <span>Physical Mill Floor Location: <strong className="text-white font-medium">{floorTelemetry.physicalLocation}</strong></span>
-                </p>
+            <div>
+              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-[var(--color-light-border)] text-[10px] font-bold font-mono uppercase tracking-widest text-[var(--color-industrial-grey)]">
+                <span className="flex h-3 w-3 border border-[var(--color-vermilion)] bg-[var(--color-vermilion)] animate-pulse" />
+                <span>EXACT LIVE STATUS</span>
+                <span>·</span>
+                <span>PO: <strong className="text-[var(--color-ink)]">{activeOrder.customerPo}</strong></span>
               </div>
 
-              {/* Delivery ETA pill */}
-              <div className="flex flex-col sm:items-end justify-center p-3.5 rounded-xl bg-slate-900/80 border border-slate-700/80 shrink-0 min-w-[240px]">
-                <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                  <Calendar className="w-3.5 h-3.5 text-teal-400" />
-                  <span>Projected Delivery to Buyer:</span>
-                </div>
-                <div className="text-base font-bold font-mono text-teal-300 mt-0.5">
-                  {floorTelemetry.projectedBuyerDelivery}
-                </div>
-                <div className="flex items-center gap-1 text-[11px] font-mono mt-0.5">
-                  {floorTelemetry.slaStatus === 'ahead_of_schedule' ? (
-                    <span className="text-emerald-400 font-semibold">✓ Ahead of SLA Deadline</span>
-                  ) : floorTelemetry.slaStatus === 'risk_delay' ? (
-                    <span className="text-rose-400 font-semibold">⚠ Schedule Recovery Active</span>
-                  ) : (
-                    <span className="text-amber-400 font-semibold">● On Track with SLA</span>
-                  )}
-                </div>
+              <h3 className="text-3xl sm:text-4xl font-black font-display text-[var(--color-ink)] uppercase tracking-tight flex items-center gap-4">
+                {floorTelemetry.exactStageCategory === 'ready_to_ship' && (
+                  <CheckCircle2 className="w-8 h-8 text-[var(--color-success-green)] shrink-0" />
+                )}
+                {floorTelemetry.exactStageCategory === 'quality' && (
+                  <ShieldCheck className="w-8 h-8 text-[var(--color-ink)] shrink-0" />
+                )}
+                {floorTelemetry.exactStageCategory === 'dyeing' && (
+                  <Sparkles className="w-8 h-8 text-[var(--color-ink)] shrink-0" />
+                )}
+                {floorTelemetry.exactStageCategory === 'weaving' && (
+                  <Layers className="w-8 h-8 text-[var(--color-ink)] shrink-0" />
+                )}
+                {floorTelemetry.exactStageCategory === 'dispatched' && (
+                  <Truck className="w-8 h-8 text-[var(--color-success-green)] shrink-0" />
+                )}
+                <span>{floorTelemetry.exactStageLabel}</span>
+              </h3>
+
+              <p className="text-xs font-bold font-mono uppercase tracking-widest text-[var(--color-industrial-grey)] mt-4 flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[var(--color-ink)] shrink-0" />
+                <span>Location: <strong className="text-[var(--color-ink)]">{floorTelemetry.physicalLocation}</strong></span>
+              </p>
+            </div>
+
+            {/* Delivery ETA pill */}
+            <div className="flex flex-col p-4 bg-[var(--color-paper)] editorial-border min-w-[280px]">
+              <div className="flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-widest text-[var(--color-industrial-grey)] mb-2 pb-2 border-b border-[var(--color-light-border)]">
+                <Calendar className="w-4 h-4 text-[var(--color-ink)]" />
+                <span>Projected Delivery:</span>
+              </div>
+              <div className="text-xl font-black font-display text-[var(--color-ink)] uppercase tracking-tight">
+                {floorTelemetry.projectedBuyerDelivery}
+              </div>
+              <div className="flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-widest mt-4">
+                {floorTelemetry.slaStatus === 'ahead_of_schedule' ? (
+                  <span className="text-[var(--color-success-green)] bg-white px-2 py-1 editorial-border">✓ Ahead of SLA</span>
+                ) : floorTelemetry.slaStatus === 'risk_delay' ? (
+                  <span className="text-[var(--color-vermilion)] bg-white px-2 py-1 editorial-border">⚠ Schedule Recovery Active</span>
+                ) : (
+                  <span className="text-[var(--color-ink)] bg-white px-2 py-1 editorial-border">● On Track</span>
+                )}
               </div>
             </div>
+          </div>iv>
           </div>
 
           {/* VERBAL TELEPHONY PROMPT BOX ("SAY THIS TO THE BUYER RIGHT NOW") */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-teal-950/40 via-slate-900 to-slate-900 border border-teal-500/30 relative group">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-teal-400" />
-                <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-teal-300">
-                  Spoken Script · Read Word-for-Word to Caller:
+          <div className="p-6 bg-white editorial-border">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-[var(--color-light-border)]">
+              <div className="flex items-center gap-3">
+                <span className="flex h-3 w-3 bg-[var(--color-ink)]" />
+                <h4 className="text-sm font-black font-display uppercase tracking-tight text-[var(--color-ink)]">
+                  Spoken Script (Read to Caller)
                 </h4>
               </div>
               <button
                 onClick={handleCopyScript}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-teal-600/20 hover:bg-teal-600/40 text-teal-300 border border-teal-500/40 text-xs font-medium transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--color-paper)] text-[var(--color-ink)] text-[10px] font-bold uppercase tracking-widest hover:bg-[var(--color-ink)] hover:text-white transition-colors editorial-border"
               >
                 {copiedScript ? (
                   <>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4" />
                     <span>Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Verbal Script</span>
+                    <Copy className="w-4 h-4" />
+                    <span>Copy Script</span>
                   </>
                 )}
               </button>
             </div>
 
-            <p className="text-sm text-slate-200 font-sans leading-relaxed italic bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            <p className="text-base font-bold font-mono text-[var(--color-ink)] uppercase tracking-widest leading-relaxed bg-[var(--color-paper)] p-6 editorial-border border-dashed">
               "{floorTelemetry.telephonyScript}"
             </p>
           </div>
 
           {/* 3-COLUMN DETAIL CARD: 1. PHYSICAL FLOOR, 2. QUALITY & ROLLS, 3. DISPATCH & LOGISTICS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* 1. PHYSICAL FLOOR TELEMETRY */}
-            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-800 text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                <Cpu className="w-4 h-4 text-teal-400" />
-                <span>1. Mill Machine & Station</span>
+            <div className="p-6 bg-white editorial-border space-y-4">
+              <div className="flex items-center gap-3 pb-4 border-b border-[var(--color-light-border)] text-sm font-black text-[var(--color-ink)] uppercase font-display tracking-tight">
+                <Cpu className="w-5 h-5 text-[var(--color-ink)]" />
+                <span>1. Machine & Station</span>
               </div>
-              <div className="space-y-2 text-xs">
+              <div className="space-y-4 text-xs font-bold font-mono uppercase tracking-widest text-[var(--color-ink)]">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Active Machine:</span>
-                  <span className="font-semibold text-white font-mono text-sm">
-                    {floorTelemetry.activeMachineCode}
-                  </span>
-                  <span className="text-[11px] text-slate-400 block truncate">
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Active Machine:</span>
+                  <span className="text-sm font-black block">{floorTelemetry.activeMachineCode}</span>
+                  <span className="text-[10px] text-[var(--color-industrial-grey)] block truncate">
                     {floorTelemetry.activeMachineName}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Station Operator:</span>
-                  <span className="font-medium text-slate-200">{floorTelemetry.operatorName}</span>
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Operator:</span>
+                  <span>{floorTelemetry.operatorName}</span>
                 </div>
 
                 {floorTelemetry.machineRpm && (
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-slate-400">Loom Operating Speed:</span>
-                    <span className="font-mono text-emerald-400 font-bold">{floorTelemetry.machineRpm} RPM</span>
+                  <div className="flex items-center justify-between border-t border-dashed border-[var(--color-light-border)] pt-4">
+                    <span className="text-[var(--color-industrial-grey)]">Loom Speed:</span>
+                    <span className="font-black">{floorTelemetry.machineRpm} RPM</span>
                   </div>
                 )}
 
                 {floorTelemetry.temperatureC && (
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-slate-400">Dye Vessel Temp:</span>
-                    <span className="font-mono text-purple-400 font-bold">{floorTelemetry.temperatureC} °C</span>
+                  <div className="flex items-center justify-between border-t border-dashed border-[var(--color-light-border)] pt-4">
+                    <span className="text-[var(--color-industrial-grey)]">Dye Temp:</span>
+                    <span className="font-black">{floorTelemetry.temperatureC} °C</span>
                   </div>
                 )}
 
-                <div className="pt-2 border-t border-slate-800/80">
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                    <span>Weaving Progress:</span>
-                    <span className="font-mono text-white font-bold">
+                <div className="pt-4 border-t border-[var(--color-light-border)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[var(--color-industrial-grey)]">Progress:</span>
+                    <span className="font-black">
                       {activeOrder.stageProgress?.fabric_weaving || 100}%
                     </span>
                   </div>
-                  <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="w-full h-2 border border-[var(--color-ink)] bg-[var(--color-paper)]">
                     <div
-                      className="h-full bg-teal-500 rounded-full transition-all"
+                      className="h-full bg-[var(--color-ink)] transition-all"
                       style={{ width: `${activeOrder.stageProgress?.fabric_weaving || 100}%` }}
                     />
                   </div>
@@ -546,45 +527,43 @@ export const BuyerCallAssistantModal: React.FC = () => {
             </div>
 
             {/* 2. QUALITY, ROLLS & READINESS */}
-            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-800 text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                <ShieldCheck className="w-4 h-4 text-blue-400" />
-                <span>2. Fabric Readiness & QA</span>
+            <div className="p-6 bg-white editorial-border space-y-4">
+              <div className="flex items-center gap-3 pb-4 border-b border-[var(--color-light-border)] text-sm font-black text-[var(--color-ink)] uppercase font-display tracking-tight">
+                <ShieldCheck className="w-5 h-5 text-[var(--color-ink)]" />
+                <span>2. QA & Readiness</span>
               </div>
-              <div className="space-y-2 text-xs">
+              <div className="space-y-4 text-xs font-bold font-mono uppercase tracking-widest text-[var(--color-ink)]">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Quantity Breakdown:</span>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-base font-bold text-white font-mono">
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Quantity Breakdown:</span>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl font-black">
                       {(activeOrder.completedQuantity || activeOrder.orderedQuantity).toLocaleString()}
                     </span>
-                    <span className="text-slate-400">/ {activeOrder.orderedQuantity.toLocaleString()} {activeOrder.unit}</span>
+                    <span className="text-[var(--color-industrial-grey)]">/ {activeOrder.orderedQuantity.toLocaleString()} {activeOrder.unit}</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Inspected Rolls:</span>
-                    <span className="text-sm font-bold font-mono text-white">
-                      {floorTelemetry.rollsInspectedCount} Rolls
-                    </span>
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <div className="p-3 bg-[var(--color-paper)] editorial-border">
+                    <span className="text-[10px] text-[var(--color-industrial-grey)] block mb-1">Rolls:</span>
+                    <span className="text-sm font-black">{floorTelemetry.rollsInspectedCount}</span>
                   </div>
-                  <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Grade A Pass Rate:</span>
-                    <span className="text-sm font-bold font-mono text-emerald-400">100% Pass</span>
+                  <div className="p-3 bg-[var(--color-paper)] editorial-border">
+                    <span className="text-[10px] text-[var(--color-industrial-grey)] block mb-1">Grade A:</span>
+                    <span className="text-sm font-black text-[var(--color-success-green)]">100%</span>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Lab Specs & Tolerance:</span>
-                  <span className="text-[11px] text-slate-300 block">
-                    GSM: <strong className="text-white">{activeOrder.gsm}</strong> · Delta E: <strong className="text-white">&lt;0.5</strong>
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Lab Specs:</span>
+                  <span>
+                    GSM: {activeOrder.gsm} · ∆E: &lt;0.5
                   </span>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80">
-                  <span className="text-slate-400 block text-[11px]">Warehouse Staging:</span>
-                  <span className="font-mono text-slate-200 text-xs font-semibold">
+                <div className="pt-4 border-t border-[var(--color-light-border)]">
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Staging:</span>
+                  <span className="font-black">
                     {floorTelemetry.warehouseRack}
                   </span>
                 </div>
@@ -592,40 +571,38 @@ export const BuyerCallAssistantModal: React.FC = () => {
             </div>
 
             {/* 3. DISPATCH & DELIVERY SCHEDULE */}
-            <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-800 text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                <Truck className="w-4 h-4 text-emerald-400" />
-                <span>3. Delivery & Freight ETA</span>
+            <div className="p-6 bg-white editorial-border space-y-4">
+              <div className="flex items-center gap-3 pb-4 border-b border-[var(--color-light-border)] text-sm font-black text-[var(--color-ink)] uppercase font-display tracking-tight">
+                <Truck className="w-5 h-5 text-[var(--color-ink)]" />
+                <span>3. Freight ETA</span>
               </div>
-              <div className="space-y-2 text-xs">
+              <div className="space-y-4 text-xs font-bold font-mono uppercase tracking-widest text-[var(--color-ink)]">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Scheduled Mill Departure:</span>
-                  <span className="font-semibold text-white font-mono text-sm">
-                    {floorTelemetry.projectedMillDispatch}
-                  </span>
-                  <span className="text-[11px] text-slate-400 block">
-                    Loading Gate: {floorTelemetry.dispatchBay}
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Mill Departure:</span>
+                  <span className="text-sm font-black block">{floorTelemetry.projectedMillDispatch}</span>
+                  <span className="text-[10px] text-[var(--color-industrial-grey)] block mt-1">
+                    Gate: {floorTelemetry.dispatchBay}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Carrier & Logistics Partner:</span>
-                  <span className="font-medium text-slate-200">{floorTelemetry.carrierName}</span>
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Carrier:</span>
+                  <span>{floorTelemetry.carrierName}</span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Tracking Reference:</span>
-                  <span className="font-mono text-teal-300 font-semibold">{floorTelemetry.trackingNumber}</span>
+                  <span className="text-[var(--color-industrial-grey)] block mb-1">Tracking:</span>
+                  <span className="font-black">{floorTelemetry.trackingNumber}</span>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80">
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-400">Contract Deadline:</span>
-                    <span className="font-mono text-white font-bold">{activeOrder.deadlineDate}</span>
+                <div className="pt-4 border-t border-[var(--color-light-border)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[var(--color-industrial-grey)]">Deadline:</span>
+                    <span className="font-black">{activeOrder.deadlineDate}</span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-emerald-400 mt-0.5">
-                    <span>SLA Performance:</span>
-                    <span className="font-semibold font-mono">
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-dashed border-[var(--color-light-border)]">
+                    <span className="text-[var(--color-industrial-grey)]">SLA Perf:</span>
+                    <span className={clsx("font-black", floorTelemetry.slaDaysVariance < 0 ? 'text-[var(--color-success-green)]' : floorTelemetry.slaDaysVariance === 0 ? 'text-[var(--color-ink)]' : 'text-[var(--color-vermilion)]')}>
                       {floorTelemetry.slaDaysVariance < 0
                         ? `${Math.abs(floorTelemetry.slaDaysVariance)} Days Early`
                         : floorTelemetry.slaDaysVariance === 0
@@ -640,35 +617,35 @@ export const BuyerCallAssistantModal: React.FC = () => {
           </div>
 
           {/* VISUAL ORDER MILESTONE PIPELINE (Whether it's being woven, checked, or shipped) */}
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-400 mb-3">
-              End-to-End Production & Delivery Pipeline:
+          <div className="p-6 bg-[var(--color-paper)] editorial-border">
+            <h4 className="text-xs font-black font-display uppercase tracking-tight text-[var(--color-ink)] mb-6 pb-2 border-b border-[var(--color-light-border)]">
+              End-to-End Production Pipeline
             </h4>
 
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
               {[
-                { stage: 'yarn_spinning', label: '1. Yarn & Warping', done: true, current: false },
+                { stage: 'yarn_spinning', label: '1. Yarn', done: true, current: false },
                 {
                   stage: 'fabric_weaving',
-                  label: '2. Weaving on Loom',
+                  label: '2. Weaving',
                   done: (activeOrder.stageProgress?.fabric_weaving || 0) >= 100,
                   current: activeOrder.currentStage === 'fabric_weaving',
                 },
                 {
                   stage: 'dyeing_finishing',
-                  label: '3. Dyeing & Finishing',
+                  label: '3. Dyeing',
                   done: (activeOrder.stageProgress?.dyeing_finishing || 0) >= 100,
                   current: activeOrder.currentStage === 'dyeing_finishing',
                 },
                 {
                   stage: 'quality_inspection',
-                  label: '4. Quality Check',
+                  label: '4. Quality',
                   done: (activeOrder.stageProgress?.quality_inspection || 0) >= 100,
                   current: activeOrder.currentStage === 'quality_inspection',
                 },
                 {
                   stage: 'packing_storage',
-                  label: '5. Ready to Ship',
+                  label: '5. Ship',
                   done: activeOrder.status === 'ready_to_dispatch' || activeOrder.status === 'completed',
                   current: activeOrder.status === 'ready_to_dispatch' || activeOrder.currentStage === 'packing_storage',
                 },
@@ -676,26 +653,26 @@ export const BuyerCallAssistantModal: React.FC = () => {
                 <div
                   key={step.stage}
                   className={clsx(
-                    'p-2.5 rounded-lg border text-center transition-all',
+                    'p-4 bg-white editorial-border text-center transition-all',
                     step.current
-                      ? 'bg-teal-950/60 border-teal-500 text-teal-200 shadow-sm shadow-teal-500/20'
+                      ? 'ring-2 ring-[var(--color-ink)]'
                       : step.done
-                      ? 'bg-slate-900 border-slate-700/80 text-slate-300'
-                      : 'bg-slate-950 border-slate-800 text-slate-400'
+                      ? 'opacity-75'
+                      : 'opacity-50'
                   )}
                 >
-                  <div className="flex items-center justify-center mb-1">
+                  <div className="flex items-center justify-center mb-2">
                     {step.done ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-5 h-5 text-[var(--color-ink)]" />
                     ) : step.current ? (
-                      <span className="flex h-3 w-3 rounded-full bg-teal-400 animate-pulse" />
+                      <span className="w-4 h-4 bg-[var(--color-ink)] border border-[var(--color-ink)] animate-pulse" />
                     ) : (
-                      <span className="w-3 h-3 rounded-full border border-slate-600" />
+                      <span className="w-4 h-4 border border-[var(--color-industrial-grey)]" />
                     )}
                   </div>
-                  <span className="text-[11px] font-semibold block leading-tight">{step.label}</span>
-                  <span className="text-[10px] font-mono text-slate-400 block mt-0.5">
-                    {step.done ? '100% Done' : step.current ? 'ACTIVE NOW' : 'Scheduled'}
+                  <span className="text-[11px] font-black font-display uppercase tracking-tight block">{step.label}</span>
+                  <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-[var(--color-industrial-grey)] block mt-2 pt-2 border-t border-[var(--color-light-border)]">
+                    {step.done ? 'Done' : step.current ? 'Active' : 'Wait'}
                   </span>
                 </div>
               ))}
@@ -705,37 +682,37 @@ export const BuyerCallAssistantModal: React.FC = () => {
         </div>
 
         {/* MODAL FOOTER WITH ONE-CLICK COMMUNICATIONS */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-6 py-4 border-t border-slate-800 bg-slate-950/90 shrink-0">
-          <div className="flex items-center gap-2 text-xs text-slate-400 w-full sm:w-auto">
-            <span>Customer: <strong className="text-white">{activeOrder.customerCompany}</strong></span>
-            <span>·</span>
-            <span>Email: <strong className="text-slate-300">{activeOrder.customerEmail}</strong></span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 border-t border-[var(--color-light-border)] bg-white shrink-0">
+          <div className="flex items-center gap-4 text-[10px] font-bold font-mono uppercase tracking-widest text-[var(--color-industrial-grey)] w-full sm:w-auto">
+            <span>Customer: <strong className="text-[var(--color-ink)]">{activeOrder.customerCompany}</strong></span>
+            <span className="hidden sm:inline">·</span>
+            <span>Email: <strong className="text-[var(--color-ink)]">{activeOrder.customerEmail}</strong></span>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
             <button
               onClick={handleCopyTrackingLink}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-[var(--color-ink)] text-[10px] font-bold font-mono uppercase tracking-widest editorial-border hover:bg-[var(--color-paper)] transition-colors"
               title="Copy link for buyer to track order themselves online"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              <span>{copiedLink ? 'Link Copied!' : 'Copy Buyer Link'}</span>
+              <span>{copiedLink ? 'Link Copied!' : 'Copy Link'}</span>
             </button>
 
             <button
               onClick={handleSendWhatsAppUpdate}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-success-green)] text-white text-[10px] font-bold font-mono uppercase tracking-widest editorial-border hover:bg-green-700 transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>Send WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
 
             <button
               onClick={handleSendEmailCert}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-semibold transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-[var(--color-ink)] text-[10px] font-bold font-mono uppercase tracking-widest editorial-border hover:bg-[var(--color-paper)] transition-colors"
             >
               <Mail className="w-3.5 h-3.5" />
-              <span>Email QA Cert</span>
+              <span>Email QA</span>
             </button>
 
             <button
@@ -743,9 +720,9 @@ export const BuyerCallAssistantModal: React.FC = () => {
                 setBuyerCallModalOpen(false);
                 navigate(`/orders?orderId=${activeOrder.id}`);
               }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-md shadow-teal-950/40 border border-teal-400/40 transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-2 bg-[var(--color-ink)] text-white text-[10px] font-bold font-mono uppercase tracking-widest editorial-border hover:bg-black/80 transition-colors"
             >
-              <span>Full Order Detail</span>
+              <span>Full Detail</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

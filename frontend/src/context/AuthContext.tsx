@@ -33,7 +33,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Production Supervisor',
     description: 'Production floor, orders, inventory, quality, workforce',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/closing-the-books'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/production', '/orders', '/inventory', '/quality', '/finished-goods', '/workforce', '/closing-the-books'],
   },
   {
     email: 'david.chen@everesttextiles.com',
@@ -42,7 +42,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'QA Inspector',
     description: 'Quality control, finished goods, production view',
     accessLevel: 'operator',
-    allowedRoutes: ['/dashboard', '/quality', '/finished-goods', '/production', '/orders'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/quality', '/finished-goods', '/production', '/orders'],
   },
   {
     email: 'fatima@everesttextiles.com',
@@ -51,7 +51,7 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
     displayRole: 'Inventory & Stores Lead',
     description: 'Inventory, dispatch, orders — gate entry and yarn feasibility',
     accessLevel: 'manager',
-    allowedRoutes: ['/dashboard', '/inventory', '/dispatch', '/orders', '/finished-goods'],
+    allowedRoutes: ['/dashboard', '/yarniq', '/inventory', '/dispatch', '/orders', '/finished-goods'],
   },
   {
     email: 'sarah.j@nordicapparel.com',

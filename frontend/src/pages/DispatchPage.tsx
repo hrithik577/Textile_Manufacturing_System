@@ -320,136 +320,153 @@ export const DispatchPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-            Dispatch, Truck Loading & Store Shelf Console
+          <h1 className="text-4xl lg:text-6xl font-black font-display uppercase tracking-tighter leading-none mb-2 text-[var(--color-ink)]">
+            Dispatch & Store Shelf Console
           </h1>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="text-sm font-sans text-[var(--color-industrial-grey)] max-w-2xl">
             Verify the right rolls for the right buyer, prevent duplicate dispatches, generate matching tax invoices, and monitor warehouse shelves so nothing is forgotten in a corner.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="md" onClick={loadData} leftIcon={<RefreshCw className="w-4 h-4" />}>
+          <button
+            onClick={loadData}
+            className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-widest editorial-border hover:bg-[var(--color-paper)] transition-colors text-[var(--color-ink)]"
+          >
+            <RefreshCw className="w-4 h-4" />
             Refresh Store
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* ─── SCENE 3 PROBLEM SOLVED: STORE SHELF VISIBILITY BANNER ─────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* ─── SCENE 3 PROBLEM SOLVED: STORE SHELF VISIBILITY BANNER ─────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* KPI 1: Sitting on the Shelf */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-900 border border-teal-500/30 shadow-md">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-teal-300 font-bold flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-teal-400" />
-              SITTING ON STORE SHELVES
+        <div className="p-6 bg-white editorial-border">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--color-light-border)]">
+            <span className="text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-2 text-[var(--color-ink)]">
+              <Layers className="w-5 h-5 text-[var(--color-ink)]" />
+              Sitting on Store Shelves
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-950 text-teal-300 border border-teal-800">
+            <span className="text-[10px] font-mono px-3 py-1 font-bold uppercase tracking-widest editorial-border bg-[var(--color-paper)] text-[var(--color-ink)]">
               Current Inventory
             </span>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl font-black font-display text-white">
-              {shelfStats.sittingRollsCount} Rolls
+          <div className="flex flex-col gap-1">
+            <span className="text-4xl font-black font-display tracking-tighter text-[var(--color-ink)]">
+              {shelfStats.sittingRollsCount} <span className="text-lg">Rolls</span>
             </span>
-            <span className="font-mono text-sm text-teal-400 font-bold">
+            <span className="font-mono text-sm text-[var(--color-industrial-grey)] font-bold">
               {shelfStats.sittingMeters.toLocaleString()} meters
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
+          <p className="text-xs font-sans text-[var(--color-industrial-grey)] mt-4 pt-4 border-t border-[var(--color-light-border)]">
             Total gross weight: <strong>{shelfStats.sittingWeightKg.toFixed(1)} kg</strong> stored in Racks A-12, A-13, B-04.
           </p>
         </div>
 
         {/* KPI 2: Gone Out / Dispatched */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-900 border border-emerald-500/30 shadow-md">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
-              <Truck className="w-4 h-4 text-emerald-400" />
-              ALREADY GONE OUT (DISPATCHED)
+        <div className="p-6 bg-white editorial-border ring-1 ring-[var(--color-success-green)] border-[var(--color-success-green)]">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--color-light-border)]">
+            <span className="text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-2 text-[var(--color-success-green)]">
+              <Truck className="w-5 h-5" />
+              Already Gone Out (Dispatched)
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+            <span className="text-[10px] font-mono px-3 py-1 font-bold uppercase tracking-widest bg-[var(--color-success-green)] text-white">
               Locked Ledger
             </span>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl font-black font-display text-white">
-              {shelfStats.dispatchedRollsCount} Rolls
+          <div className="flex flex-col gap-1">
+            <span className="text-4xl font-black font-display tracking-tighter text-[var(--color-ink)]">
+              {shelfStats.dispatchedRollsCount} <span className="text-lg">Rolls</span>
             </span>
-            <span className="font-mono text-sm text-emerald-400 font-bold">
+            <span className="font-mono text-sm text-[var(--color-success-green)] font-bold">
               {shelfStats.dispatchedMeters.toLocaleString()} meters
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
+          <p className="text-xs font-sans text-[var(--color-industrial-grey)] mt-4 pt-4 border-t border-[var(--color-light-border)]">
             Locked from re-dispatch. Transferred to carrier Maersk & DHL trucks.
           </p>
         </div>
 
         {/* KPI 3: Aging in Corner / Forgotten Fabric Radar */}
         <div className={clsx(
-          'p-4 rounded-2xl border shadow-md transition-all',
+          'p-6 bg-white editorial-border transition-all',
           shelfStats.agingRolls.length > 0
-            ? 'bg-amber-950/30 border-amber-500/50'
-            : 'bg-slate-900 border-slate-800'
+            ? 'border-[var(--color-vermilion)] ring-1 ring-[var(--color-vermilion)]'
+            : ''
         )}>
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-amber-400" />
-              AGING FABRIC RADAR (ZERO FORGOTTEN)
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-[var(--color-light-border)]">
+            <span className={clsx(
+              "text-[10px] font-mono uppercase tracking-widest font-bold flex items-center gap-2",
+              shelfStats.agingRolls.length > 0 ? "text-[var(--color-vermilion)]" : "text-[var(--color-ink)]"
+            )}>
+              <Clock className="w-5 h-5" />
+              Aging Fabric Radar (Zero Forgotten)
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+            <span className={clsx(
+              "text-[10px] font-mono px-3 py-1 font-bold uppercase tracking-widest editorial-border text-[var(--color-ink)]",
+              shelfStats.agingRolls.length > 0 ? "bg-[var(--color-vermilion)] text-white border-[var(--color-vermilion)]" : "bg-[var(--color-paper)]"
+            )}>
               &gt;10 Days Staged
             </span>
           </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl font-black font-display text-amber-200">
-              {shelfStats.agingRolls.length} Rolls Flagged
+          <div className="flex flex-col gap-1">
+            <span className={clsx(
+              "text-4xl font-black font-display tracking-tighter",
+              shelfStats.agingRolls.length > 0 ? "text-[var(--color-vermilion)]" : "text-[var(--color-ink)]"
+            )}>
+              {shelfStats.agingRolls.length} <span className="text-lg">Rolls Flagged</span>
             </span>
-            <span className="font-mono text-sm text-amber-300 font-bold">
+            <span className={clsx(
+              "font-mono text-sm font-bold",
+              shelfStats.agingRolls.length > 0 ? "text-[var(--color-vermilion)]" : "text-[var(--color-industrial-grey)]"
+            )}>
               {shelfStats.agingRolls.reduce((s, r) => s + r.netLengthMeters, 0)} meters
             </span>
           </div>
-          <p className="text-[11px] text-slate-300 mt-1">
+          <p className="text-xs font-sans text-[var(--color-ink)] mt-4 pt-4 border-t border-[var(--color-light-border)]">
             {shelfStats.agingRolls.length > 0 ? (
-              <span>⚠️ Staged in <strong>Warehouse Bay 1 / Rack C-14 (Corner)</strong> for 14 days without dispatch!</span>
+              <span className="font-bold">⚠️ Staged in <strong>Warehouse Bay 1 / Rack C-14 (Corner)</strong> for 14 days without dispatch!</span>
             ) : (
-              <span>✓ All fabric rotating normally. Zero rolls forgotten in corners.</span>
+              <span className="font-bold text-[var(--color-industrial-grey)]">✓ All fabric rotating normally. Zero rolls forgotten in corners.</span>
             )}
           </p>
         </div>
       </div>
 
       {/* ─── TRUCK LOADING GATE SCANNER & MISMATCH GUARD ─────────────────────────── */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-teal-500/40 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/40 flex items-center justify-center shrink-0">
-              <Barcode className="w-5 h-5 animate-pulse" />
+      <div className="p-6 bg-[var(--color-paper)] editorial-border shadow-md space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-white editorial-border flex items-center justify-center shrink-0 text-[var(--color-ink)]">
+              <Barcode className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <h3 className="text-sm font-bold font-display text-white">
-                Truck Loading Gate Barcode Scanner & Mismatch Guard
+              <h3 className="text-xl font-black font-display uppercase tracking-tight text-[var(--color-ink)]">
+                Truck Loading Gate Barcode Scanner
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm font-sans text-[var(--color-industrial-grey)] mt-1">
                 Scan each roll as it is physically loaded onto the truck. Enforces buyer isolation, duplicate block, and QA clearance.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-slate-400">Active Target Truck:</span>
-            <span className="px-2.5 py-1 rounded-lg bg-teal-950 text-teal-200 border border-teal-700 font-bold">
+          <div className="flex items-center gap-3 text-xs font-mono font-bold uppercase tracking-widest text-[var(--color-industrial-grey)]">
+            <span>Active Target Truck</span>
+            <span className="px-3 py-1.5 editorial-border bg-white text-[var(--color-ink)]">
               {vehicleNumber} ({currentOrder?.customerCompany.split(' ')[0]})
             </span>
           </div>
         </div>
 
         {/* Barcode Input Bar with Scan Button */}
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Barcode className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Barcode className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-industrial-grey)]" />
             <input
               type="text"
               placeholder="Scan or enter Roll Barcode (e.g. ROLL-8401, ROLL-8402)..."
@@ -461,49 +478,48 @@ export const DispatchPage: React.FC = () => {
                   handleBarcodeScan();
                 }
               }}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-teal-500 text-sm text-white placeholder-slate-500 font-mono focus:outline-none"
+              className="w-full pl-12 pr-4 py-3 editorial-border bg-white focus:ring-1 focus:ring-[var(--color-ink)] text-sm font-bold font-mono placeholder-[var(--color-industrial-grey)] focus:outline-none"
             />
           </div>
 
-          <Button
-            variant="primary"
-            size="md"
+          <button
             onClick={() => handleBarcodeScan()}
-            leftIcon={<PackageCheck className="w-4 h-4" />}
+            className="flex items-center justify-center gap-2 px-8 py-3 bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors editorial-border font-bold text-xs uppercase tracking-widest shrink-0"
           >
+            <PackageCheck className="w-4 h-4" />
             Verify & Load to Truck
-          </Button>
+          </button>
         </div>
 
         {/* Simulation / Testing Quick Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto text-xs pt-1">
-          <span className="text-[11px] text-slate-400 shrink-0 font-medium">Test Guard Scenarios:</span>
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-industrial-grey)] shrink-0">Test Scenarios:</span>
           <button
             onClick={() => handleBarcodeScan('ROLL-8401')}
-            className="px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 text-teal-300 border border-slate-800 font-mono text-[11px] shrink-0"
+            className="px-3 py-1.5 bg-white hover:bg-[var(--color-paper)] text-[var(--color-ink)] editorial-border font-bold font-mono text-[10px] uppercase tracking-widest transition-colors"
           >
-            ✓ Scan Valid Roll (ROLL-8401)
+            ✓ Valid Roll (ROLL-8401)
           </button>
           <button
             onClick={() => handleBarcodeScan('ROLL-9701')}
-            className="px-2.5 py-1 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-rose-300 border border-rose-800/60 font-mono text-[11px] shrink-0"
+            className="px-3 py-1.5 bg-white hover:bg-[var(--color-paper)] text-[var(--color-vermilion)] editorial-border border-[var(--color-vermilion)] font-bold font-mono text-[10px] uppercase tracking-widest transition-colors"
             title="Attempts to load Patagonia roll into Nordic Apparel truck"
           >
-            ⚠️ Test Wrong Buyer (ROLL-9701 Patagonia)
+            ⚠️ Wrong Buyer (ROLL-9701 Patagonia)
           </button>
           <button
             onClick={() => handleBarcodeScan('ROLL-8390')}
-            className="px-2.5 py-1 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 text-amber-300 border border-amber-800/60 font-mono text-[11px] shrink-0"
+            className="px-3 py-1.5 bg-white hover:bg-[var(--color-paper)] text-[var(--color-vermilion)] editorial-border border-[var(--color-vermilion)] font-bold font-mono text-[10px] uppercase tracking-widest transition-colors"
             title="Attempts to re-dispatch a roll already marked dispatched"
           >
-            ⚠️ Test Duplicate Dispatch (ROLL-8390)
+            ⚠️ Duplicate Dispatch (ROLL-8390)
           </button>
           <button
             onClick={() => handleBarcodeScan('ROLL-9201')}
-            className="px-2.5 py-1 rounded-lg bg-purple-950/40 hover:bg-purple-900/40 text-purple-300 border border-purple-800/60 font-mono text-[11px] shrink-0"
+            className="px-3 py-1.5 bg-white hover:bg-[var(--color-paper)] text-purple-600 editorial-border border-purple-600 font-bold font-mono text-[10px] uppercase tracking-widest transition-colors"
             title="Attempts to dispatch roll on QC Hold"
           >
-            ⚠️ Test Quality Hold (ROLL-9201 Grade B)
+            ⚠️ Quality Hold (ROLL-9201 Grade B)
           </button>
         </div>
 
@@ -551,20 +567,20 @@ export const DispatchPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Step 1: Customer Order Selector */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-xs font-bold flex items-center justify-center font-mono">
+          <div className="bg-white p-6 editorial-border mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[var(--color-light-border)] pb-4 mb-6">
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-8 editorial-border bg-[var(--color-ink)] text-white text-sm font-bold flex items-center justify-center font-mono">
                   1
                 </span>
-                <h3 className="text-sm font-semibold text-white font-display">
+                <h3 className="text-xl font-black text-[var(--color-ink)] font-display uppercase tracking-tight">
                   Select Customer Order for Dispatch
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400 uppercase">QA Verified Stage</span>
+              <span className="text-[10px] font-mono text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest border border-[var(--color-light-border)] px-2 py-1 bg-[var(--color-paper)]">QA Verified Stage</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {orders.map((order) => {
                 const isSelected = order.id === selectedOrderId;
                 return (
@@ -576,21 +592,21 @@ export const DispatchPage: React.FC = () => {
                       setScanAlert(null);
                     }}
                     className={clsx(
-                      'p-3.5 rounded-xl border text-left cursor-pointer transition-all duration-150',
+                      'p-4 editorial-border text-left cursor-pointer transition-all duration-150',
                       isSelected
-                        ? 'bg-teal-950/20 border-teal-500 shadow-md ring-1 ring-teal-500/40'
-                        : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                        ? 'border-[var(--color-ink)] ring-1 ring-[var(--color-ink)] bg-[var(--color-paper)]'
+                        : 'bg-white hover:bg-[var(--color-paper)]'
                     )}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-xs text-white">{order.orderNumber}</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-mono font-bold text-sm text-[var(--color-ink)]">{order.orderNumber}</span>
                       <StatusBadge status={order.status} size="sm" />
                     </div>
-                    <p className="text-xs font-semibold text-slate-200 mt-1">{order.customerCompany}</p>
-                    <p className="text-[11px] text-slate-400">{order.fabricType}</p>
-                    <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
-                      <span className="text-slate-400">Total: {order.orderedQuantity.toLocaleString()} m</span>
-                      <span className="text-teal-400 font-semibold">{order.allocatedRollsCount} rolls staged</span>
+                    <p className="text-sm font-bold text-[var(--color-ink)]">{order.customerCompany}</p>
+                    <p className="text-[11px] font-mono text-[var(--color-industrial-grey)] mt-1">{order.fabricType}</p>
+                    <div className="mt-4 pt-3 border-t border-[var(--color-light-border)] flex items-center justify-between text-[11px] font-mono font-bold">
+                      <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Total: {order.orderedQuantity.toLocaleString()} m</span>
+                      <span className="text-[var(--color-ink)] uppercase tracking-widest">{order.allocatedRollsCount} rolls staged</span>
                     </div>
                   </div>
                 );
@@ -599,27 +615,27 @@ export const DispatchPage: React.FC = () => {
           </div>
 
           {/* Step 2: Eligible Roll Allocation & Barcode Verification */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-xs font-bold flex items-center justify-center font-mono">
+          <div className="bg-white p-6 editorial-border mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[var(--color-light-border)] pb-4 mb-6">
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-8 editorial-border bg-[var(--color-ink)] text-white text-sm font-bold flex items-center justify-center font-mono">
                   2
                 </span>
-                <h3 className="text-sm font-semibold text-white font-display">
-                  Loaded Rolls on Truck (Live Verification Checklist)
+                <h3 className="text-xl font-black text-[var(--color-ink)] font-display uppercase tracking-tight">
+                  Loaded Rolls on Truck
                 </h3>
               </div>
-              <span className="text-xs text-slate-400 font-mono">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-industrial-grey)] font-mono">
                 {selectedRollIds.length} of {eligibleRolls.length} rolls on truck
               </span>
             </div>
 
             {eligibleRolls.length === 0 ? (
-              <div className="p-8 text-center text-slate-400 text-xs rounded-lg bg-slate-950/60 border border-slate-800 border-dashed">
+              <div className="p-8 text-center text-[var(--color-industrial-grey)] text-xs font-bold uppercase tracking-widest border border-dashed border-[var(--color-light-border)] bg-[var(--color-paper)]">
                 No finished rolls in warehouse for this order. Ensure rolls pass Quality Control first.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {eligibleRolls.map((roll) => {
                   const isChecked = selectedRollIds.includes(roll.id);
 
@@ -628,38 +644,50 @@ export const DispatchPage: React.FC = () => {
                       key={roll.id}
                       onClick={() => toggleRollSelection(roll.id)}
                       className={clsx(
-                        'flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors',
+                        'flex items-center justify-between p-4 editorial-border cursor-pointer transition-colors',
                         isChecked
-                          ? 'bg-teal-950/30 border-teal-500/80 text-white'
-                          : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                          ? 'bg-[var(--color-ink)] border-[var(--color-ink)] text-white'
+                          : 'bg-white hover:bg-[var(--color-paper)] border-[var(--color-light-border)] text-[var(--color-ink)]'
                       )}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => {}}
-                          className="rounded border-slate-700 text-teal-600 focus:ring-teal-500"
+                          className={clsx(
+                            "w-5 h-5 editorial-border rounded-none focus:ring-1 focus:ring-[var(--color-ink)] cursor-pointer",
+                            isChecked ? "text-white" : "text-[var(--color-ink)]"
+                          )}
                         />
                         <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-xs text-white">{roll.rollBarcode}</span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">
+                          <div className="flex items-center gap-3">
+                            <span className="font-mono font-bold text-sm">{roll.rollBarcode}</span>
+                            <span className={clsx(
+                              "text-[10px] px-2 py-0.5 font-bold uppercase tracking-widest font-mono editorial-border",
+                              isChecked ? "bg-white text-[var(--color-ink)]" : "bg-[var(--color-success-green)] text-white border-[var(--color-success-green)]"
+                            )}>
                               {roll.grade}
                             </span>
                             {isChecked && (
-                              <span className="text-[10px] font-mono text-teal-300 bg-teal-950 px-1.5 py-0.5 rounded border border-teal-700">
+                              <span className="text-[10px] font-mono text-[var(--color-ink)] bg-white px-2 py-0.5 border border-white font-bold uppercase tracking-widest">
                                 LOADED ON TRUCK
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-slate-400 mt-0.5">Location: {roll.warehouseLocation}</p>
+                          <p className={clsx(
+                            "text-[11px] font-mono mt-1 font-bold",
+                            isChecked ? "text-white/70" : "text-[var(--color-industrial-grey)]"
+                          )}>Location: {roll.warehouseLocation}</p>
                         </div>
                       </div>
 
-                      <div className="text-right font-mono text-xs">
-                        <div className="font-bold text-teal-400">{roll.netLengthMeters} meters</div>
-                        <div className="text-[10px] text-slate-400">{roll.grossWeightKg} kg</div>
+                      <div className="text-right font-mono text-sm font-bold">
+                        <div>{roll.netLengthMeters} meters</div>
+                        <div className={clsx(
+                          "text-[10px] uppercase tracking-widest mt-1",
+                          isChecked ? "text-white/70" : "text-[var(--color-industrial-grey)]"
+                        )}>{roll.grossWeightKg} kg</div>
                       </div>
                     </div>
                   );
@@ -669,64 +697,64 @@ export const DispatchPage: React.FC = () => {
           </div>
 
           {/* Step 3: Logistics, Carrier & Vehicle Allocation */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-xs font-bold flex items-center justify-center font-mono">
+          <div className="bg-white p-6 editorial-border mb-6">
+            <div className="flex items-center gap-3 border-b border-[var(--color-light-border)] pb-4 mb-6">
+              <span className="w-8 h-8 editorial-border bg-[var(--color-ink)] text-white text-sm font-bold flex items-center justify-center font-mono">
                 3
               </span>
-              <h3 className="text-sm font-semibold text-white font-display">
+              <h3 className="text-xl font-black text-[var(--color-ink)] font-display uppercase tracking-tight">
                 Carrier Logistics & Transport Assignment
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs font-bold uppercase tracking-widest font-mono text-[var(--color-ink)]">
               <div>
-                <label className="text-slate-300 font-medium block mb-1">Carrier / Freight Line</label>
+                <label className="block mb-2">Carrier / Freight Line</label>
                 <input
                   type="text"
                   value={carrierName}
                   onChange={(e) => setCarrierName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500"
+                  className="w-full bg-white editorial-border px-4 py-3 focus:ring-1 focus:ring-[var(--color-ink)] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-slate-300 font-medium block mb-1">Transport Vehicle #</label>
+                <label className="block mb-2">Transport Vehicle #</label>
                 <input
                   type="text"
                   value={vehicleNumber}
                   onChange={(e) => setVehicleNumber(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-teal-500"
+                  className="w-full bg-white editorial-border px-4 py-3 focus:ring-1 focus:ring-[var(--color-ink)] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-slate-300 font-medium block mb-1">Driver Name & Contact</label>
+                <label className="block mb-2">Driver Name</label>
                 <input
                   type="text"
                   value={driverName}
                   onChange={(e) => setDriverName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500"
+                  className="w-full bg-white editorial-border px-4 py-3 focus:ring-1 focus:ring-[var(--color-ink)] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-slate-300 font-medium block mb-1">Driver Phone</label>
+                <label className="block mb-2">Driver Phone</label>
                 <input
                   type="text"
                   value={driverPhone}
                   onChange={(e) => setDriverPhone(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-teal-500"
+                  className="w-full bg-white editorial-border px-4 py-3 focus:ring-1 focus:ring-[var(--color-ink)] focus:outline-none"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="text-slate-300 font-medium block mb-1">Delivery Destination Address</label>
+                <label className="block mb-2">Delivery Destination Address</label>
                 <input
                   type="text"
                   value={destinationAddress}
                   onChange={(e) => setDestinationAddress(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500"
+                  className="w-full bg-white editorial-border px-4 py-3 focus:ring-1 focus:ring-[var(--color-ink)] focus:outline-none"
                 />
               </div>
             </div>
@@ -737,89 +765,92 @@ export const DispatchPage: React.FC = () => {
         <div className="space-y-6">
           
           {/* Dispatch Summary Card */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-            <h3 className="text-sm font-semibold font-display text-white pb-3 border-b border-slate-800 flex items-center justify-between">
+          <div className="bg-white p-6 editorial-border mb-6">
+            <h3 className="text-xl font-black font-display text-[var(--color-ink)] pb-4 mb-4 border-b border-[var(--color-light-border)] flex items-center justify-between uppercase tracking-tight">
               <span>Shipment Loading Summary</span>
-              <span className="text-[10px] font-mono text-teal-400 bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
+              <span className="text-[10px] font-mono text-white bg-[var(--color-success-green)] px-3 py-1 font-bold uppercase tracking-widest editorial-border">
                 100% Verified
               </span>
             </h3>
 
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Target Buyer:</span>
-                <span className="font-semibold text-white truncate max-w-[150px]">
+            <div className="space-y-4 text-xs font-bold font-mono">
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Target Buyer:</span>
+                <span className="text-[var(--color-ink)] truncate max-w-[150px] text-right">
                   {currentOrder?.customerCompany}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Order Ref:</span>
-                <span className="font-mono text-teal-400 font-bold">{currentOrder?.orderNumber}</span>
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Order Ref:</span>
+                <span className="text-[var(--color-ink)] text-right">{currentOrder?.orderNumber}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Total Rolls on Truck:</span>
-                <span className="font-mono font-bold text-white">{selectedRollIds.length} rolls</span>
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Total Rolls on Truck:</span>
+                <span className="text-[var(--color-ink)] text-right text-sm">{selectedRollIds.length} rolls</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Loaded Fabric Meters:</span>
-                <span className="font-mono font-bold text-emerald-400 text-sm">
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Loaded Fabric Meters:</span>
+                <span className="text-[var(--color-success-green)] text-right text-base">
                   {totalSelectedMeters.toLocaleString()} meters
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Gross Export Weight:</span>
-                <span className="font-mono text-slate-300">{totalSelectedWeight.toFixed(1)} kg</span>
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Gross Export Weight:</span>
+                <span className="text-[var(--color-ink)] text-right">{totalSelectedWeight.toFixed(1)} kg</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Assigned Vehicle:</span>
-                <span className="font-mono text-white font-semibold">{vehicleNumber}</span>
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Assigned Vehicle:</span>
+                <span className="text-[var(--color-ink)] text-right">{vehicleNumber}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Carrier:</span>
-                <span className="text-slate-300 truncate max-w-[150px]">{carrierName}</span>
+              <div className="flex justify-between items-end border-b border-dashed border-[var(--color-light-border)] pb-2">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Carrier:</span>
+                <span className="text-[var(--color-ink)] truncate max-w-[150px] text-right">{carrierName}</span>
               </div>
             </div>
 
             {/* Matching Tax Invoice Total Preview */}
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
-              <div className="flex justify-between text-[11px] text-slate-400">
-                <span>Matching Tax Invoice Value:</span>
-                <span className="font-mono text-white font-bold">
+            <div className="p-4 mt-6 bg-[var(--color-paper)] editorial-border space-y-2">
+              <div className="flex justify-between text-xs font-bold font-mono">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Tax Invoice Value:</span>
+                <span className="text-[var(--color-ink)]">
                   ₹{Math.round(totalSelectedMeters * 380).toLocaleString()}
                 </span>
               </div>
-              <div className="flex justify-between text-[10px] text-slate-400">
-                <span>GST (5% HSN 5208):</span>
-                <span className="font-mono text-teal-400">
+              <div className="flex justify-between text-[10px] font-bold font-mono">
+                <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">GST (5% HSN 5208):</span>
+                <span className="text-[var(--color-ink)]">
                   ₹{Math.round(totalSelectedMeters * 380 * 0.05).toLocaleString()}
                 </span>
               </div>
             </div>
 
-            <Button
-              variant="primary"
-              size="lg"
+            <button
               onClick={() => setConfirmDialogOpen(true)}
               disabled={selectedRollIds.length === 0}
-              leftIcon={<Truck className="w-4 h-4" />}
-              className="w-full font-bold shadow-md"
+              className={clsx(
+                "w-full mt-6 flex justify-center items-center gap-2 px-6 py-4 font-bold text-xs uppercase tracking-widest editorial-border transition-colors",
+                selectedRollIds.length === 0
+                  ? "bg-[var(--color-light-border)] text-[var(--color-industrial-grey)] cursor-not-allowed"
+                  : "bg-[var(--color-ink)] text-white hover:bg-black/80"
+              )}
             >
+              <Truck className="w-4 h-4" />
               Authorize Dispatch & Issue Invoice
-            </Button>
+            </button>
           </div>
 
           {/* Recent Dispatches Log */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-3 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+          <div className="bg-white p-6 editorial-border">
+            <div className="flex items-center justify-between pb-4 border-b border-[var(--color-light-border)] mb-4">
+              <h4 className="text-sm font-black uppercase tracking-widest text-[var(--color-ink)] font-display">
                 Recent Dispatches (Locked)
               </h4>
-              <span className="text-[10px] text-emerald-400 font-mono font-semibold">
+              <span className="text-[10px] text-[var(--color-success-green)] font-mono font-bold uppercase tracking-widest">
                 Duplicate Protected
               </span>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               {dispatches.map((disp) => (
                 <div
                   key={disp.id}
@@ -827,16 +858,16 @@ export const DispatchPage: React.FC = () => {
                     setActiveDispatchRecord(disp);
                     setDocModalOpen(true);
                   }}
-                  className="p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors text-xs space-y-1"
+                  className="p-4 bg-[var(--color-paper)] editorial-border hover:bg-black/5 cursor-pointer transition-colors space-y-2"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-white">{disp.dispatchNumber}</span>
-                    <span className="text-[10px] font-mono text-teal-400 font-semibold">{disp.challanNumber}</span>
+                    <span className="font-mono font-bold text-sm text-[var(--color-ink)]">{disp.dispatchNumber}</span>
+                    <span className="text-[10px] font-mono text-[var(--color-industrial-grey)] font-bold">{disp.challanNumber}</span>
                   </div>
-                  <p className="text-slate-300 font-medium truncate">{disp.customerName}</p>
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
+                  <p className="text-[var(--color-ink)] font-bold text-xs truncate uppercase tracking-widest">{disp.customerName}</p>
+                  <div className="flex items-center justify-between text-[11px] text-[var(--color-industrial-grey)] font-mono font-bold pt-2 border-t border-[var(--color-light-border)]">
                     <span>{disp.totalMeters.toLocaleString()}m ({disp.totalRolls} rolls)</span>
-                    <span className="text-emerald-400 font-semibold">IN TRANSIT</span>
+                    <span className="text-[var(--color-success-green)] font-bold uppercase tracking-widest">IN TRANSIT</span>
                   </div>
                 </div>
               ))}
@@ -869,101 +900,101 @@ export const DispatchPage: React.FC = () => {
         maxWidth="4xl"
       >
         {activeDispatchRecord && (
-          <div className="space-y-4 text-xs text-slate-300">
+          <div className="space-y-6 text-xs text-[var(--color-ink)] font-bold">
             {/* DOCUMENT SELECTOR TABS */}
-            <div className="flex items-center gap-2 p-1 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="flex flex-col sm:flex-row items-stretch gap-2 p-1 border border-[var(--color-ink)] bg-white">
               <button
                 onClick={() => setDocViewTab('challan')}
                 className={clsx(
-                  'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all',
+                  'flex-1 py-3 px-4 text-xs font-bold font-mono uppercase tracking-widest flex items-center justify-center gap-2 transition-all',
                   docViewTab === 'challan'
-                    ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[var(--color-ink)] text-white'
+                    : 'text-[var(--color-industrial-grey)] hover:bg-[var(--color-paper)] hover:text-[var(--color-ink)]'
                 )}
               >
-                <Truck className="w-3.5 h-3.5" />
+                <Truck className="w-4 h-4" />
                 <span>1. Delivery Challan (Gate Pass)</span>
               </button>
 
               <button
                 onClick={() => setDocViewTab('tax_invoice')}
                 className={clsx(
-                  'flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all',
+                  'flex-1 py-3 px-4 text-xs font-bold font-mono uppercase tracking-widest flex items-center justify-center gap-2 transition-all',
                   docViewTab === 'tax_invoice'
-                    ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[var(--color-ink)] text-white'
+                    : 'text-[var(--color-industrial-grey)] hover:bg-[var(--color-paper)] hover:text-[var(--color-ink)]'
                 )}
               >
-                <Receipt className="w-3.5 h-3.5" />
-                <span>2. Matching Commercial GST Tax Invoice</span>
+                <Receipt className="w-4 h-4" />
+                <span>2. Commercial GST Tax Invoice</span>
               </button>
             </div>
 
             {/* TAB 1: DELIVERY CHALLAN & MANIFEST */}
             {docViewTab === 'challan' && (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Manifest Header */}
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between">
+                <div className="p-6 bg-white editorial-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-base font-bold text-white font-display tracking-tight">
+                    <h2 className="text-2xl font-black text-[var(--color-ink)] font-display uppercase tracking-tight">
                       EVEREST TEXTILE MILLS LTD.
                     </h2>
-                    <p className="text-[11px] text-slate-400">Plot 104-108, Industrial Manufacturing Zone, Phase II</p>
-                    <p className="text-[11px] text-slate-400">GSTIN / Tax ID: 24AAACE0921B1Z8</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] mt-1">Plot 104-108, Industrial Manufacturing Zone, Phase II</p>
+                    <p className="text-[10px] font-mono text-[var(--color-ink)] font-bold mt-1">GSTIN / Tax ID: 24AAACE0921B1Z8</p>
                   </div>
-                  <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-teal-400 block">{activeDispatchRecord.challanNumber}</span>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">Date: {activeDispatchRecord.dispatchedAt}</span>
-                    <span className="text-[11px] text-slate-400 block">Tracking: {activeDispatchRecord.trackingNumber}</span>
+                  <div className="text-left sm:text-right font-mono">
+                    <span className="text-lg font-black text-[var(--color-ink)] block">{activeDispatchRecord.challanNumber}</span>
+                    <span className="text-[11px] font-bold text-[var(--color-industrial-grey)] block mt-1">Date: {activeDispatchRecord.dispatchedAt}</span>
+                    <span className="text-[11px] font-bold text-[var(--color-industrial-grey)] block">Tracking: {activeDispatchRecord.trackingNumber}</span>
                   </div>
                 </div>
 
                 {/* Consignee & Carrier Details */}
-                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-950 border border-slate-800">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-[var(--color-paper)] editorial-border">
                   <div>
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block mb-1">CONSIGNEE (BUYER):</span>
-                    <p className="font-bold text-white text-xs">{activeDispatchRecord.customerName}</p>
-                    <p className="text-[11px] text-slate-300 mt-0.5">{activeDispatchRecord.destinationAddress}</p>
-                    <p className="text-[11px] text-slate-400 font-mono mt-1">Order Ref: {activeDispatchRecord.orderNumber}</p>
+                    <span className="text-[10px] uppercase font-mono text-[var(--color-industrial-grey)] font-bold block mb-2 tracking-widest border-b border-[var(--color-light-border)] pb-2">CONSIGNEE (BUYER)</span>
+                    <p className="font-black font-display text-[var(--color-ink)] text-base">{activeDispatchRecord.customerName}</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] mt-1">{activeDispatchRecord.destinationAddress}</p>
+                    <p className="text-xs text-[var(--color-ink)] font-mono font-bold mt-2">Order Ref: {activeDispatchRecord.orderNumber}</p>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block mb-1">CARRIER & VEHICLE:</span>
-                    <p className="font-bold text-white text-xs">{activeDispatchRecord.carrierName}</p>
-                    <p className="text-[11px] text-slate-300 font-mono mt-0.5">Vehicle: {activeDispatchRecord.vehicleNumber}</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Driver: {activeDispatchRecord.driverName} ({activeDispatchRecord.driverPhone})</p>
+                    <span className="text-[10px] uppercase font-mono text-[var(--color-industrial-grey)] font-bold block mb-2 tracking-widest border-b border-[var(--color-light-border)] pb-2">CARRIER & VEHICLE</span>
+                    <p className="font-black font-display text-[var(--color-ink)] text-base">{activeDispatchRecord.carrierName}</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] font-mono mt-1">Vehicle: {activeDispatchRecord.vehicleNumber}</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] mt-2">Driver: {activeDispatchRecord.driverName} ({activeDispatchRecord.driverPhone})</p>
                   </div>
                 </div>
 
                 {/* Roll Itemized Table */}
-                <div className="rounded-xl border border-slate-800 overflow-hidden">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+                <div className="bg-white editorial-border overflow-hidden">
+                  <table className="w-full text-left text-xs font-bold">
+                    <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
                       <tr>
-                        <th className="px-4 py-2">Item #</th>
-                        <th className="px-4 py-2">Roll Identifier</th>
-                        <th className="px-4 py-2">Quality Grade</th>
-                        <th className="px-4 py-2 text-right">Net Length</th>
-                        <th className="px-4 py-2 text-right">Gross Weight</th>
+                        <th className="px-4 py-3 tracking-widest">Item #</th>
+                        <th className="px-4 py-3 tracking-widest">Roll Identifier</th>
+                        <th className="px-4 py-3 tracking-widest">Quality Grade</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Net Length</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Gross Weight</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60 bg-slate-950/40">
+                    <tbody className="divide-y divide-[var(--color-light-border)]">
                       {activeDispatchRecord.rollIds.map((rollBarcode, idx) => (
-                        <tr key={idx}>
-                          <td className="px-4 py-2 font-mono">{idx + 1}</td>
-                          <td className="px-4 py-2 font-mono font-bold text-white">{rollBarcode}</td>
-                          <td className="px-4 py-2 text-emerald-400 font-mono text-[11px]">Grade A (Export)</td>
-                          <td className="px-4 py-2 font-mono text-right text-white">500 m</td>
-                          <td className="px-4 py-2 font-mono text-right text-slate-300">56.0 kg</td>
+                        <tr key={idx} className="hover:bg-[var(--color-paper)] transition-colors">
+                          <td className="px-4 py-3 font-mono">{idx + 1}</td>
+                          <td className="px-4 py-3 font-mono font-black text-[var(--color-ink)]">{rollBarcode}</td>
+                          <td className="px-4 py-3 text-[var(--color-success-green)] font-mono uppercase tracking-widest text-[10px]">Grade A</td>
+                          <td className="px-4 py-3 font-mono text-right text-[var(--color-ink)]">500 m</td>
+                          <td className="px-4 py-3 font-mono text-right text-[var(--color-industrial-grey)]">56.0 kg</td>
                         </tr>
                       ))}
-                      <tr className="bg-slate-950 font-bold border-t border-slate-700">
-                        <td colSpan={3} className="px-4 py-2.5 text-white font-display">
+                      <tr className="bg-[var(--color-paper)] border-t-2 border-[var(--color-ink)]">
+                        <td colSpan={3} className="px-4 py-4 text-[var(--color-ink)] font-black uppercase tracking-widest">
                           TOTAL SHIPMENT QUANTITY
                         </td>
-                        <td className="px-4 py-2.5 font-mono text-right text-teal-400 text-xs">
+                        <td className="px-4 py-4 font-mono text-right text-[var(--color-success-green)] text-sm font-black">
                           {activeDispatchRecord.totalMeters.toLocaleString()} m
                         </td>
-                        <td className="px-4 py-2.5 font-mono text-right text-white text-xs">
+                        <td className="px-4 py-4 font-mono text-right text-[var(--color-ink)] text-sm font-black">
                           {activeDispatchRecord.grossWeightKg.toFixed(1)} kg
                         </td>
                       </tr>
@@ -972,95 +1003,94 @@ export const DispatchPage: React.FC = () => {
                 </div>
               </div>
             )}
-
             {/* TAB 2: MATCHING COMMERCIAL GST TAX INVOICE */}
             {docViewTab === 'tax_invoice' && (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Tax Invoice Header */}
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between">
+                <div className="p-6 bg-[var(--color-paper)] editorial-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-teal-400 font-bold block">
+                    <span className="text-[10px] font-mono uppercase text-[var(--color-industrial-grey)] font-bold tracking-widest block mb-2">
                       TAX INVOICE · RULE 46 OF CGST RULES
                     </span>
-                    <h2 className="text-base font-bold text-white font-display tracking-tight mt-0.5">
+                    <h2 className="text-2xl font-black text-[var(--color-ink)] font-display tracking-tight">
                       EVEREST TEXTILE MILLS LIMITED
                     </h2>
-                    <p className="text-[11px] text-slate-400">GSTIN: 24AAACE0921B1Z8 · State Code: 24 (Gujarat)</p>
+                    <p className="text-[11px] text-[var(--color-ink)] font-mono font-bold mt-1">GSTIN: 24AAACE0921B1Z8 · State Code: 24 (Gujarat)</p>
                   </div>
-                  <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-emerald-400 block">
+                  <div className="text-left sm:text-right font-mono">
+                    <span className="text-lg font-black text-[var(--color-ink)] block">
                       INVOICE #{activeDispatchRecord.invoiceNumber || 'INV-2026-0884'}
                     </span>
-                    <span className="text-[11px] text-slate-400 block mt-0.5">
+                    <span className="text-[11px] font-bold text-[var(--color-industrial-grey)] block mt-1">
                       Challan Ref: {activeDispatchRecord.challanNumber}
                     </span>
-                    <span className="text-[11px] text-slate-400 block">
+                    <span className="text-[11px] font-bold text-[var(--color-industrial-grey)] block">
                       Vehicle: {activeDispatchRecord.vehicleNumber}
                     </span>
                   </div>
                 </div>
 
                 {/* Billed To / Shipped To */}
-                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-950 border border-slate-800">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white editorial-border">
                   <div>
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block mb-1">BILLED TO (BUYER):</span>
-                    <p className="font-bold text-white text-xs">{activeDispatchRecord.customerName}</p>
-                    <p className="text-[11px] text-slate-300 mt-0.5">{activeDispatchRecord.destinationAddress}</p>
-                    <p className="text-[11px] text-slate-400 font-mono mt-1">PO #: PO-NOR-9921</p>
+                    <span className="text-[10px] uppercase font-mono text-[var(--color-industrial-grey)] font-bold block mb-2 tracking-widest border-b border-[var(--color-light-border)] pb-2">BILLED TO (BUYER)</span>
+                    <p className="font-black font-display text-[var(--color-ink)] text-base">{activeDispatchRecord.customerName}</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] mt-1">{activeDispatchRecord.destinationAddress}</p>
+                    <p className="text-xs text-[var(--color-ink)] font-mono font-bold mt-2">PO #: PO-NOR-9921</p>
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase font-mono text-slate-400 block mb-1">SHIPPED TO (DELIVERY SITE):</span>
-                    <p className="font-bold text-white text-xs">{activeDispatchRecord.destinationCity}</p>
-                    <p className="text-[11px] text-slate-300 mt-0.5">Via {activeDispatchRecord.carrierName}</p>
-                    <p className="text-[11px] text-emerald-400 font-mono mt-1">Mode: Direct Road Freight / Container</p>
+                    <span className="text-[10px] uppercase font-mono text-[var(--color-industrial-grey)] font-bold block mb-2 tracking-widest border-b border-[var(--color-light-border)] pb-2">SHIPPED TO (DELIVERY SITE)</span>
+                    <p className="font-black font-display text-[var(--color-ink)] text-base">{activeDispatchRecord.destinationCity}</p>
+                    <p className="text-xs font-bold text-[var(--color-industrial-grey)] mt-1">Via {activeDispatchRecord.carrierName}</p>
+                    <p className="text-[10px] text-[var(--color-ink)] bg-[var(--color-paper)] font-mono px-2 py-0.5 inline-block font-bold mt-2 border border-[var(--color-light-border)]">Mode: Direct Road Freight / Container</p>
                   </div>
                 </div>
 
                 {/* Itemized Tax Breakdown Table */}
-                <div className="rounded-xl border border-slate-800 overflow-hidden">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+                <div className="bg-white editorial-border overflow-hidden">
+                  <table className="w-full text-left text-xs font-bold">
+                    <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
                       <tr>
-                        <th className="px-3 py-2">HSN Code</th>
-                        <th className="px-3 py-2">Goods Description</th>
-                        <th className="px-3 py-2 text-right">Qty (Meters)</th>
-                        <th className="px-3 py-2 text-right">Rate (₹/m)</th>
-                        <th className="px-3 py-2 text-right">Taxable Value</th>
-                        <th className="px-3 py-2 text-right">GST (5%)</th>
-                        <th className="px-3 py-2 text-right">Total (₹)</th>
+                        <th className="px-4 py-3 tracking-widest">HSN Code</th>
+                        <th className="px-4 py-3 tracking-widest">Goods Description</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Qty (Meters)</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Rate (₹/m)</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Taxable Value</th>
+                        <th className="px-4 py-3 text-right tracking-widest">GST (5%)</th>
+                        <th className="px-4 py-3 text-right tracking-widest">Total (₹)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60 bg-slate-950/40 font-mono">
-                      <tr>
-                        <td className="px-3 py-2 text-slate-400">5208 32 90</td>
-                        <td className="px-3 py-2 text-white font-sans">
+                    <tbody className="divide-y divide-[var(--color-light-border)] font-mono">
+                      <tr className="hover:bg-[var(--color-paper)] transition-colors">
+                        <td className="px-4 py-4 text-[var(--color-industrial-grey)]">5208 32 90</td>
+                        <td className="px-4 py-4 text-[var(--color-ink)] font-sans">
                           100% Combed Cotton Single Jersey Fabric ({activeDispatchRecord.totalRolls} Verified Rolls)
                         </td>
-                        <td className="px-3 py-2 text-right text-teal-400 font-bold">
+                        <td className="px-4 py-4 text-right text-[var(--color-ink)] font-black">
                           {activeDispatchRecord.totalMeters.toLocaleString()} m
                         </td>
-                        <td className="px-3 py-2 text-right text-slate-300">₹380.00</td>
-                        <td className="px-3 py-2 text-right text-slate-300">
+                        <td className="px-4 py-4 text-right text-[var(--color-industrial-grey)]">₹380.00</td>
+                        <td className="px-4 py-4 text-right text-[var(--color-ink)]">
                           ₹{(activeDispatchRecord.totalMeters * 380).toLocaleString()}
                         </td>
-                        <td className="px-3 py-2 text-right text-emerald-400">
+                        <td className="px-4 py-4 text-right text-[var(--color-success-green)]">
                           ₹{Math.round(activeDispatchRecord.totalMeters * 380 * 0.05).toLocaleString()}
                         </td>
-                        <td className="px-3 py-2 text-right text-white font-bold">
+                        <td className="px-4 py-4 text-right text-[var(--color-ink)] font-black text-sm">
                           ₹{Math.round(activeDispatchRecord.totalMeters * 380 * 1.05).toLocaleString()}
                         </td>
                       </tr>
-                      <tr className="bg-slate-950 font-bold border-t border-slate-700 text-xs">
-                        <td colSpan={4} className="px-3 py-2.5 text-white font-display">
+                      <tr className="bg-[var(--color-paper)] border-t-2 border-[var(--color-ink)] text-xs">
+                        <td colSpan={4} className="px-4 py-4 text-[var(--color-ink)] font-black uppercase tracking-widest font-display">
                           MATCHING INVOICE GRAND TOTAL
                         </td>
-                        <td className="px-3 py-2.5 text-right text-slate-300">
+                        <td className="px-4 py-4 text-right text-[var(--color-ink)]">
                           ₹{(activeDispatchRecord.totalMeters * 380).toLocaleString()}
                         </td>
-                        <td className="px-3 py-2.5 text-right text-emerald-400">
+                        <td className="px-4 py-4 text-right text-[var(--color-success-green)]">
                           ₹{Math.round(activeDispatchRecord.totalMeters * 380 * 0.05).toLocaleString()}
                         </td>
-                        <td className="px-3 py-2.5 text-right text-emerald-300">
+                        <td className="px-4 py-4 text-right text-[var(--color-ink)] font-black text-base">
                           ₹{Math.round(activeDispatchRecord.totalMeters * 380 * 1.05).toLocaleString()}
                         </td>
                       </tr>
@@ -1069,14 +1099,14 @@ export const DispatchPage: React.FC = () => {
                 </div>
 
                 {/* Verification Seal */}
-                <div className="p-3 rounded-lg bg-emerald-950/30 border border-emerald-500/40 flex items-center justify-between text-xs text-emerald-300">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>
-                      Physical Truck Load Matches Tax Invoice Exactly: <strong>{activeDispatchRecord.totalRolls} Rolls / {activeDispatchRecord.totalMeters.toLocaleString()}m</strong> verified.
+                <div className="p-4 bg-white editorial-border ring-1 ring-[var(--color-success-green)] border-[var(--color-success-green)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[var(--color-success-green)] shrink-0" />
+                    <span className="text-[var(--color-ink)] font-bold">
+                      Physical Truck Load Matches Tax Invoice Exactly: <strong className="font-black font-mono bg-[var(--color-paper)] px-2 py-0.5 border border-[var(--color-light-border)]">{activeDispatchRecord.totalRolls} Rolls / {activeDispatchRecord.totalMeters.toLocaleString()}m</strong> verified.
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] uppercase font-bold text-emerald-400">
+                  <span className="font-mono text-[10px] uppercase font-black tracking-widest text-white bg-[var(--color-success-green)] px-3 py-1.5 editorial-border shrink-0">
                     MATCH CONFIRMED
                   </span>
                 </div>
@@ -1084,19 +1114,19 @@ export const DispatchPage: React.FC = () => {
             )}
 
             {/* Signature & Print Footer */}
-            <div className="pt-3 flex items-center justify-between border-t border-slate-800">
-              <div className="text-[11px] text-slate-400">
-                Authorized Store Officer: <strong className="text-white">{activeDispatchRecord.dispatchedBy}</strong>
+            {/* Signature & Print Footer */}
+            <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-[var(--color-light-border)]">
+              <div className="text-[11px] font-mono text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest">
+                Authorized Store Officer: <strong className="text-[var(--color-ink)] ml-1 border-b border-[var(--color-ink)] pb-0.5">{activeDispatchRecord.dispatchedBy}</strong>
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <button
                   onClick={() => window.print()}
-                  leftIcon={<Printer className="w-4 h-4" />}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 font-bold text-xs uppercase tracking-widest bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors editorial-border"
                 >
+                  <Printer className="w-4 h-4" />
                   Print Verified {docViewTab === 'challan' ? 'Challan' : 'Tax Invoice'}
-                </Button>
+                </button>
               </div>
             </div>
           </div>

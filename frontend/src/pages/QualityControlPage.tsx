@@ -131,140 +131,106 @@ export const QualityControlPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-              Quality Assurance & Roll Traceability
-            </h1>
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800">
-              FPY: {fpyPercent}%
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <h1 className="text-4xl lg:text-6xl font-black font-display uppercase tracking-tighter leading-none mb-2">
+            Quality Audit
+          </h1>
+          <p className="text-sm font-sans text-[var(--color-industrial-grey)] max-w-lg">
             Pre-dispatch 4-point fabric inspection. Trace every roll back to order, machine, warp beam, and defect root cause.
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="md"
-          onClick={() => setInspectModalOpen(true)}
-          leftIcon={<Plus className="w-4 h-4" />}
-        >
-          Record Roll Inspection
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="editorial-border px-3 py-1.5 font-mono font-bold text-sm flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[var(--color-success-green)]" />
+            FPY: {fpyPercent}%
+          </div>
+          <button
+            onClick={() => setInspectModalOpen(true)}
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Record Inspection
+          </button>
+        </div>
       </div>
 
-      {/* Quality KPI Summary Cards: What Passed, What Failed, What Needs Rework, What is Waiting */}
+      {/* Quality KPI Summary Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {/* 1. Passed Rolls */}
-        <button
+        <div
           onClick={() => setSelectedDecision(selectedDecision === 'pass' ? 'all' : 'pass')}
           className={clsx(
-            'p-4 rounded-xl border text-left transition-all',
-            selectedDecision === 'pass'
-              ? 'bg-emerald-950/60 border-emerald-500 ring-1 ring-emerald-500/50'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-all flex flex-col justify-between bg-white',
+            selectedDecision === 'pass' && 'bg-[var(--color-success-green)] text-white'
           )}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Passed (Grade A Export)</span>
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <span className="text-2xl font-bold font-display text-emerald-400 block mt-2">
-            {passedCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
-          </span>
-          <span className="text-[10px] text-emerald-400/80 block mt-1">Cleared for truck dispatch</span>
-        </button>
+          <span className={clsx('editorial-label mb-2', selectedDecision === 'pass' ? 'text-green-100' : 'text-[var(--color-success-green)]')}>Passed (Grade A)</span>
+          <span className="font-display text-4xl font-bold block">{passedCount}</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold mt-2 opacity-80">Cleared for dispatch</span>
+        </div>
 
         {/* 2. Waiting to be Checked */}
-        <button
+        <div
           onClick={() => setSelectedDecision(selectedDecision === 'pending' ? 'all' : 'pending')}
           className={clsx(
-            'p-4 rounded-xl border text-left transition-all',
-            selectedDecision === 'pending'
-              ? 'bg-blue-950/60 border-blue-500 ring-1 ring-blue-500/50'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-all flex flex-col justify-between bg-white',
+            selectedDecision === 'pending' && 'bg-blue-100'
           )}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Waiting to be Checked</span>
-            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              <FileCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <span className="text-2xl font-bold font-display text-blue-400 block mt-2">
-            {pendingCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
-          </span>
-          <span className="text-[10px] text-blue-400/80 block mt-1">In staging inspection bay</span>
-        </button>
+          <span className="editorial-label text-blue-700 mb-2">Pending Check</span>
+          <span className="font-display text-4xl font-bold text-blue-900 block">{pendingCount}</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold text-blue-700 mt-2">Staging bay</span>
+        </div>
 
         {/* 3. Needs Rework / Hold */}
-        <button
+        <div
           onClick={() => setSelectedDecision(selectedDecision === 'hold' ? 'all' : 'hold')}
           className={clsx(
-            'p-4 rounded-xl border text-left transition-all',
-            selectedDecision === 'hold'
-              ? 'bg-amber-950/60 border-amber-500 ring-1 ring-amber-500/50'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-all flex flex-col justify-between bg-white',
+            selectedDecision === 'hold' && 'bg-amber-100'
           )}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Needs Rework / Hold</span>
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              <AlertTriangle className="w-4 h-4" />
-            </div>
-          </div>
-          <span className="text-2xl font-bold font-display text-amber-400 block mt-2">
-            {holdCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
-          </span>
-          <span className="text-[10px] text-amber-400/80 block mt-1">Rewash / mending staged</span>
-        </button>
+          <span className="editorial-label text-amber-700 mb-2">Needs Rework / Hold</span>
+          <span className="font-display text-4xl font-bold text-amber-900 block">{holdCount}</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold text-amber-700 mt-2">Rewash / mending</span>
+        </div>
 
         {/* 4. Failed / Rejected */}
-        <button
+        <div
           onClick={() => setSelectedDecision(selectedDecision === 'reject' ? 'all' : 'reject')}
           className={clsx(
-            'p-4 rounded-xl border text-left transition-all',
-            selectedDecision === 'reject'
-              ? 'bg-rose-950/60 border-rose-500 ring-1 ring-rose-500/50'
-              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-all flex flex-col justify-between bg-white',
+            selectedDecision === 'reject' && 'bg-[var(--color-vermilion)] text-white'
           )}
         >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Failed / Rejected</span>
-            <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
-              <XCircle className="w-4 h-4" />
-            </div>
-          </div>
-          <span className="text-2xl font-bold font-display text-rose-400 block mt-2">
-            {rejectCount} <span className="text-xs font-normal text-slate-400">Rolls</span>
-          </span>
-          <span className="text-[10px] text-rose-400/80 block mt-1">Scrap write-off & root cause</span>
-        </button>
+          <span className={clsx('editorial-label mb-2', selectedDecision === 'reject' ? 'text-rose-100' : 'text-[var(--color-vermilion)]')}>Failed / Rejected</span>
+          <span className="font-display text-4xl font-bold block">{rejectCount}</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold mt-2 opacity-80">Scrap write-off</span>
+        </div>
       </div>
 
       {/* Filter and Search */}
-      <div className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-        <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search Roll # (ROLL-8401), order number, customer, or inspector..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
-          />
-        </div>
+      <div className="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-[var(--color-light-border)]">
+        <h2 className="font-display font-bold text-2xl uppercase tracking-tighter">Inspection Log</h2>
+        
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative">
+            <Search className="w-4 h-4 text-[var(--color-industrial-grey)] absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search roll #, order, customer..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="editorial-border pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)] w-64"
+            />
+          </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
           <select
             value={selectedDecision}
             onChange={(e) => setSelectedDecision(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+            className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
           >
             <option value="all">All QA Decisions</option>
             <option value="pass">Pass (Grade A)</option>
@@ -276,7 +242,7 @@ export const QualityControlPage: React.FC = () => {
           <select
             value={selectedDefect}
             onChange={(e) => setSelectedDefect(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+            className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
           >
             <option value="all">All Defect Types</option>
             <option value="none">No Defects (Clean)</option>
@@ -289,21 +255,21 @@ export const QualityControlPage: React.FC = () => {
       </div>
 
       {/* Inspections Table */}
-      <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
+      <div className="editorial-border bg-white overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
               <tr>
-                <th className="px-4 py-3">Roll ID & Order</th>
-                <th className="px-4 py-3">Fabric Construction</th>
-                <th className="px-4 py-3">Defect Category</th>
-                <th className="px-4 py-3">GSM & Width Test</th>
-                <th className="px-4 py-3">Decision & Grade</th>
-                <th className="px-4 py-3">Inspector & Date</th>
-                <th className="px-4 py-3 text-right">Traceability</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Roll ID & Order</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Fabric Construction</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Defect Category</th>
+                <th className="px-4 py-3 font-bold tracking-widest">GSM & Width Test</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Decision & Grade</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Inspector & Date</th>
+                <th className="px-4 py-3 text-right font-bold tracking-widest">Traceability</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[var(--color-light-border)]">
               {filteredInspections.map((i) => {
                 const isPass = i.decision === 'pass';
                 const isHold = i.decision === 'hold';
@@ -313,52 +279,59 @@ export const QualityControlPage: React.FC = () => {
                   <tr
                     key={i.id}
                     onClick={() => setSelectedInspection(i)}
-                    className="hover:bg-slate-800/60 cursor-pointer transition-colors"
+                    className={clsx(
+                      'cursor-pointer transition-colors hover:bg-[var(--color-paper)]',
+                      isReject && 'bg-rose-50',
+                      isHold && 'bg-amber-50'
+                    )}
                   >
                     <td className="px-4 py-3">
-                      <div className="font-mono font-bold text-white text-xs">{i.rollNumber}</div>
-                      <div className="text-[11px] text-teal-400 font-mono font-medium">{i.orderNumber}</div>
-                      <div className="text-[10px] text-slate-400">{i.customerName}</div>
+                      <div className="font-mono font-bold text-sm">{i.rollNumber}</div>
+                      <div className="text-[11px] text-[var(--color-vermilion)] font-mono font-bold">{i.orderNumber}</div>
+                      <div className="text-[10px] text-[var(--color-industrial-grey)]">{i.customerName}</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="text-slate-200 font-medium">{i.fabricType}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">Lot: {i.yarnLotNumber}</div>
+                      <div className="font-bold text-[var(--color-ink)]">{i.fabricType}</div>
+                      <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono">Lot: {i.yarnLotNumber}</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="font-medium text-slate-300 capitalize">
+                      <div className="font-bold capitalize">
                         {i.defectCategory.replace(/_/g, ' ')}
                       </div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-[var(--color-industrial-grey)]">
                         {i.defectCount > 0 ? `${i.defectCount} defect point(s)` : 'Zero defect points'}
                       </div>
                     </td>
 
                     <td className="px-4 py-3 font-mono text-xs">
-                      <div>
+                      <div className="font-bold">
                         {i.measuredGsm} GSM{' '}
-                        <span className="text-[10px] text-slate-500">(Target: {i.targetGsm})</span>
+                        <span className="text-[10px] text-[var(--color-industrial-grey)] font-normal">(Target: {i.targetGsm})</span>
                       </div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-[var(--color-industrial-grey)]">
                         Width: {i.measuredWidthInches}" (Target: {i.targetWidthInches}")
                       </div>
                     </td>
 
                     <td className="px-4 py-3">
                       <StatusBadge status={i.decision} size="sm" />
-                      <div className="text-[10px] font-mono text-slate-400 mt-1">{i.grade}</div>
+                      <div className="text-[10px] font-mono font-bold text-[var(--color-industrial-grey)] mt-1">{i.grade}</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="text-slate-300 font-medium">{i.inspectorName}</div>
-                      <div className="text-[10px] font-mono text-slate-400">{i.inspectionDate}</div>
+                      <div className="font-bold text-[var(--color-ink)]">{i.inspectorName}</div>
+                      <div className="text-[10px] font-mono text-[var(--color-industrial-grey)]">{i.inspectionDate}</div>
                     </td>
 
                     <td className="px-4 py-3 text-right">
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedInspection(i)}>
-                        Trace Lot
-                      </Button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelectedInspection(i); }}
+                        className="text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] hover:text-[var(--color-vermilion)] flex items-center gap-1 ml-auto"
+                      >
+                        Trace Lot <ChevronRight className="w-3 h-3" />
+                      </button>
                     </td>
                   </tr>
                 );

@@ -432,62 +432,59 @@ export const InventoryPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-teal-500/20 text-teal-400 border border-teal-500/30 uppercase">
-              Raw Material & Inward Hub
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2 py-0.5 border border-[var(--color-ink)] text-[10px] font-mono font-bold bg-[var(--color-ink)] text-white uppercase tracking-widest">
+              Central Stores
             </span>
-            <span className="text-slate-500 text-xs">•</span>
-            <span className="text-xs text-slate-400">Everest Textile Mills — Central Stores</span>
+            <span className="text-sm font-sans text-[var(--color-industrial-grey)]">
+              Everest Textile Mills
+            </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight flex items-center gap-2.5">
-            <Layers className="w-6 h-6 text-teal-400" />
-            Yarn Receiving, Raw Materials & Feasibility
+          <h1 className="text-4xl lg:text-6xl font-black font-display uppercase tracking-tighter leading-none mb-2">
+            Yarn Hub & Materials
           </h1>
-          <p className="mt-1 text-xs text-slate-400 max-w-2xl">
+          <p className="text-sm font-sans text-[var(--color-industrial-grey)] max-w-2xl">
             Track yarn arriving at the gate, monitor warehouse safety stock runways, and instantly verify whether sufficient yarn exists to start new orders.
           </p>
         </div>
 
-        {/* Quick Action Buttons & Tab Bar */}
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="primary"
-            size="sm"
+        {/* Quick Action Buttons */}
+        <div className="flex flex-wrap items-center gap-3">
+          <button
             onClick={() => setGateInwardModalOpen(true)}
-            leftIcon={<Truck className="w-3.5 h-3.5" />}
-            className="shadow-md shadow-teal-950/40"
+            className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold uppercase tracking-widest bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors"
           >
+            <Truck className="w-4 h-4" />
             Inward Yarn Gate Entry
-          </Button>
+          </button>
 
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={loadInventoryData}
-            leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+            className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-widest editorial-border hover:bg-black/5 transition-colors"
           >
+            <RefreshCw className="w-4 h-4 text-[var(--color-ink)]" />
             Sync
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* 4 Main Interactive Tabs */}
-      <div className="flex border-b border-slate-800 gap-1 overflow-x-auto pb-px">
+      <div className="flex gap-2 overflow-x-auto pb-4">
         <button
           onClick={() => setActiveTab('materials')}
           className={clsx(
-            'px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-all flex items-center gap-2 shrink-0 border-t border-x',
+            'px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 editorial-border',
             activeTab === 'materials'
-              ? 'bg-slate-900 text-teal-400 border-slate-800 border-b-slate-900 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-900/40'
+              ? 'bg-[var(--color-ink)] text-white'
+              : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
           )}
         >
           <Layers className="w-4 h-4" />
           <span>Warehouse Stock Balances</span>
           {lowStockItems.length > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-mono font-bold border border-amber-500/30">
+            <span className="px-1.5 py-0.5 bg-[var(--color-vermilion)] text-white text-[10px] font-mono font-bold">
               {lowStockItems.length} Low
             </span>
           )}
@@ -496,15 +493,15 @@ export const InventoryPage: React.FC = () => {
         <button
           onClick={() => setActiveTab('gate_inward')}
           className={clsx(
-            'px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-all flex items-center gap-2 shrink-0 border-t border-x',
+            'px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 editorial-border',
             activeTab === 'gate_inward'
-              ? 'bg-slate-900 text-teal-400 border-slate-800 border-b-slate-900 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-900/40'
+              ? 'bg-[var(--color-ink)] text-white'
+              : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
           )}
         >
           <Truck className="w-4 h-4" />
           <span>Yarn Gate Reception (Trucks)</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-mono font-bold">
+          <span className="px-1.5 py-0.5 bg-[var(--color-ink)] text-white text-[10px] font-mono font-bold border border-white/20">
             {gateEntries.length} Inward
           </span>
         </button>
@@ -512,15 +509,18 @@ export const InventoryPage: React.FC = () => {
         <button
           onClick={() => setActiveTab('feasibility')}
           className={clsx(
-            'px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-all flex items-center gap-2 shrink-0 border-t border-x',
+            'px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 editorial-border',
             activeTab === 'feasibility'
-              ? 'bg-slate-900 text-teal-400 border-slate-800 border-b-slate-900 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-900/40'
+              ? 'bg-[var(--color-success-green)] text-white border-[var(--color-success-green)]'
+              : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
           )}
         >
-          <Sparkles className="w-4 h-4 text-emerald-400" />
-          <span className="font-bold text-white">Can We Start? (Yarn Feasibility)</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold">
+          <Sparkles className="w-4 h-4" />
+          <span>Can We Start? (Yarn Feasibility)</span>
+          <span className={clsx(
+            'px-1.5 py-0.5 text-[10px] font-mono font-bold',
+            activeTab === 'feasibility' ? 'bg-white/20' : 'bg-[var(--color-paper)] border border-[var(--color-light-border)]'
+          )}>
             BOM Checker
           </span>
         </button>
@@ -528,10 +528,10 @@ export const InventoryPage: React.FC = () => {
         <button
           onClick={() => setActiveTab('movements')}
           className={clsx(
-            'px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-all flex items-center gap-2 shrink-0 border-t border-x',
+            'px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 editorial-border',
             activeTab === 'movements'
-              ? 'bg-slate-900 text-teal-400 border-slate-800 border-b-slate-900 font-bold shadow-sm'
-              : 'text-slate-400 hover:text-slate-200 border-transparent hover:bg-slate-900/40'
+              ? 'bg-[var(--color-ink)] text-white'
+              : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
           )}
         >
           <History className="w-4 h-4" />
@@ -541,21 +541,21 @@ export const InventoryPage: React.FC = () => {
 
       {/* Critical Early Warning Banner (Always visible if low stock items exist) */}
       {lowStockItems.length > 0 && (
-        <div className="p-4 rounded-xl bg-gradient-to-r from-amber-950/50 via-slate-900 to-amber-950/40 border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
-          <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0 mt-0.5">
-              <AlertTriangle className="w-5 h-5 animate-pulse" />
+        <div className="p-5 editorial-border bg-[var(--color-vermilion)] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-white text-[var(--color-vermilion)] editorial-border shrink-0">
+              <AlertTriangle className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-black uppercase tracking-wider text-amber-300 font-display">
+              <div className="flex items-center gap-3">
+                <span className="text-lg font-black uppercase tracking-tight font-display">
                   Early Warning: Raw Material Below Reorder Threshold ({lowStockItems.length} Materials)
                 </span>
-                <span className="px-2 py-0.5 text-[9px] font-mono uppercase bg-red-500/20 text-red-300 rounded border border-red-500/30">
+                <span className="px-2 py-0.5 text-[10px] font-mono uppercase bg-white text-[var(--color-vermilion)] border border-white font-bold tracking-widest">
                   Stockout Risk
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-1">
+              <p className="text-sm font-sans mt-1 max-w-3xl">
                 <strong>50D/72F Recycled Polyester (YARN-PET-50D-REC)</strong> has only <strong>400 kg</strong> available (Reorder point: 3,000 kg).
                 Estimated runway: <strong>2.5 days</strong> before Loom WEAVE-03 is starved of weft yarn.
               </p>
@@ -563,19 +563,17 @@ export const InventoryPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={() => {
                 const target = lowStockItems[0];
                 setReorderItem(target);
                 setReorderPoQty(target.reorderThreshold * 2);
                 setReorderModalOpen(true);
               }}
-              className="text-amber-300 border-amber-600/60 hover:bg-amber-950/80 font-bold text-xs"
+              className="px-5 py-3 bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)] font-bold text-xs uppercase tracking-widest transition-colors editorial-border"
             >
               1-Click Reorder PO
-            </Button>
+            </button>
           </div>
         </div>
       )}
@@ -584,23 +582,25 @@ export const InventoryPage: React.FC = () => {
       {activeTab === 'materials' && (
         <div className="space-y-4">
           {/* Search and Filters */}
-          <div className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-            <div className="relative flex-1 w-full">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search raw yarn SKU, specification, lot number (LOT-2026-Y881), or spinner..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500 font-mono"
-              />
-            </div>
+          <div className="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-[var(--color-light-border)]">
+            <h2 className="font-display font-bold text-2xl uppercase tracking-tighter">Raw Material Inventory</h2>
+            
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="relative">
+                <Search className="w-4 h-4 text-[var(--color-industrial-grey)] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search SKU, lot number, supplier..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="editorial-border pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)] w-64"
+                />
+              </div>
 
-            <div className="flex items-center gap-2 w-full md:w-auto">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
               >
                 <option value="all">All Raw Materials</option>
                 <option value="raw_yarn">Raw Spun & Filament Yarn</option>
@@ -612,7 +612,7 @@ export const InventoryPage: React.FC = () => {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
               >
                 <option value="all">All Threshold Statuses</option>
                 <option value="in_stock">Healthy Stock</option>
@@ -623,70 +623,73 @@ export const InventoryPage: React.FC = () => {
           </div>
 
           {/* Table */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
+          <div className="editorial-border bg-white overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
                   <tr>
-                    <th className="px-4 py-3">Raw Material / Yarn SKU</th>
-                    <th className="px-4 py-3">Lot & Storage Bin</th>
-                    <th className="px-4 py-3">Total Physical Stock</th>
-                    <th className="px-4 py-3">Free Available vs Reserved</th>
-                    <th className="px-4 py-3">Reorder Point & Runway</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3 text-right">Actions</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Raw Material / Yarn SKU</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Lot & Storage Bin</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Total Physical Stock</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Free Available vs Reserved</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Reorder Point & Runway</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Status</th>
+                    <th className="px-4 py-3 text-right font-bold tracking-widest">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-[var(--color-light-border)]">
                   {filteredItems.map((item) => {
                     const isLow = item.status === 'low_stock' || item.status === 'critical';
                     const estimatedRunwayDays = (item.availableQuantity / 160).toFixed(1);
 
                     return (
-                      <tr key={item.id} className="hover:bg-slate-800/60 transition-colors">
+                      <tr key={item.id} className={clsx(
+                        'transition-colors hover:bg-[var(--color-paper)]',
+                        isLow && 'bg-rose-50'
+                      )}>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-white text-xs">{item.sku}</span>
+                            <span className="font-mono font-bold text-sm text-[var(--color-ink)]">{item.sku}</span>
                             {item.colorHex && (
                               <span
-                                className="w-3 h-3 rounded-full border border-slate-600 inline-block"
+                                className="w-3 h-3 rounded-full border border-[var(--color-light-border)] inline-block"
                                 style={{ backgroundColor: item.colorHex }}
                                 title="Yarn shade color"
                               />
                             )}
                           </div>
-                          <div className="text-[11px] text-slate-200 font-medium">{item.name}</div>
-                          <div className="text-[10px] text-slate-400">{item.specification}</div>
-                          <div className="text-[10px] text-teal-400/80 font-mono mt-0.5">Supplier: {item.supplierName}</div>
+                          <div className="text-[11px] text-[var(--color-ink)] font-bold mt-1">{item.name}</div>
+                          <div className="text-[10px] text-[var(--color-industrial-grey)]">{item.specification}</div>
+                          <div className="text-[10px] text-[var(--color-ink)] font-mono mt-1 font-bold">Supplier: {item.supplierName}</div>
                         </td>
 
                         <td className="px-4 py-3">
-                          <div className="font-mono text-teal-400 font-semibold">{item.lotNumber}</div>
-                          <div className="text-[11px] text-slate-300 font-mono mt-0.5">
+                          <div className="font-mono text-[var(--color-vermilion)] font-bold">{item.lotNumber}</div>
+                          <div className="text-[11px] text-[var(--color-industrial-grey)] font-mono mt-1 font-bold">
                             {item.warehouseRack} • {item.warehouseBin}
                           </div>
                         </td>
 
-                        <td className="px-4 py-3 font-mono font-bold text-white text-xs">
+                        <td className="px-4 py-3 font-mono font-bold text-sm text-[var(--color-ink)]">
                           {item.quantity.toLocaleString()} {item.unit}
                         </td>
 
                         <td className="px-4 py-3">
-                          <div className="font-mono text-emerald-400 font-bold">
+                          <div className="font-mono text-[var(--color-success-green)] font-bold">
                             {item.availableQuantity.toLocaleString()} {item.unit} free
                           </div>
-                          <div className="font-mono text-amber-400 text-[10px] mt-0.5">
+                          <div className="font-mono text-[var(--color-vermilion)] text-[10px] mt-1 font-bold">
                             {item.reservedQuantity.toLocaleString()} {item.unit} locked for orders
                           </div>
                         </td>
 
                         <td className="px-4 py-3">
-                          <div className="text-[11px] font-mono text-slate-300">
+                          <div className="text-[11px] font-mono text-[var(--color-ink)]">
                             Reorder: <strong>{item.reorderThreshold.toLocaleString()} {item.unit}</strong>
                           </div>
                           <div className={clsx(
-                            'text-[10px] font-mono font-bold mt-0.5',
-                            isLow ? 'text-red-400' : 'text-emerald-400'
+                            'text-[10px] font-mono font-bold mt-1',
+                            isLow ? 'text-[var(--color-vermilion)]' : 'text-[var(--color-industrial-grey)]'
                           )}>
                             ⚡ Runway: ~{estimatedRunwayDays} days
                           </div>
@@ -697,31 +700,28 @@ export const InventoryPage: React.FC = () => {
                         </td>
 
                         <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
+                          <div className="flex items-center justify-end gap-2">
                             {isLow && (
-                              <Button
-                                variant="outline"
-                                size="sm"
+                              <button
                                 onClick={() => {
                                   setReorderItem(item);
                                   setReorderPoQty(item.reorderThreshold * 2);
                                   setReorderModalOpen(true);
                                 }}
-                                className="text-amber-400 border-amber-700/60 hover:bg-amber-950/60 text-[11px]"
+                                className="px-3 py-1.5 editorial-border bg-[var(--color-vermilion)] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-red-700 transition-colors"
                               >
                                 Reorder
-                              </Button>
+                              </button>
                             )}
-                            <Button
-                              variant="ghost"
-                              size="sm"
+                            <button
                               onClick={() => {
                                 setSelectedItemForAdjust(item);
                                 setAdjustmentModalOpen(true);
                               }}
+                              className="px-3 py-1.5 editorial-border font-bold text-[10px] uppercase tracking-widest text-[var(--color-ink)] hover:bg-[var(--color-paper)] transition-colors"
                             >
                               Audit
-                            </Button>
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -737,123 +737,119 @@ export const InventoryPage: React.FC = () => {
       {/* TAB 2: Yarn Gate Reception (Truck Inward) */}
       {activeTab === 'gate_inward' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 editorial-border bg-[var(--color-paper)] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <h3 className="text-sm font-bold font-display text-white">
+              <div className="flex items-center gap-3">
+                <h3 className="text-xl font-bold font-display uppercase tracking-tight">
                   Mill Security Gate & Inward Weighbridge
                 </h3>
               </div>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-sm font-sans text-[var(--color-industrial-grey)] mt-1">
                 Every yarn truck arriving at Everest Textile Mills is inspected here. Weight, shade, count, and target order earmarking are recorded before offloading into warehouse racks.
               </p>
             </div>
-            <Button
-              variant="primary"
-              size="sm"
+            <button
               onClick={() => setGateInwardModalOpen(true)}
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
-              className="shrink-0"
+              className="flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-widest editorial-border bg-white hover:bg-black/5 transition-colors shrink-0"
             >
+              <Plus className="w-4 h-4" />
               Record New Inbound Truck
-            </Button>
+            </button>
           </div>
 
           {/* Inward Truck Entries Table */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
+          <div className="editorial-border bg-white overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
                   <tr>
-                    <th className="px-4 py-3">Gate Pass # & Time</th>
-                    <th className="px-4 py-3">Vehicle & Driver</th>
-                    <th className="px-4 py-3">Supplier & Invoice</th>
-                    <th className="px-4 py-3">Yarn Specification & Shade</th>
-                    <th className="px-4 py-3">Net Wt (Gross - Tare)</th>
-                    <th className="px-4 py-3">Earmarked Purpose</th>
-                    <th className="px-4 py-3">Assigned Location</th>
-                    <th className="px-4 py-3 text-right">Pass</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Gate Pass # & Time</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Vehicle & Driver</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Supplier & Invoice</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Yarn Specification & Shade</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Net Wt (Gross - Tare)</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Earmarked Purpose</th>
+                    <th className="px-4 py-3 font-bold tracking-widest">Assigned Location</th>
+                    <th className="px-4 py-3 text-right font-bold tracking-widest">Pass</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-[var(--color-light-border)]">
                   {gateEntries.map((gate) => (
-                    <tr key={gate.id} className="hover:bg-slate-800/60 transition-colors">
+                    <tr key={gate.id} className="hover:bg-[var(--color-paper)] transition-colors">
                       <td className="px-4 py-3">
-                        <div className="font-mono font-bold text-teal-400 text-xs">{gate.gatePassNumber}</div>
-                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">{gate.entryTimestamp}</div>
+                        <div className="font-mono font-bold text-sm text-[var(--color-ink)]">{gate.gatePassNumber}</div>
+                        <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono mt-1 font-bold">{gate.entryTimestamp}</div>
                       </td>
 
                       <td className="px-4 py-3">
-                        <div className="font-mono font-bold text-white text-xs">{gate.vehicleNumber}</div>
-                        <div className="text-[11px] text-slate-300">{gate.driverName}</div>
-                        {gate.driverPhone && <div className="text-[10px] text-slate-500 font-mono">{gate.driverPhone}</div>}
+                        <div className="font-mono font-bold text-[var(--color-ink)]">{gate.vehicleNumber}</div>
+                        <div className="text-[11px] text-[var(--color-ink)] font-bold mt-1">{gate.driverName}</div>
+                        {gate.driverPhone && <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono mt-0.5">{gate.driverPhone}</div>}
                       </td>
 
                       <td className="px-4 py-3">
-                        <div className="font-bold text-slate-200 text-xs">{gate.supplierName}</div>
-                        <div className="font-mono text-[10px] text-teal-400/80 mt-0.5">DC: {gate.challanInvoiceNumber}</div>
+                        <div className="font-bold text-[var(--color-ink)] text-xs">{gate.supplierName}</div>
+                        <div className="font-mono text-[10px] text-[var(--color-ink)] mt-1 font-bold">DC: {gate.challanInvoiceNumber}</div>
                       </td>
 
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{gate.yarnName}</span>
+                          <span className="font-bold text-[var(--color-ink)]">{gate.yarnName}</span>
                           {gate.yarnColorHex && (
                             <span
-                              className="w-3.5 h-3.5 rounded-full border border-slate-600 shadow-sm"
+                              className="w-3 h-3 rounded-full border border-[var(--color-light-border)]"
                               style={{ backgroundColor: gate.yarnColorHex }}
                             />
                           )}
                         </div>
-                        <div className="text-[11px] text-slate-300 font-medium">Color: {gate.yarnColor}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">Lot: {gate.lotNumber} • {gate.bagCount} bags ({gate.coneCount || 0} cones)</div>
+                        <div className="text-[11px] text-[var(--color-industrial-grey)] font-bold mt-1">Color: {gate.yarnColor}</div>
+                        <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono mt-0.5">Lot: {gate.lotNumber} • {gate.bagCount} bags ({gate.coneCount || 0} cones)</div>
                       </td>
 
                       <td className="px-4 py-3">
-                        <div className="font-mono font-bold text-emerald-400 text-xs">
+                        <div className="font-mono font-bold text-[var(--color-success-green)] text-sm">
                           {gate.netWeightKg.toLocaleString()} kg Net
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono">
+                        <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono mt-1 font-bold">
                           Gross: {gate.grossWeightKg}kg | Tare: {gate.tareWeightKg}kg
                         </div>
-                        <div className="text-[10px] text-teal-400 font-mono mt-0.5">
+                        <div className="text-[10px] text-[var(--color-success-green)] font-mono mt-0.5 font-bold">
                           Moisture: {gate.moisturePercent}% (Passed)
                         </div>
                       </td>
 
                       <td className="px-4 py-3">
                         {gate.earmarkedOrderNumber ? (
-                          <div className="p-1.5 rounded-lg bg-teal-950/60 border border-teal-800/60">
-                            <div className="font-mono font-bold text-teal-300 text-xs">
+                          <div className="p-2 editorial-border bg-white">
+                            <div className="font-mono font-bold text-[var(--color-ink)] text-xs">
                               {gate.earmarkedOrderNumber}
                             </div>
-                            <div className="text-[10px] text-slate-300 truncate max-w-[140px]">
+                            <div className="text-[10px] text-[var(--color-industrial-grey)] font-bold truncate max-w-[140px] mt-1">
                               {gate.earmarkedCustomer}
                             </div>
                           </div>
                         ) : (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">
+                          <span className="px-2 py-0.5 border border-[var(--color-light-border)] bg-[var(--color-paper)] text-[10px] font-mono text-[var(--color-industrial-grey)] font-bold">
                             General Buffer Stock
                           </span>
                         )}
                       </td>
 
-                      <td className="px-4 py-3 text-slate-300 font-mono text-[11px]">
+                      <td className="px-4 py-3 text-[var(--color-ink)] font-mono font-bold text-[11px]">
                         {gate.allocatedStorageLocation}
                       </td>
 
                       <td className="px-4 py-3 text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                        <button
                           onClick={() => {
                             setActiveGatePass(gate);
                             setGatePassPrintModalOpen(true);
                           }}
-                          leftIcon={<Printer className="w-3 h-3" />}
+                          className="px-3 py-1.5 editorial-border font-bold text-[10px] uppercase tracking-widest text-[var(--color-ink)] hover:bg-[var(--color-paper)] transition-colors flex items-center gap-2 ml-auto"
                         >
+                          <Printer className="w-3 h-3" />
                           Print Slip
-                        </Button>
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -867,29 +863,29 @@ export const InventoryPage: React.FC = () => {
       {/* TAB 3: Can We Start? (Pre-Production Yarn Feasibility Checker) */}
       {activeTab === 'feasibility' && (
         <div className="space-y-6">
-          <div className="bg-gradient-to-r from-slate-900 via-teal-950/50 to-slate-900 p-5 rounded-2xl border border-teal-800/60 shadow-lg">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-[var(--color-paper)] p-6 editorial-border">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-teal-400 font-bold block">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--color-ink)] font-bold block border border-[var(--color-ink)] px-2 py-0.5 max-w-fit mb-3">
                   Bill of Materials (BOM) Feasibility Engine
                 </span>
-                <h3 className="text-lg font-black text-white mt-0.5">
-                  Pre-Production Yarn Verification: "Can We Start This Order?"
+                <h3 className="text-3xl font-black font-display uppercase tracking-tight text-[var(--color-ink)]">
+                  Pre-Production Yarn Verification
                 </h3>
-                <p className="text-xs text-slate-300 mt-1 max-w-2xl">
+                <p className="text-sm font-sans text-[var(--color-industrial-grey)] mt-2 max-w-2xl">
                   When a new order comes in, check whether enough warp and weft yarn is available in the warehouse before loading beams onto looms, or automatically raise a PO for the deficit.
                 </p>
               </div>
 
               {/* Order Picker */}
-              <div className="w-full md:w-72 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                <label className="text-[10px] font-mono text-slate-400 uppercase block mb-1">
-                  Select Order to Verify:
+              <div className="w-full md:w-80 bg-white p-4 editorial-border">
+                <label className="text-[10px] font-mono text-[var(--color-ink)] uppercase font-bold block mb-2 tracking-widest">
+                  Select Order to Verify
                 </label>
                 <select
                   value={selectedOrderForCheck}
                   onChange={(e) => setSelectedOrderForCheck(e.target.value)}
-                  className="w-full bg-slate-900 text-white font-bold text-xs p-2 rounded-lg border border-slate-700 focus:outline-none focus:border-teal-500"
+                  className="w-full editorial-border text-[var(--color-ink)] font-bold text-xs p-2.5 focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)] uppercase tracking-wider"
                 >
                   {orders.map((ord) => (
                     <option key={ord.id} value={ord.id}>
@@ -903,98 +899,102 @@ export const InventoryPage: React.FC = () => {
           </div>
 
           {/* Feasibility Verdict Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left: Calculation Formula & Breakdown */}
-            <div className="lg:col-span-2 bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2">
-                  <Scale className="w-5 h-5 text-teal-400" />
-                  <h4 className="text-sm font-bold text-white">Yarn Bill of Materials Calculation</h4>
+            <div className="lg:col-span-2 bg-white p-6 editorial-border">
+              <div className="flex items-center justify-between border-b border-[var(--color-light-border)] pb-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <Scale className="w-6 h-6 text-[var(--color-ink)]" />
+                  <h4 className="text-lg font-black font-display uppercase tracking-tight text-[var(--color-ink)]">Yarn Bill of Materials Calculation</h4>
                 </div>
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-xs font-mono font-bold text-[var(--color-ink)] uppercase tracking-widest bg-[var(--color-paper)] px-3 py-1 editorial-border">
                   {feasibilityResult.orderNumber || 'Custom Simulation'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 text-xs font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-[var(--color-paper)] p-4 editorial-border font-mono mb-6">
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase">Fabric Length</span>
-                  <span className="font-bold text-white text-sm">{feasibilityResult.lengthMeters.toLocaleString()} m</span>
+                  <span className="text-[var(--color-industrial-grey)] block text-[10px] uppercase font-bold tracking-widest mb-1">Fabric Length</span>
+                  <span className="font-black text-[var(--color-ink)] text-base">{feasibilityResult.lengthMeters.toLocaleString()} m</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase">Fabric Width</span>
-                  <span className="font-bold text-white text-sm">{feasibilityResult.widthInches}" ({((feasibilityResult.widthInches * 0.0254)).toFixed(2)}m)</span>
+                  <span className="text-[var(--color-industrial-grey)] block text-[10px] uppercase font-bold tracking-widest mb-1">Fabric Width</span>
+                  <span className="font-black text-[var(--color-ink)] text-base">{feasibilityResult.widthInches}" ({((feasibilityResult.widthInches * 0.0254)).toFixed(2)}m)</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase">Fabric GSM</span>
-                  <span className="font-bold text-white text-sm">{feasibilityResult.gsm} g/m²</span>
+                  <span className="text-[var(--color-industrial-grey)] block text-[10px] uppercase font-bold tracking-widest mb-1">Fabric GSM</span>
+                  <span className="font-black text-[var(--color-ink)] text-base">{feasibilityResult.gsm} g/m²</span>
                 </div>
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase">Loom Wastage</span>
-                  <span className="font-bold text-teal-400 text-sm">+{feasibilityResult.wastageFactorPercent}% Crimp</span>
+                  <span className="text-[var(--color-industrial-grey)] block text-[10px] uppercase font-bold tracking-widest mb-1">Loom Wastage</span>
+                  <span className="font-black text-[var(--color-success-green)] text-base">+{feasibilityResult.wastageFactorPercent}% Crimp</span>
                 </div>
               </div>
 
               {/* Formula Callout */}
-              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] font-mono text-slate-400">
-                Formula: (Length {feasibilityResult.lengthMeters}m × Width {((feasibilityResult.widthInches * 0.0254)).toFixed(2)}m × GSM {feasibilityResult.gsm} ÷ 1000) × 1.05 = <strong className="text-white">{feasibilityResult.calculatedYarnNeededKg.toLocaleString()} kg Total Yarn</strong>
+              <div className="p-4 bg-white editorial-border text-xs font-mono text-[var(--color-industrial-grey)] mb-6 font-bold leading-relaxed">
+                <span className="text-[var(--color-ink)] uppercase tracking-widest mr-2">Formula:</span>
+                (Length {feasibilityResult.lengthMeters}m × Width {((feasibilityResult.widthInches * 0.0254)).toFixed(2)}m × GSM {feasibilityResult.gsm} ÷ 1000) × 1.05 = <strong className="text-[var(--color-ink)] text-sm ml-2 bg-[var(--color-paper)] px-2 py-1">{feasibilityResult.calculatedYarnNeededKg.toLocaleString()} kg Total Yarn</strong>
               </div>
 
               {/* Warp / Weft Breakdown */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 bg-teal-950/20 border border-teal-800/40 rounded-xl">
-                  <div className="text-[10px] font-mono text-teal-400 uppercase font-bold">Warp Beaming Requirement (60%)</div>
-                  <div className="text-lg font-black text-white mt-1">{feasibilityResult.warpYarnKg.toLocaleString()} kg</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">High tensile sizing & creel creeling</div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-5 bg-white editorial-border">
+                  <div className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase font-bold tracking-widest border-b border-[var(--color-light-border)] pb-2 mb-3">Warp Beaming Requirement (60%)</div>
+                  <div className="text-3xl font-black text-[var(--color-ink)] font-display tracking-tighter">{feasibilityResult.warpYarnKg.toLocaleString()} <span className="text-lg">kg</span></div>
+                  <div className="text-[10px] text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest mt-2">High tensile sizing & creel creeling</div>
                 </div>
 
-                <div className="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-xl">
-                  <div className="text-[10px] font-mono text-emerald-400 uppercase font-bold">Weft Insertion Requirement (40%)</div>
-                  <div className="text-lg font-black text-white mt-1">{feasibilityResult.weftYarnKg.toLocaleString()} kg</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">Air-jet feeder package cones</div>
+                <div className="p-5 bg-white editorial-border">
+                  <div className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase font-bold tracking-widest border-b border-[var(--color-light-border)] pb-2 mb-3">Weft Insertion Requirement (40%)</div>
+                  <div className="text-3xl font-black text-[var(--color-ink)] font-display tracking-tighter">{feasibilityResult.weftYarnKg.toLocaleString()} <span className="text-lg">kg</span></div>
+                  <div className="text-[10px] text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest mt-2">Air-jet feeder package cones</div>
                 </div>
               </div>
             </div>
 
             {/* Right: Real-time Stock Comparison & Decision Card */}
             <div className={clsx(
-              'p-5 rounded-2xl border flex flex-col justify-between shadow-xl',
+              'p-6 editorial-border flex flex-col justify-between bg-white',
               feasibilityResult.feasibilityStatus === 'ready'
-                ? 'bg-gradient-to-b from-slate-900 via-emerald-950/30 to-slate-900 border-emerald-500/40'
-                : 'bg-gradient-to-b from-slate-900 via-red-950/30 to-slate-900 border-red-500/40'
+                ? 'border-[var(--color-success-green)] ring-1 ring-[var(--color-success-green)]'
+                : 'border-[var(--color-vermilion)] ring-1 ring-[var(--color-vermilion)]'
             )}>
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-mono uppercase font-bold text-slate-400">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-[var(--color-light-border)]">
+                  <span className="text-[10px] font-mono uppercase font-bold text-[var(--color-industrial-grey)] tracking-widest">
                     Live Stock Comparison
                   </span>
                   <span className={clsx(
-                    'px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider',
+                    'px-3 py-1 text-[10px] font-black uppercase tracking-widest editorial-border',
                     feasibilityResult.feasibilityStatus === 'ready'
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                      : 'bg-red-500/20 text-red-400 border border-red-500/40 animate-pulse'
+                      ? 'bg-[var(--color-success-green)] text-white'
+                      : 'bg-[var(--color-vermilion)] text-white animate-pulse'
                   )}>
                     {feasibilityResult.feasibilityStatus === 'ready' ? '✅ Ready to Start' : '❌ Yarn Shortfall'}
                   </span>
                 </div>
 
-                <h4 className="text-base font-bold text-white mb-2">
+                <h4 className={clsx(
+                  "text-xl font-black font-display uppercase tracking-tight mb-6",
+                  feasibilityResult.feasibilityStatus === 'ready' ? 'text-[var(--color-ink)]' : 'text-[var(--color-vermilion)]'
+                )}>
                   {feasibilityResult.feasibilityStatus === 'ready'
                     ? 'Sufficient Yarn In Warehouse'
                     : `Material Deficit: -${feasibilityResult.deficitKg.toLocaleString()} kg`}
                 </h4>
 
                 {/* Progress bar */}
-                <div className="space-y-1 mb-4">
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-slate-400">Stock Availability:</span>
-                    <span className="font-bold text-white">{feasibilityResult.readyToStartPercent}%</span>
+                <div className="space-y-2 mb-8">
+                  <div className="flex justify-between text-xs font-mono font-bold uppercase tracking-widest">
+                    <span className="text-[var(--color-industrial-grey)]">Stock Availability</span>
+                    <span className="text-[var(--color-ink)]">{feasibilityResult.readyToStartPercent}%</span>
                   </div>
-                  <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-[var(--color-paper)] h-3 editorial-border overflow-hidden">
                     <div
                       className={clsx(
-                        'h-full rounded-full transition-all duration-700',
-                        feasibilityResult.feasibilityStatus === 'ready' ? 'bg-emerald-500' : 'bg-red-500'
+                        'h-full transition-all duration-700',
+                        feasibilityResult.feasibilityStatus === 'ready' ? 'bg-[var(--color-success-green)]' : 'bg-[var(--color-vermilion)]'
                       )}
                       style={{ width: `${Math.min(100, feasibilityResult.readyToStartPercent)}%` }}
                     />
@@ -1002,20 +1002,20 @@ export const InventoryPage: React.FC = () => {
                 </div>
 
                 {/* Stock numbers */}
-                <div className="space-y-2 text-xs font-mono bg-slate-950/70 p-3 rounded-xl border border-slate-800 mb-4">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Required For Order:</span>
-                    <span className="font-bold text-white">{feasibilityResult.calculatedYarnNeededKg.toLocaleString()} kg</span>
+                <div className="space-y-3 text-xs font-mono bg-[var(--color-paper)] p-4 editorial-border mb-6">
+                  <div className="flex justify-between font-bold">
+                    <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Required For Order:</span>
+                    <span className="text-[var(--color-ink)]">{feasibilityResult.calculatedYarnNeededKg.toLocaleString()} kg</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Free In Warehouse:</span>
-                    <span className="font-bold text-emerald-400">{feasibilityResult.availableStockKg.toLocaleString()} kg</span>
+                  <div className="flex justify-between font-bold">
+                    <span className="text-[var(--color-industrial-grey)] uppercase tracking-widest">Free In Warehouse:</span>
+                    <span className="text-[var(--color-success-green)]">{feasibilityResult.availableStockKg.toLocaleString()} kg</span>
                   </div>
-                  <div className="flex justify-between border-t border-slate-800 pt-1.5">
-                    <span className="text-slate-400">Variance / Deficit:</span>
+                  <div className="flex justify-between border-t border-[var(--color-light-border)] pt-3 mt-3">
+                    <span className="text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest">Variance / Deficit:</span>
                     <span className={clsx(
-                      'font-black',
-                      feasibilityResult.deficitKg > 0 ? 'text-red-400' : 'text-emerald-400'
+                      'font-black text-sm',
+                      feasibilityResult.deficitKg > 0 ? 'text-[var(--color-vermilion)]' : 'text-[var(--color-success-green)]'
                     )}>
                       {feasibilityResult.deficitKg > 0 ? `-${feasibilityResult.deficitKg.toLocaleString()} kg` : 'Surplus Stock'}
                     </span>
@@ -1024,30 +1024,28 @@ export const InventoryPage: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-2">
+              <div className="pt-4 border-t border-[var(--color-light-border)]">
                 {feasibilityResult.feasibilityStatus === 'ready' ? (
-                  <Button
-                    variant="primary"
-                    className="w-full font-bold shadow-lg shadow-emerald-950/40 bg-emerald-600 hover:bg-emerald-500"
+                  <button
+                    className="w-full px-6 py-4 font-bold text-xs uppercase tracking-widest bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors flex justify-center items-center gap-2 editorial-border"
                     onClick={handleLockYarnReservation}
-                    leftIcon={<PackageCheck className="w-4 h-4" />}
                   >
+                    <PackageCheck className="w-4 h-4" />
                     Lock & Reserve Yarn for Order
-                  </Button>
+                  </button>
                 ) : (
-                  <Button
-                    variant="primary"
-                    className="w-full font-bold shadow-lg shadow-red-950/40 bg-red-600 hover:bg-red-500"
+                  <button
+                    className="w-full px-6 py-4 font-bold text-xs uppercase tracking-widest bg-[var(--color-vermilion)] text-white hover:bg-red-700 transition-colors flex justify-center items-center gap-2 editorial-border"
                     onClick={() => {
                       const matchedItem = items.find((i) => i.id === feasibilityResult.matchingInventoryItemId) || items[0];
                       setReorderItem(matchedItem);
                       setReorderPoQty(feasibilityResult.deficitKg + 1000); // Deficit + Safety Buffer
                       setReorderModalOpen(true);
                     }}
-                    leftIcon={<Truck className="w-4 h-4" />}
                   >
-                    Raise Supplier PO for Deficit ({feasibilityResult.deficitKg} kg)
-                  </Button>
+                    <Truck className="w-4 h-4" />
+                    Raise PO for Deficit ({feasibilityResult.deficitKg} kg)
+                  </button>
                 )}
               </div>
             </div>
@@ -1057,57 +1055,57 @@ export const InventoryPage: React.FC = () => {
 
       {/* TAB 4: Stock Movement Audit Ledger */}
       {activeTab === 'movements' && (
-        <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-          <div className="p-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <div className="editorial-border bg-white overflow-hidden">
+          <div className="p-5 border-b border-[var(--color-light-border)] bg-[var(--color-paper)] flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold font-display text-white">
+              <h3 className="text-xl font-bold font-display uppercase tracking-tight text-[var(--color-ink)]">
                 Traceable Stock Movement Audit Trail
               </h3>
-              <p className="text-xs text-slate-400">All inbound truck receipts, production reservations, issues, and scraps</p>
+              <p className="text-sm font-sans text-[var(--color-industrial-grey)] mt-1">All inbound truck receipts, production reservations, issues, and scraps</p>
             </div>
-            <span className="text-[10px] font-mono text-slate-500 uppercase">Immutable Ledger</span>
+            <span className="text-[10px] font-mono text-[var(--color-ink)] font-bold uppercase tracking-widest border border-[var(--color-ink)] px-3 py-1 bg-white">Immutable Ledger</span>
           </div>
 
-          <div className="divide-y divide-slate-800/60">
+          <div className="divide-y divide-[var(--color-light-border)]">
             {movements.map((mov) => {
               const isReceipt = mov.type === 'receipt';
               return (
-                <div key={mov.id} className="p-4 flex items-start justify-between hover:bg-slate-800/40 transition-colors">
-                  <div className="flex items-start gap-3">
+                <div key={mov.id} className="p-4 flex items-start justify-between hover:bg-[var(--color-paper)] transition-colors">
+                  <div className="flex items-start gap-4">
                     <div
                       className={clsx(
-                        'p-2 rounded-lg shrink-0',
+                        'p-3 editorial-border shrink-0 bg-white',
                         isReceipt
-                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                          : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                          ? 'text-[var(--color-success-green)]'
+                          : 'text-[var(--color-vermilion)]'
                       )}
                     >
-                      {isReceipt ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                      {isReceipt ? <ArrowDownRight className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-xs text-white">{mov.referenceNumber}</span>
-                        <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                      <div className="flex items-center gap-3 mb-1">
+                        <span className="font-mono font-bold text-sm text-[var(--color-ink)]">{mov.referenceNumber}</span>
+                        <span className="text-[10px] font-mono uppercase px-2 py-0.5 border border-[var(--color-light-border)] font-bold bg-white text-[var(--color-ink)]">
                           {mov.type.replace(/_/g, ' ')}
                         </span>
                       </div>
-                      <h4 className="text-xs font-semibold text-slate-200 mt-0.5">{mov.itemName}</h4>
-                      <p className="text-xs text-slate-400 mt-0.5">{mov.notes}</p>
+                      <h4 className="text-sm font-bold text-[var(--color-ink)]">{mov.itemName}</h4>
+                      <p className="text-xs text-[var(--color-industrial-grey)] mt-1 max-w-2xl">{mov.notes}</p>
                     </div>
                   </div>
 
                   <div className="text-right shrink-0">
                     <div
                       className={clsx(
-                        'font-mono font-bold text-xs',
-                        isReceipt ? 'text-emerald-400' : 'text-slate-200'
+                        'font-mono font-black text-sm',
+                        isReceipt ? 'text-[var(--color-success-green)]' : 'text-[var(--color-vermilion)]'
                       )}
                     >
                       {isReceipt ? '+' : '-'}{mov.quantity.toLocaleString()} {mov.unit}
                     </div>
-                    <div className="text-[10px] text-slate-400 mt-1">{mov.timestamp}</div>
-                    <div className="text-[10px] text-slate-500">{mov.performedBy}</div>
+                    <div className="text-[11px] font-mono text-[var(--color-industrial-grey)] font-bold mt-1.5">{mov.timestamp}</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-industrial-grey)] mt-1">{mov.performedBy}</div>
                   </div>
                 </div>
               );

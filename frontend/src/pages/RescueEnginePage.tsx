@@ -182,56 +182,52 @@ export const RescueEnginePage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Signature Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-                Everest Rescue Engine™
-              </h1>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-mono font-bold animate-pulse">
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-4xl lg:text-6xl font-black font-display text-[var(--color-vermilion)] uppercase tracking-tighter leading-none flex items-center gap-4">
+              <ShieldAlert className="w-10 h-10 lg:w-14 lg:h-14" />
+              Rescue Engine™
+            </h1>
+            <span className="text-[10px] px-2 py-1 border border-[var(--color-vermilion)] text-[var(--color-vermilion)] uppercase font-mono font-bold animate-pulse">
               AUTONOMOUS TRIAGE ACTIVE
             </span>
           </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="text-sm font-sans text-[var(--color-industrial-grey)] max-w-xl">
             Real-time operational problem detection, causal telemetry diagnosis, multi-factor recovery plan comparison, and management approval.
           </p>
         </div>
       </div>
 
       {/* Triage Stats Summary Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block">Critical Breaches</span>
-          <span className="text-xl sm:text-2xl font-bold font-display text-rose-400 block mt-0.5">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <span className="editorial-label text-[var(--color-vermilion)] mb-2">Critical Breaches</span>
+          <span className="font-display text-4xl font-bold text-[var(--color-vermilion)]">
             {triageStats.critical}
           </span>
         </div>
-        <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block">Orders at Risk</span>
-          <span className="text-xl sm:text-2xl font-bold font-display text-amber-400 block mt-0.5">
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <span className="editorial-label text-amber-600 mb-2">Orders at Risk</span>
+          <span className="font-display text-4xl font-bold text-amber-600">
             {triageStats.ordersAtRisk}
           </span>
         </div>
-        <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block">Machine Trips</span>
-          <span className="text-xl sm:text-2xl font-bold font-display text-white block mt-0.5">
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <span className="editorial-label text-[var(--color-ink)] mb-2">Machine Trips</span>
+          <span className="font-display text-4xl font-bold text-[var(--color-ink)]">
             {triageStats.machineStops}
           </span>
         </div>
-        <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block">Quality Holds</span>
-          <span className="text-xl sm:text-2xl font-bold font-display text-teal-400 block mt-0.5">
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <span className="editorial-label text-[var(--color-industrial-grey)] mb-2">Quality Holds</span>
+          <span className="font-display text-4xl font-bold text-[var(--color-ink)]">
             {triageStats.qualityHolds}
           </span>
         </div>
-        <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 col-span-2 sm:col-span-1">
-          <span className="text-[10px] uppercase font-mono text-slate-400 block">Dye Shortages</span>
-          <span className="text-xl sm:text-2xl font-bold font-display text-indigo-400 block mt-0.5">
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between col-span-2 sm:col-span-1">
+          <span className="editorial-label text-[var(--color-industrial-grey)] mb-2">Dye Shortages</span>
+          <span className="font-display text-4xl font-bold text-[var(--color-ink)]">
             {triageStats.materialShortages}
           </span>
         </div>
@@ -240,15 +236,15 @@ export const RescueEnginePage: React.FC = () => {
       {/* Main Workspace: Left Column Issues Feed + Right Column Deep Dive & Plans */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (4 cols): Issue Triage List */}
-        <div className="lg:col-span-4 space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+        <div className="lg:col-span-4 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--color-light-border)]">
+            <h3 className="editorial-label text-[var(--color-ink)]">
               Detected Incidents ({issues.length})
             </h3>
-            <span className="text-[10px] font-mono text-slate-500">Heuristic Engine</span>
+            <span className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase tracking-wider font-bold">Heuristic Engine</span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {issues.map((issue) => {
               const isSelected = issue.id === selectedIssueId;
               const isCritical = issue.severity === 'critical';
@@ -258,49 +254,47 @@ export const RescueEnginePage: React.FC = () => {
                   key={issue.id}
                   onClick={() => setSelectedIssueId(issue.id)}
                   className={clsx(
-                    'p-4 rounded-xl border text-left cursor-pointer transition-all duration-150 relative overflow-hidden',
-                    isSelected
-                      ? 'bg-slate-900 border-teal-500 shadow-md ring-1 ring-teal-500/40'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                    'p-4 editorial-border text-left cursor-pointer transition-all duration-150 relative bg-white',
+                    isSelected ? (isCritical ? 'border-[var(--color-vermilion)] ring-1 ring-[var(--color-vermilion)] shadow-sm' : 'border-[var(--color-ink)] ring-1 ring-[var(--color-ink)] shadow-sm') : 'hover:bg-black/5'
                   )}
                 >
                   {isCritical && (
-                    <div className="absolute top-0 left-0 bottom-0 w-1 bg-rose-500" />
+                    <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[var(--color-vermilion)]" />
                   )}
 
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="font-mono font-bold text-xs text-rose-400">
+                  <div className={clsx("flex items-start justify-between gap-2", isCritical ? "ml-2" : "")}>
+                    <span className={clsx("font-display font-bold text-sm tracking-widest uppercase", isCritical ? "text-[var(--color-vermilion)]" : "text-[var(--color-ink)]")}>
                       {issue.issueCode}
                     </span>
                     <StatusBadge status={issue.severity} size="sm" />
                   </div>
 
-                  <h4 className="text-xs font-bold text-white font-display mt-1.5 leading-snug">
+                  <h4 className={clsx("text-sm font-bold font-sans mt-2 leading-snug", isCritical ? "ml-2" : "")}>
                     {issue.title}
                   </h4>
 
-                  <div className="mt-2 text-[11px] text-slate-400 space-y-0.5">
+                  <div className={clsx("mt-3 text-[11px] font-bold text-[var(--color-industrial-grey)] space-y-1", isCritical ? "ml-2" : "")}>
                     {issue.affectedOrderNumber && (
-                      <div className="flex items-center gap-1">
-                        <ShoppingBag className="w-3 h-3 text-slate-400" />
-                        <span className="font-mono text-slate-300">{issue.affectedOrderNumber}</span>
-                        <span className="text-slate-400 truncate">({issue.customerName})</span>
+                      <div className="flex items-center gap-1.5">
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span className="font-mono text-[var(--color-ink)] uppercase tracking-widest">{issue.affectedOrderNumber}</span>
+                        <span className="truncate">({issue.customerName})</span>
                       </div>
                     )}
                     {issue.affectedMachineName && (
-                      <div className="flex items-center gap-1">
-                        <Cpu className="w-3 h-3 text-slate-400" />
-                        <span className="truncate">{issue.affectedMachineName}</span>
+                      <div className="flex items-center gap-1.5">
+                        <Cpu className="w-3.5 h-3.5" />
+                        <span className="truncate uppercase">{issue.affectedMachineName}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono">
-                    <span className="text-slate-400">{issue.detectionTime}</span>
+                  <div className={clsx("mt-4 pt-3 border-t border-[var(--color-light-border)] flex items-center justify-between text-[10px] font-mono", isCritical ? "ml-2" : "")}>
+                    <span className="text-[var(--color-industrial-grey)] font-bold">{issue.detectionTime}</span>
                     <span
                       className={clsx(
-                        'uppercase font-bold',
-                        issue.status === 'approved' ? 'text-emerald-400' : 'text-amber-400'
+                        'uppercase font-bold tracking-widest',
+                        issue.status === 'approved' ? 'text-[var(--color-success-green)]' : 'text-amber-600'
                       )}
                     >
                       {issue.status.replace(/_/g, ' ')}
@@ -316,96 +310,91 @@ export const RescueEnginePage: React.FC = () => {
         {activeIssue && (
           <div className="lg:col-span-8 space-y-6">
             {/* 1. Incident Diagnosis & Impact Card */}
-            <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div className="editorial-border bg-white p-6 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 editorial-border-b">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-rose-400 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="font-display font-bold text-sm tracking-widest uppercase text-[var(--color-vermilion)] border border-[var(--color-vermilion)] px-2 py-0.5">
                       {activeIssue.issueCode}
                     </span>
                     <StatusBadge status={activeIssue.severity} size="sm" />
-                    <span className="text-xs text-slate-400 font-mono">Detected: {activeIssue.detectionTime}</span>
+                    <span className="text-xs text-[var(--color-industrial-grey)] font-mono font-bold">Detected: {activeIssue.detectionTime}</span>
                   </div>
-                  <h2 className="text-base sm:text-lg font-bold text-white font-display mt-1">
+                  <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
                     {activeIssue.title}
                   </h2>
                 </div>
 
                 {activeIssue.status === 'approved' && (
-                  <div className="p-2 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-mono font-bold flex items-center gap-1.5 shrink-0">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>PLAN APPROVED</span>
+                  <div className="px-4 py-2 bg-[var(--color-success-green)] text-white text-xs font-mono font-bold flex items-center gap-2 shrink-0">
+                    <CheckCircle2 className="w-4 h-4" />
+                    PLAN APPROVED
                   </div>
                 )}
               </div>
 
-              {/* What Happened & Likely Root Cause */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                  <span className="text-[10px] font-mono uppercase text-slate-400 block font-bold">
-                    ROOT CAUSE DIAGNOSIS:
-                  </span>
-                  <p className="text-slate-200 leading-relaxed">{activeIssue.likelyCause}</p>
+              {/* Root Cause & Impact */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 bg-[var(--color-paper)] border border-[var(--color-light-border)] space-y-2">
+                  <span className="editorial-label text-[var(--color-ink)]">Root Cause Diagnosis</span>
+                  <p className="text-sm font-sans leading-relaxed">{activeIssue.likelyCause}</p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-900/40 space-y-1">
-                  <span className="text-[10px] font-mono uppercase text-rose-400 block font-bold">
-                    OPERATIONAL IMPACT ANALYSIS:
-                  </span>
-                  <div className="flex items-center gap-2 text-rose-300 font-mono font-bold text-xs">
-                    <span>Delay: +{activeIssue.impactAnalysis.delayDays} Days</span>
-                    <span>|</span>
-                    <span>Cost: +₹{activeIssue.impactAnalysis.costImpactUsd}</span>
+                <div className="p-4 bg-rose-50 border border-[var(--color-vermilion)] space-y-2">
+                  <span className="editorial-label text-[var(--color-vermilion)]">Operational Impact</span>
+                  <div className="font-display font-bold text-xl text-[var(--color-vermilion)] flex gap-4">
+                    <span>+{activeIssue.impactAnalysis.delayDays}D Delay</span>
+                    <span>₹{activeIssue.impactAnalysis.costImpactUsd}</span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                  <p className="text-xs text-[var(--color-ink)] leading-relaxed font-medium">
                     {activeIssue.impactAnalysis.description}
                   </p>
                 </div>
               </div>
 
-              {/* Operational Telemetry Evidence Log */}
+              {/* Evidence Log */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono mb-2">
+                <h4 className="editorial-label text-[var(--color-ink)] mb-3">
                   Supporting Sensor Evidence & Heuristic Indicators
                 </h4>
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5 text-xs">
+                <div className="p-4 bg-[var(--color-paper)] border border-[var(--color-light-border)] space-y-2">
                   {activeIssue.evidence.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-slate-300">
-                      <span className="text-teal-400 font-mono">›</span>
-                      <span>{item}</span>
+                    <div key={idx} className="flex items-start gap-3 text-sm">
+                      <span className="text-[var(--color-vermilion)] font-mono font-bold text-base leading-none mt-0.5">›</span>
+                      <span className="font-sans">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Approval status banner if already approved */}
+              {/* Approval banner */}
               {activeIssue.status === 'approved' && (
-                <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-xs text-emerald-200 space-y-1">
-                  <div className="flex items-center justify-between font-mono font-bold">
+                <div className="p-4 bg-[var(--color-success-green)] text-white space-y-1">
+                  <div className="flex items-center justify-between font-mono font-bold text-sm">
                     <span>Approved by: {activeIssue.approvedBy}</span>
                     <span>{activeIssue.approvedAt}</span>
                   </div>
-                  <p className="text-[11px] text-slate-300">{activeIssue.executionStatus}</p>
+                  <p className="text-xs opacity-90">{activeIssue.executionStatus}</p>
                 </div>
               )}
             </div>
 
             {/* 2. Recovery Plan Comparison Matrix */}
-            <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 space-y-4 shadow-sm">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div className="editorial-border bg-white p-6 space-y-5">
+              <div className="flex items-center justify-between pb-3 editorial-border-b">
                 <div>
-                  <h3 className="text-sm font-semibold text-white font-display">
-                    Recommended Recovery Plans ({activeIssue.recoveryPlans.length} Options Generated)
+                  <h3 className="font-display font-bold text-xl uppercase tracking-tight">
+                    Recovery Plans ({activeIssue.recoveryPlans.length} Options)
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    Compare lead time recovery, additional expediting costs, and operational trade-offs.
+                  <p className="text-xs text-[var(--color-industrial-grey)] mt-1 font-sans">
+                    Compare lead time recovery, expediting costs, and operational trade-offs.
                   </p>
                 </div>
-                <span className="text-[10px] font-mono text-teal-400 uppercase">Everest Heuristics</span>
+                <span className="editorial-label text-[var(--color-industrial-grey)]">Everest Heuristics</span>
               </div>
 
               {/* Plan Cards Comparison */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {activeIssue.recoveryPlans.map((plan) => {
                   const isPlanSelected = plan.id === selectedPlanId;
                   const isFeasible = plan.feasibilityScorePercent >= 90;
@@ -415,48 +404,48 @@ export const RescueEnginePage: React.FC = () => {
                       key={plan.id}
                       onClick={() => setSelectedPlanId(plan.id)}
                       className={clsx(
-                        'p-4 rounded-xl border text-left cursor-pointer transition-all duration-150 flex flex-col justify-between',
+                        'p-4 editorial-border text-left cursor-pointer transition-all duration-150 flex flex-col justify-between bg-white',
                         isPlanSelected
-                          ? 'bg-teal-950/30 border-teal-500 shadow-md ring-1 ring-teal-500/50'
-                          : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                          ? 'border-[var(--color-ink)] ring-2 ring-[var(--color-ink)] shadow-md'
+                          : 'hover:bg-black/5'
                       )}
                     >
                       <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-mono font-bold text-[11px] text-teal-300 truncate">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-display font-bold text-sm uppercase tracking-widest">
                             {plan.planCode.split(' ')[0]}
                           </span>
                           <span
                             className={clsx(
-                              'text-[10px] font-mono font-bold px-1.5 py-0.5 rounded',
-                              isFeasible ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-300'
+                              'text-[10px] font-mono font-bold px-2 py-0.5 uppercase',
+                              isFeasible ? 'bg-[var(--color-success-green)] text-white' : 'bg-[var(--color-paper)] text-[var(--color-industrial-grey)] border border-[var(--color-light-border)]'
                             )}
                           >
-                            {plan.feasibilityScorePercent}% Match
+                            {plan.feasibilityScorePercent}%
                           </span>
                         </div>
 
-                        <h4 className="text-xs font-bold text-white font-display mt-1 line-clamp-2">
+                        <h4 className="text-sm font-bold font-sans mt-1 line-clamp-2 leading-snug">
                           {plan.title}
                         </h4>
 
-                        <p className="text-[11px] text-slate-400 mt-2 line-clamp-3 leading-relaxed">
+                        <p className="text-[11px] text-[var(--color-industrial-grey)] mt-2 line-clamp-3 leading-relaxed font-sans">
                           {plan.summary}
                         </p>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-slate-800 space-y-1 font-mono text-xs">
+                      <div className="mt-4 pt-3 border-t border-[var(--color-light-border)] space-y-1.5 font-mono text-xs">
                         <div className="flex justify-between">
-                          <span className="text-slate-400 text-[11px]">Schedule Gain:</span>
-                          <span className="font-bold text-emerald-400">{plan.estimatedDelayChangeDays} Days</span>
+                          <span className="text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest text-[10px]">Schedule Gain:</span>
+                          <span className="font-bold text-[var(--color-success-green)]">{plan.estimatedDelayChangeDays} Days</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400 text-[11px]">Extra Cost:</span>
-                          <span className="font-bold text-white">₹{plan.estimatedCostUsd}</span>
+                          <span className="text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest text-[10px]">Extra Cost:</span>
+                          <span className="font-bold">₹{plan.estimatedCostUsd}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400 text-[11px]">Risk Profile:</span>
-                          <span className="capitalize text-slate-300">{plan.riskLevel}</span>
+                          <span className="text-[var(--color-industrial-grey)] font-bold uppercase tracking-widest text-[10px]">Risk Profile:</span>
+                          <span className="capitalize font-bold">{plan.riskLevel}</span>
                         </div>
                       </div>
                     </div>
@@ -466,57 +455,59 @@ export const RescueEnginePage: React.FC = () => {
 
               {/* Selected Plan Deep-Dive & Action Controls */}
               {activePlan && (
-                <div className="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4 text-xs">
-                  <div className="flex items-center justify-between">
+                <div className="p-6 bg-[var(--color-paper)] border border-[var(--color-light-border)] space-y-5">
+                  <div className="flex items-center justify-between pb-3 editorial-border-b">
                     <div>
-                      <span className="text-[10px] font-mono uppercase text-teal-400 font-bold">
-                        SELECTED PLAN EXECUTION STRATEGY:
+                      <span className="editorial-label text-[var(--color-ink)]">
+                        Selected Plan Execution Strategy
                       </span>
-                      <h4 className="text-sm font-bold text-white font-display mt-0.5">
+                      <h4 className="font-display text-xl font-bold uppercase tracking-tight mt-1">
                         {activePlan.title}
                       </h4>
                     </div>
-                    <span className="font-mono text-slate-400">Score: {activePlan.feasibilityScorePercent}/100</span>
+                    <div className="editorial-border px-3 py-1.5 font-mono font-bold text-sm">
+                      {activePlan.feasibilityScorePercent}/100
+                    </div>
                   </div>
 
-                  <p className="text-slate-300 leading-relaxed">{activePlan.strategyDescription}</p>
+                  <p className="text-sm font-sans leading-relaxed">{activePlan.strategyDescription}</p>
 
                   {/* Steps */}
                   <div>
-                    <h5 className="font-bold text-white uppercase font-mono text-[10px] mb-2">
+                    <h5 className="editorial-label text-[var(--color-ink)] mb-3">
                       Operational Action Steps:
                     </h5>
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       {activePlan.steps.map((step, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-slate-300">
-                          <span className="w-4 h-4 rounded-full bg-slate-800 text-teal-400 text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
+                        <div key={idx} className="flex items-start gap-3 text-sm">
+                          <span className="w-5 h-5 bg-[var(--color-ink)] text-white text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
                             {idx + 1}
                           </span>
-                          <span>{step}</span>
+                          <span className="font-sans">{step}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Pros & Cons Matrix */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                    <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-900/40 space-y-1">
-                      <span className="font-bold text-emerald-400 text-[10px] font-mono uppercase flex items-center gap-1">
-                        <ThumbsUp className="w-3 h-3" /> Advantages:
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 bg-white border border-[var(--color-light-border)] space-y-2">
+                      <span className="editorial-label text-[var(--color-success-green)] flex items-center gap-1">
+                        <ThumbsUp className="w-3.5 h-3.5" /> Advantages
                       </span>
                       {activePlan.pros.map((p, idx) => (
-                        <p key={idx} className="text-slate-300 text-[11px] leading-relaxed">
+                        <p key={idx} className="text-sm font-sans leading-relaxed">
                           • {p}
                         </p>
                       ))}
                     </div>
 
-                    <div className="p-3 rounded-lg bg-amber-950/20 border border-amber-900/40 space-y-1">
-                      <span className="font-bold text-amber-400 text-[10px] font-mono uppercase flex items-center gap-1">
-                        <ThumbsDown className="w-3 h-3" /> Trade-offs / Risks:
+                    <div className="p-4 bg-amber-50 border border-amber-300 space-y-2">
+                      <span className="editorial-label text-amber-700 flex items-center gap-1">
+                        <ThumbsDown className="w-3.5 h-3.5" /> Trade-offs / Risks
                       </span>
                       {activePlan.cons.map((c, idx) => (
-                        <p key={idx} className="text-slate-300 text-[11px] leading-relaxed">
+                        <p key={idx} className="text-sm font-sans leading-relaxed text-amber-900">
                           • {c}
                         </p>
                       ))}
@@ -524,29 +515,25 @@ export const RescueEnginePage: React.FC = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div className="text-[11px] text-slate-400">
-                      Required Sign-off: <strong className="text-slate-200">{activePlan.requiredApprovals.join(', ')}</strong>
+                  <div className="pt-5 border-t border-[var(--color-light-border)] flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-xs text-[var(--color-industrial-grey)] font-bold">
+                      Required Sign-off: <span className="text-[var(--color-ink)] font-bold">{activePlan.requiredApprovals.join(', ')}</span>
                     </div>
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <Button
-                        variant="outline"
-                        size="sm"
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <button
                         onClick={() => setRejectModalOpen(true)}
-                        className="w-full sm:w-auto"
+                        className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest editorial-border hover:bg-black/5 transition-colors w-full sm:w-auto"
                       >
                         Reject Plan
-                      </Button>
-                      <Button
-                        variant="primary"
-                        size="md"
+                      </button>
+                      <button
                         onClick={() => setApprovalModalOpen(true)}
-                        leftIcon={<Check className="w-4 h-4" />}
-                        className="w-full sm:w-auto font-bold shadow-lg"
+                        className="px-6 py-2.5 text-xs font-bold uppercase tracking-widest bg-[var(--color-ink)] text-white hover:bg-black/80 transition-colors flex items-center gap-2 w-full sm:w-auto"
                       >
-                        Approve & Execute Plan
-                      </Button>
+                        <Check className="w-4 h-4" />
+                        Approve & Execute
+                      </button>
                     </div>
                   </div>
                 </div>

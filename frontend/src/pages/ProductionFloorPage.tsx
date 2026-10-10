@@ -260,15 +260,12 @@ export const ProductionFloorPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* 1. Header & Live Mid-Shift Telemetry Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-              Production Floor — Mid-Shift Operations
-            </h1>
-            <DataSourceBadge source="SIMULATED" />
-          </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <h1 className="text-4xl lg:text-6xl font-black font-display text-[var(--color-ink)] uppercase tracking-tighter leading-none mb-2">
+            Production Floor
+          </h1>
+          <p className="text-sm font-sans text-[var(--color-industrial-grey)] max-w-md">
             Live process pipeline from raw yarn through spinning, weaving, and dyeing to finished fabric. Monitor live machine status, order progress, idle units, and shift worker assignments.
           </p>
         </div>
@@ -276,12 +273,12 @@ export const ProductionFloorPage: React.FC = () => {
         {/* View Switcher & Action Tabs */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Active Mode Tabs */}
-          <div className="flex items-center rounded-lg bg-slate-950 p-1 border border-slate-800 text-xs">
+          <div className="flex items-center border border-[var(--color-ink)] bg-white">
             <button
               onClick={() => setActiveTab('floor')}
               className={clsx(
-                'px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5',
-                activeTab === 'floor' ? 'bg-teal-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                'px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5',
+                activeTab === 'floor' ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-ink)] hover:bg-black/5'
               )}
             >
               <Cpu className="w-3.5 h-3.5" />
@@ -290,45 +287,43 @@ export const ProductionFloorPage: React.FC = () => {
             <button
               onClick={() => setActiveTab('order-matrix')}
               className={clsx(
-                'px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5',
-                activeTab === 'order-matrix' ? 'bg-teal-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                'px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 border-l border-r border-[var(--color-ink)]',
+                activeTab === 'order-matrix' ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-ink)] hover:bg-black/5'
               )}
             >
               <Layers className="w-3.5 h-3.5" />
-              Order ➔ Machine Matrix
+              Matrix
             </button>
             <button
               onClick={() => setActiveTab('roster')}
               className={clsx(
-                'px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1.5',
-                activeTab === 'roster' ? 'bg-teal-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                'px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5',
+                activeTab === 'roster' ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-ink)] hover:bg-black/5'
               )}
             >
               <Users className="w-3.5 h-3.5" />
-              Worker Roster ({workers.length})
+              Roster
             </button>
           </div>
 
-          {/* Grid / Table Toggle (only on floor tab) */}
+          {/* Grid / Table Toggle */}
           {activeTab === 'floor' && (
-            <div className="flex items-center rounded-lg bg-slate-950 p-1 border border-slate-800">
+            <div className="flex items-center border border-[var(--color-ink)] bg-white">
               <button
                 onClick={() => setViewMode('grid')}
                 className={clsx(
-                  'p-1.5 rounded-md transition-colors',
-                  viewMode === 'grid' ? 'bg-teal-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  'p-2 transition-colors',
+                  viewMode === 'grid' ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-ink)] hover:bg-black/5'
                 )}
-                title="Grid View"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
                 className={clsx(
-                  'p-1.5 rounded-md transition-colors',
-                  viewMode === 'table' ? 'bg-teal-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  'p-2 transition-colors border-l border-[var(--color-ink)]',
+                  viewMode === 'table' ? 'bg-[var(--color-ink)] text-white' : 'text-[var(--color-ink)] hover:bg-black/5'
                 )}
-                title="Table View"
               >
                 <List className="w-4 h-4" />
               </button>
@@ -347,124 +342,80 @@ export const ProductionFloorPage: React.FC = () => {
       </div>
 
       {/* 2. Factory Floor Mid-Shift KPI Summary Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Fabric Output Today */}
-        <div className="p-3.5 rounded-xl bg-gradient-to-br from-teal-950/60 to-slate-900 border border-teal-800/40">
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Today's Total Output</span>
-            <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-          </div>
-          <div className="mt-1 text-xl font-bold font-display text-white">
-            {floorStats.totalTodayMeters.toLocaleString()} <span className="text-xs font-normal text-slate-400">m</span>
-          </div>
-          <div className="mt-1 flex items-center justify-between text-[10px] text-teal-400">
-            <span>Target: {floorStats.targetTodayMeters.toLocaleString()} m</span>
-            <span className="font-bold">{floorStats.percentAchieved}%</span>
-          </div>
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <div className="editorial-label text-[var(--color-industrial-grey)] mb-2">Today's Output</div>
+          <div className="font-display text-3xl font-bold uppercase">{floorStats.totalTodayMeters.toLocaleString()} <span className="text-xs">m</span></div>
+          <div className="mt-2 text-xs font-semibold text-[var(--color-ink)] border-t border-[var(--color-light-border)] pt-2">Target: {floorStats.targetTodayMeters.toLocaleString()}m ({floorStats.percentAchieved}%)</div>
         </div>
 
         {/* Current Shift */}
-        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Shift Status</span>
-            <Clock className="w-3.5 h-3.5 text-blue-400" />
-          </div>
-          <div className="mt-1 text-sm font-bold font-display text-white truncate">
-            Shift 1 (Morning)
-          </div>
-          <p className="mt-1 text-[10px] text-slate-400">
-            06:00 – 14:00 (5h 45m elapsed)
-          </p>
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <div className="editorial-label text-[var(--color-industrial-grey)] mb-2">Shift Status</div>
+          <div className="font-display text-2xl font-bold uppercase">Shift 1</div>
+          <div className="mt-2 text-xs text-[var(--color-industrial-grey)] border-t border-[var(--color-light-border)] pt-2">06:00 – 14:00</div>
         </div>
 
         {/* Running Machines */}
-        <button
+        <div
           onClick={() => { setSelectedStatus('running'); setActiveTab('floor'); }}
           className={clsx(
-            'p-3.5 rounded-xl border text-left transition-all',
-            selectedStatus === 'running'
-              ? 'bg-emerald-950/40 border-emerald-500 shadow-sm ring-1 ring-emerald-500/50'
-              : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-colors flex flex-col justify-between',
+            selectedStatus === 'running' ? 'bg-[var(--color-ink)] text-white' : 'bg-white hover:bg-black/5'
           )}
         >
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Running Now</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          </div>
-          <div className="mt-1 text-xl font-bold font-display text-emerald-300">
-            {floorStats.totalRunning} <span className="text-xs font-normal text-slate-400">/ {floorStats.totalFleet}</span>
-          </div>
-          <p className="mt-1 text-[10px] text-emerald-400/80">Active producing units</p>
-        </button>
+          <div className={clsx("editorial-label mb-2", selectedStatus === 'running' ? 'text-[var(--color-light-border)]' : 'text-[var(--color-success-green)]')}>Running</div>
+          <div className="font-display text-3xl font-bold">{floorStats.totalRunning} <span className="text-xs font-sans font-normal opacity-70">/ {floorStats.totalFleet}</span></div>
+          <div className="mt-2 text-xs opacity-70 border-t border-current pt-2">Active producing units</div>
+        </div>
 
-        {/* Sitting Idle Machines */}
-        <button
+        {/* Idle Machines */}
+        <div
           onClick={() => { setSelectedStatus('idle'); setActiveTab('floor'); }}
           className={clsx(
-            'p-3.5 rounded-xl border text-left transition-all',
-            selectedStatus === 'idle'
-              ? 'bg-amber-950/40 border-amber-500 shadow-sm ring-1 ring-amber-500/50'
-              : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-colors flex flex-col justify-between',
+            selectedStatus === 'idle' ? 'bg-amber-100' : 'bg-white hover:bg-black/5'
           )}
         >
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Sitting Idle</span>
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
-          </div>
-          <div className="mt-1 text-xl font-bold font-display text-amber-300">
-            {floorStats.totalIdle} <span className="text-xs font-normal text-slate-400">units</span>
-          </div>
-          <p className="mt-1 text-[10px] text-amber-400/80">Awaiting materials / beam</p>
-        </button>
+          <div className="editorial-label text-amber-700 mb-2">Sitting Idle</div>
+          <div className="font-display text-3xl font-bold text-amber-900">{floorStats.totalIdle}</div>
+          <div className="mt-2 text-xs text-amber-800 border-t border-amber-200 pt-2">Awaiting materials</div>
+        </div>
 
         {/* Breakdown Machines */}
-        <button
+        <div
           onClick={() => { setSelectedStatus('breakdown'); setActiveTab('floor'); }}
           className={clsx(
-            'p-3.5 rounded-xl border text-left transition-all',
-            selectedStatus === 'breakdown'
-              ? 'bg-rose-950/40 border-rose-500 shadow-sm ring-1 ring-rose-500/50'
-              : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+            'p-4 editorial-border cursor-pointer transition-colors flex flex-col justify-between',
+            selectedStatus === 'breakdown' ? 'bg-[var(--color-vermilion)] text-white' : 'bg-white hover:bg-black/5'
           )}
         >
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Breakdowns</span>
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-          </div>
-          <div className="mt-1 text-xl font-bold font-display text-rose-400">
-            {floorStats.totalBreakdown} <span className="text-xs font-normal text-slate-400">unit</span>
-          </div>
-          <p className="mt-1 text-[10px] text-rose-400/80">Loom #3 Rapier Inverter</p>
-        </button>
+          <div className={clsx("editorial-label mb-2", selectedStatus === 'breakdown' ? 'text-rose-100' : 'text-[var(--color-vermilion)]')}>Breakdowns</div>
+          <div className="font-display text-3xl font-bold">{floorStats.totalBreakdown}</div>
+          <div className="mt-2 text-xs opacity-80 border-t border-current pt-2">Requires triage</div>
+        </div>
 
         {/* Fleet OEE Efficiency */}
-        <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-          <div className="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>Avg Fleet OEE</span>
-            <Activity className="w-3.5 h-3.5 text-teal-400" />
-          </div>
-          <div className="mt-1 text-xl font-bold font-display text-white">
-            {floorStats.avgEfficiency}%
-          </div>
-          <p className="mt-1 text-[10px] text-slate-400">Floor target &ge; 85%</p>
+        <div className="p-4 editorial-border bg-white flex flex-col justify-between">
+          <div className="editorial-label text-[var(--color-industrial-grey)] mb-2">Avg Fleet OEE</div>
+          <div className="font-display text-3xl font-bold">{floorStats.avgEfficiency}%</div>
+          <div className="mt-2 text-xs text-[var(--color-industrial-grey)] border-t border-[var(--color-light-border)] pt-2">Target &ge; 85%</div>
         </div>
       </div>
 
       {/* 3. Sequential Mid-Shift Process Pipeline Ribbon (Yarn -> Fabric Transformation) */}
-      <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3 pb-2 border-b border-slate-800/80">
-          <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-teal-400" />
-            <h3 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
-              Mid-Shift Process Pipeline & Transformation Flow
-            </h3>
-          </div>
-          <span className="text-[11px] text-slate-400">
-            Click any stage to filter machines & see fabric progression
+      <div className="editorial-border bg-white mt-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 pb-2 editorial-border-b">
+          <h3 className="editorial-label text-[var(--color-ink)]">
+            Mid-Shift Process Pipeline
+          </h3>
+          <span className="text-[10px] uppercase font-bold text-[var(--color-industrial-grey)] tracking-widest">
+            Click stage to filter
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-0">
           {stageStats.map((stage, idx) => {
             const isSelected = selectedProcess === stage.id;
             const stagePercent = stage.targetMeters > 0 ? Math.round((stage.outputMeters / stage.targetMeters) * 100) : 0;
@@ -477,67 +428,44 @@ export const ProductionFloorPage: React.FC = () => {
                   setActiveTab('floor');
                 }}
                 className={clsx(
-                  'p-3 rounded-lg border text-left transition-all relative overflow-hidden group',
+                  'p-4 text-left transition-colors relative border-b lg:border-b-0 lg:border-r border-[var(--color-ink)] last:border-r-0 last:border-b-0',
                   isSelected
-                    ? 'bg-slate-800 border-teal-500 shadow-md ring-1 ring-teal-500/50'
-                    : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900'
+                    ? 'bg-[var(--color-ink)] text-white'
+                    : 'bg-white hover:bg-[var(--color-paper)] text-[var(--color-ink)]'
                 )}
               >
-                {/* Arrow connector indicator */}
-                {idx < stageStats.length - 1 && (
-                  <div className="hidden lg:block absolute right-[-8px] top-1/2 -translate-y-1/2 z-10">
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-teal-400 transition-colors" />
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold font-display text-white group-hover:text-teal-300 transition-colors">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-display font-bold uppercase tracking-wide">
                     {stage.label}
                   </span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
-                    {stage.machines.length} Units
-                  </span>
                 </div>
-
-                <p className="text-[10px] text-slate-400 mt-0.5 truncate">{stage.subLabel}</p>
-
-                {/* Stage output & progress */}
-                <div className="mt-2.5 pt-2 border-t border-slate-800/60">
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span className="text-slate-400 font-mono">
-                      {stage.outputMeters.toLocaleString()} m
-                    </span>
-                    <span className="font-mono font-bold text-white">{stagePercent}%</span>
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
-                    <div
-                      className={clsx(
-                        'h-full rounded-full transition-all duration-300',
-                        stage.statusColor === 'rose'
-                          ? 'bg-rose-500'
-                          : stage.statusColor === 'amber'
-                          ? 'bg-amber-500'
-                          : 'bg-teal-500'
-                      )}
-                      style={{ width: `${Math.min(100, stagePercent)}%` }}
-                    />
-                  </div>
+                
+                <div className="flex justify-between text-xs font-mono mb-2">
+                  <span>{stage.outputMeters.toLocaleString()} m</span>
+                  <span className="font-bold">{stagePercent}%</span>
                 </div>
-
-                {/* Stage Health Tag */}
-                <div className="mt-2 flex items-center justify-between text-[10px]">
-                  <span
+                <div className="h-1.5 w-full bg-[var(--color-light-border)] overflow-hidden">
+                  <div
                     className={clsx(
-                      'font-medium truncate',
+                      'h-full transition-all duration-300',
                       stage.statusColor === 'rose'
-                        ? 'text-rose-400 font-semibold'
+                        ? 'bg-[var(--color-vermilion)]'
                         : stage.statusColor === 'amber'
-                        ? 'text-amber-400'
-                        : 'text-emerald-400'
+                        ? 'bg-amber-500'
+                        : 'bg-[var(--color-success-green)]'
                     )}
-                  >
-                    {stage.statusNote}
-                  </span>
+                    style={{ width: `${Math.min(100, stagePercent)}%` }}
+                  />
+                </div>
+                <div className={clsx(
+                  'mt-3 text-[10px] font-bold uppercase tracking-wider truncate',
+                  stage.statusColor === 'rose'
+                    ? 'text-[var(--color-vermilion)]'
+                    : stage.statusColor === 'amber'
+                    ? 'text-amber-600'
+                    : isSelected ? 'text-[var(--color-light-border)]' : 'text-[var(--color-industrial-grey)]'
+                )}>
+                  {stage.statusNote}
                 </div>
               </button>
             );
@@ -547,25 +475,24 @@ export const ProductionFloorPage: React.FC = () => {
 
       {/* 4. Breakdown Critical Notice (WEAVE-03) */}
       {floorStats.totalBreakdown > 0 && (
-        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-600/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0">
-              <ShieldAlert className="w-5 h-5" />
+        <div className="editorial-border border-[var(--color-vermilion)] bg-white p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1.5 h-full bg-[var(--color-vermilion)]"></div>
+          <div className="flex items-start gap-4 pl-2">
+            <div className="p-2 text-[var(--color-vermilion)] shrink-0">
+              <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-rose-300 font-display">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-[var(--color-vermilion)] font-display">
                 Active Stoppage: Loom #3 Breakdown Detected (145 mins down)
               </h4>
-              <p className="text-xs text-slate-300 mt-0.5">
+              <p className="text-xs text-[var(--color-ink)] mt-1 font-medium">
                 <strong>WEAVE-03 (Picanol OptiMax-i Rapier Loom)</strong> — Main Servo Drive Overheat & Inverter Trip (Error E-402). 
-                Impacts Order <strong>ORD-2026-097 (Patagonia Recycled Ripstop)</strong>.
+                Impacts Order <strong className="text-[var(--color-vermilion)] font-mono">ORD-2026-097 (Patagonia Recycled Ripstop)</strong>.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
+          <div className="flex items-center gap-3">
+            <button
               onClick={() => {
                 const w = workers.find((w) => w.assignedMachine.includes('WEAVE-03'));
                 if (w) {
@@ -574,18 +501,16 @@ export const ProductionFloorPage: React.FC = () => {
                   setReassignModalOpen(true);
                 }
               }}
-              leftIcon={<Shuffle className="w-3.5 h-3.5" />}
+              className="px-4 py-2 text-xs font-bold uppercase tracking-widest editorial-border hover:bg-black/5 transition-colors"
             >
               Reassign Operator
-            </Button>
-            <Button
-              variant="danger"
-              size="sm"
+            </button>
+            <button
               onClick={() => navigate('/rescue-engine?issueId=resc-001')}
-              rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
+              className="px-4 py-2 text-xs font-bold uppercase tracking-widest bg-[var(--color-vermilion)] text-white hover:bg-rose-700 transition-colors flex items-center gap-2"
             >
-              Triage in Rescue Engine
-            </Button>
+              Triage in Rescue Engine <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       )}
@@ -596,39 +521,38 @@ export const ProductionFloorPage: React.FC = () => {
       {activeTab === 'floor' && (
         <div className="space-y-4">
           {/* Search, Process & Status Filters */}
-          <div className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-            {/* Search */}
-            <div className="relative flex-1 w-full">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search machine ID (e.g. WEAVE-03), name, operator, or order code..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
-              />
-            </div>
+          <div className="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-[var(--color-light-border)]">
+            <h2 className="font-display font-bold text-2xl uppercase tracking-tighter">Machine Grid</h2>
+            
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative">
+                <Search className="w-4 h-4 text-[var(--color-industrial-grey)] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search ID, name, order..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="editorial-border pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)] w-64"
+                />
+              </div>
 
-            {/* Process Filter */}
-            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
               <select
                 value={selectedProcess}
                 onChange={(e) => setSelectedProcess(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
               >
                 <option value="all">All Processes</option>
-                <option value="spinning">Spinning (2)</option>
-                <option value="weaving">Weaving (4)</option>
-                <option value="dyeing">Dyeing (2)</option>
-                <option value="finishing">Finishing (1)</option>
-                <option value="inspection">Inspection (1)</option>
+                <option value="spinning">Spinning</option>
+                <option value="weaving">Weaving</option>
+                <option value="dyeing">Dyeing</option>
+                <option value="finishing">Finishing</option>
+                <option value="inspection">Inspection</option>
               </select>
 
-              {/* Status Filter */}
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
               >
                 <option value="all">All Statuses</option>
                 <option value="running">Running</option>
@@ -636,24 +560,23 @@ export const ProductionFloorPage: React.FC = () => {
                 <option value="breakdown">Breakdown</option>
                 <option value="setup">In Setup</option>
               </select>
-
-              {/* Sort By */}
+              
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none bg-[var(--color-paper)]"
               >
                 <option value="code">Sort: Machine ID</option>
-                <option value="output">Sort: Shift Output (Meters)</option>
-                <option value="efficiency">Sort: Efficiency %</option>
-                <option value="downtime">Sort: Downtime Minutes</option>
+                <option value="output">Sort: Output</option>
+                <option value="efficiency">Sort: OEE %</option>
+                <option value="downtime">Sort: Downtime</option>
               </select>
             </div>
           </div>
 
           {/* Machine Grid */}
           {viewMode === 'grid' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredMachines.map((m) => {
                 const isBreakdown = m.status === 'breakdown';
                 const isIdle = m.status === 'idle';
@@ -664,146 +587,74 @@ export const ProductionFloorPage: React.FC = () => {
                     key={m.id}
                     onClick={() => setSelectedMachine(m)}
                     className={clsx(
-                      'rounded-xl border p-5 transition-all duration-200 cursor-pointer group shadow-sm flex flex-col justify-between relative overflow-hidden',
-                      isBreakdown
-                        ? 'border-rose-500/60 hover:border-rose-400 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.15)]'
-                        : isIdle
-                        ? 'border-amber-500/40 hover:border-amber-400 bg-amber-950/10'
-                        : 'border-slate-800 bg-slate-900/90 hover:border-teal-500/60 hover:shadow-md'
+                      'editorial-border p-5 transition-all duration-200 cursor-pointer group flex flex-col justify-between relative bg-white',
+                      isBreakdown && 'border-[var(--color-vermilion)] bg-rose-50',
+                      isIdle && 'bg-amber-50 border-amber-500',
+                      !isBreakdown && !isIdle && 'hover:bg-black/5'
                     )}
                   >
-                    {/* Top breakdown banner strip */}
-                    {isBreakdown && (
-                      <div className="absolute top-0 inset-x-0 bg-rose-600 text-white text-[10px] font-bold uppercase tracking-widest text-center py-0.5">
-                        BREAKDOWN STOPPAGE — {m.downtimeMinutesToday} MINS DOWNTIME
-                      </div>
-                    )}
-
-                    {/* Top idle banner strip */}
-                    {isIdle && (
-                      <div className="absolute top-0 inset-x-0 bg-amber-500 text-slate-950 text-[10px] font-bold uppercase tracking-widest text-center py-0.5">
-                        SITTING IDLE — {m.downtimeMinutesToday} MINS
-                      </div>
-                    )}
-
-                    <div className={clsx((isBreakdown || isIdle) && 'pt-3')}>
-                      {/* Top: Code, Type & Status */}
-                      <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-start justify-between gap-2 mb-4">
                         <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-sm text-white group-hover:text-teal-400 transition-colors">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-display font-bold text-xl uppercase tracking-tighter">
                               {m.code}
                             </span>
-                            <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 uppercase font-mono">
+                            <span className="text-[9px] px-1.5 py-0.5 border border-[var(--color-ink)] uppercase font-mono font-bold tracking-widest">
                               {m.type}
                             </span>
                           </div>
-                          <h3 className="text-xs font-semibold text-slate-200 mt-1 font-display truncate max-w-[200px]" title={m.name}>
-                            {m.name}
+                          <h3 className="text-xs font-sans text-[var(--color-industrial-grey)] truncate max-w-[200px]" title={m.name}>
+                            {m.name} | {m.line}
                           </h3>
-                          <span className="text-[10px] text-slate-400">{m.line}</span>
                         </div>
-
                         <StatusBadge status={m.status} size="sm" />
                       </div>
 
-                      {/* What Machine is Doing Right Now */}
-                      <div className="mb-3 p-2 rounded-lg bg-slate-950/80 border border-slate-800/80">
-                        <div className="text-[10px] uppercase font-mono text-slate-400 mb-0.5 flex items-center justify-between">
-                          <span>CURRENT ACTIVITY (RIGHT NOW):</span>
-                          {m.status === 'running' && <span className="text-emerald-400 font-bold">ACTIVE</span>}
-                        </div>
-                        <p className={clsx('text-xs font-medium', isBreakdown ? 'text-rose-300' : isIdle ? 'text-amber-300' : 'text-teal-300')}>
-                          {isBreakdown
-                            ? `Stopped: ${m.downtimeReason}`
-                            : isIdle
-                            ? `Idle: ${m.downtimeReason || 'Awaiting Order Staging'}`
-                            : m.currentOrderCode
-                            ? `Running Batch: ${m.currentOrderCode} (${m.speedRpm} RPM)`
-                            : `Running calibration`}
+                      <div className="flex-1">
+                        <div className="text-[10px] uppercase font-mono text-[var(--color-industrial-grey)] mb-1">CURRENT ACTIVITY:</div>
+                        <p className={clsx('text-sm font-bold font-sans mb-4', isBreakdown ? 'text-[var(--color-vermilion)]' : isIdle ? 'text-amber-900' : 'text-[var(--color-success-green)]')}>
+                          {isBreakdown ? `Stopped: ${m.downtimeReason}` : isIdle ? `Idle: ${m.downtimeReason || 'Awaiting Order'}` : m.currentOrderCode ? `Batch: ${m.currentOrderCode} (${m.speedRpm} RPM)` : `Calibration`}
                         </p>
-                      </div>
 
-                      {/* Machine Telemetry Gauges (Speed, Temp, Tension, Efficiency) */}
-                      <div className="grid grid-cols-4 gap-1.5 p-2 rounded-lg bg-slate-950/90 border border-slate-800/80 mb-3 text-center">
-                        <div>
-                          <span className="text-[9px] text-slate-400 block font-mono">SPEED</span>
-                          <span className="text-xs font-bold font-mono text-white">
-                            {m.speedRpm > 0 ? `${m.speedRpm}` : '0'} <span className="text-[9px] font-normal text-slate-400">RPM</span>
-                          </span>
+                        <div className="grid grid-cols-4 gap-2 mb-4">
+                          <div>
+                            <span className="text-[9px] uppercase tracking-widest text-[var(--color-industrial-grey)] block">Speed</span>
+                            <span className="text-sm font-bold font-mono">{m.speedRpm > 0 ? m.speedRpm : '0'}</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] uppercase tracking-widest text-[var(--color-industrial-grey)] block">Temp</span>
+                            <span className={clsx('text-sm font-bold font-mono', m.temperatureC > 40 && 'text-[var(--color-vermilion)]')}>{m.temperatureC}°</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] uppercase tracking-widest text-[var(--color-industrial-grey)] block">Tensn</span>
+                            <span className="text-sm font-bold font-mono">{m.tensionN}N</span>
+                          </div>
+                          <div>
+                            <span className="text-[9px] uppercase tracking-widest text-[var(--color-industrial-grey)] block">OEE</span>
+                            <span className="text-sm font-bold font-mono text-[var(--color-success-green)]">{m.efficiencyPercent}%</span>
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-[9px] text-slate-400 block font-mono">TEMP</span>
-                          <span className={clsx('text-xs font-bold font-mono', m.temperatureC > 40 ? 'text-rose-400' : 'text-white')}>
-                            {m.temperatureC}°C
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-[9px] text-slate-400 block font-mono">TENSION</span>
-                          <span className="text-xs font-bold font-mono text-white">
-                            {m.tensionN} <span className="text-[9px] font-normal text-slate-400">N</span>
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-[9px] text-slate-400 block font-mono">OEE</span>
-                          <span className="text-xs font-bold font-mono text-teal-300">
-                            {m.efficiencyPercent}%
-                          </span>
-                        </div>
-                      </div>
 
-                      {/* Output Today vs Target */}
-                      <div className="space-y-1.5 mb-3">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-slate-400 text-[11px]">Today's Production</span>
-                          <span className="font-mono font-semibold text-white">
-                            {m.shiftOutputMeters.toLocaleString()} / {m.targetOutputMeters.toLocaleString()} {m.unit}
-                          </span>
-                        </div>
-                        <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-                          <div
-                            className={clsx(
-                              'h-full rounded-full transition-all duration-500',
-                              isBreakdown ? 'bg-rose-500' : isIdle ? 'bg-amber-500' : percent > 85 ? 'bg-teal-500' : 'bg-emerald-500'
-                            )}
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Mounted Order & Operator */}
-                      <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/60 text-xs space-y-1.5">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Mounted Order:</span>
-                          {m.currentOrderCode ? (
-                            <span className="font-mono font-semibold text-teal-400">
-                              {m.currentOrderCode}
-                            </span>
-                          ) : (
-                            <span className="text-slate-500 italic">No Order (Sitting Idle)</span>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Operator on Shift:</span>
-                          <div className="flex items-center gap-1">
-                            <User className="w-3 h-3 text-slate-400" />
-                            <span className="text-slate-300 font-medium truncate max-w-[140px]">
-                              {m.operatorName}
-                            </span>
+                        <div className="space-y-1.5 mb-4">
+                          <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+                            <span>Today's Output</span>
+                            <span className="font-mono">{m.shiftOutputMeters.toLocaleString()}/{m.targetOutputMeters.toLocaleString()} {m.unit}</span>
+                          </div>
+                          <div className="h-1 w-full bg-[var(--color-light-border)] overflow-hidden">
+                            <div className={clsx('h-full', isBreakdown ? 'bg-[var(--color-vermilion)]' : isIdle ? 'bg-amber-500' : 'bg-[var(--color-ink)]')} style={{ width: `${percent}%` }} />
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Card Footer */}
-                    <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400 flex items-center gap-1 font-mono">
-                        <Clock className="w-3 h-3 text-slate-400" />
-                        Live Feed
-                      </span>
-                      <span className="text-teal-400 group-hover:translate-x-1 transition-transform flex items-center gap-0.5 font-medium">
-                        View Controls <ChevronRight className="w-3 h-3" />
-                      </span>
+                      <div className="pt-3 border-t border-[var(--color-light-border)] flex items-center justify-between text-xs font-sans">
+                        <span className="text-[var(--color-industrial-grey)] flex items-center gap-1 font-bold">
+                          <User className="w-3 h-3" /> {m.operatorName}
+                        </span>
+                        <span className="text-[var(--color-ink)] font-bold flex items-center gap-1 group-hover:underline uppercase tracking-wider text-[10px]">
+                          Controls <ArrowRight className="w-3 h-3" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 );

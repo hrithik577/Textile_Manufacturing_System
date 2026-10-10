@@ -1,55 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Sidebar } from './Sidebar';
-import { TopNav } from './TopNav';
+import { Header } from './Header';
 import { ToastContainer } from '../common/ToastContainer';
 import { SearchModal } from '../common/SearchModal';
 import { BuyerCallAssistantModal } from '../orders/BuyerCallAssistantModal';
 import { useApp } from '../../context/AppContext';
-import { AlertTriangle, Info } from 'lucide-react';
 
 export const AppLayout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const { isDemoMode } = useApp();
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
-      {/* Sidebar */}
-      <Sidebar
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
-        mobileOpen={mobileOpen}
-        setMobileOpen={setMobileOpen}
-      />
+    <div className="flex flex-col h-screen bg-[var(--color-paper)] text-[var(--color-ink)] overflow-hidden font-sans">
+      <Header />
 
-      {/* Main Content Viewport */}
-      <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden bg-slate-900/60">
-        <TopNav onMobileMenuClick={() => setMobileOpen(true)} />
-
-        {/* Global Demo Simulation Banner */}
-        {isDemoMode && (
-          <div className="bg-amber-950/40 border-b border-amber-800/60 px-4 py-1.5 flex items-center justify-between text-xs text-amber-300">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="font-semibold uppercase tracking-wider text-[10px] font-mono">
-                SIMULATION ACTIVE:
-              </span>
-              <span className="text-slate-300 text-[11px]">
-                Displaying virtual factory event stream and synthetic machine telemetry.
-              </span>
-            </div>
-            <span className="text-[10px] font-mono text-amber-400/80 hidden sm:inline">
-              Member 3 Simulator Engine Active
+      {/* Global Demo Simulation Banner */}
+      {isDemoMode && (
+        <div className="bg-[var(--color-vermilion)]/10 border-b border-[var(--color-vermilion)]/20 px-6 py-1.5 flex items-center justify-between text-xs text-[var(--color-ink)]">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-[var(--color-vermilion)] animate-pulse" />
+            <span className="font-bold uppercase tracking-wider text-[10px] font-mono">
+              SIMULATION ACTIVE:
+            </span>
+            <span className="text-[var(--color-industrial-grey)] text-[11px]">
+              Displaying virtual factory event stream and synthetic machine telemetry.
             </span>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Dynamic Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
-          <Outlet />
-        </main>
-      </div>
+      {/* Main Content Viewport */}
+      <main className="flex-1 overflow-y-auto px-6 py-8">
+        <Outlet />
+      </main>
 
       {/* Global Modals & Overlays */}
       <ToastContainer />
@@ -58,3 +40,4 @@ export const AppLayout: React.FC = () => {
     </div>
   );
 };
+

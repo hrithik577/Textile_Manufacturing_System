@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     # Simulator Shared Secret for integrations
     SIMULATOR_SHARED_SECRET: str = "simulator-dev-secret-key-2026"
 
+    # Gemini AI — YarnIQ Procurement Copilot
+    GEMINI_API_KEY: str = ""
+
     model_config = SettingsConfigDict(
         env_file=(".env", "backend/.env"),
         env_file_encoding="utf-8",

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
@@ -201,21 +202,21 @@ export const CustomerOrdersPage: React.FC = () => {
       </div>
 
       {/* BUYER TELEPHONY INQUIRY ASSISTANT HIGHLIGHT BANNER */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-teal-950/30 via-slate-900 to-slate-900 border border-teal-500/30 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/40 flex items-center justify-center shrink-0">
-            <PhoneCall className="w-5 h-5 animate-pulse" />
+      <div className="p-5 editorial-border bg-[var(--color-paper)] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-white editorial-border flex items-center justify-center shrink-0 text-[var(--color-ink)]">
+            <PhoneCall className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold font-display text-white">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-bold font-display uppercase tracking-tight">
                 Buyer Asking: "Is My Fabric Ready & When Will It Ship?"
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-950 text-teal-300 border border-teal-800">
+              <span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--color-vermilion)] text-[var(--color-vermilion)] uppercase font-bold tracking-widest">
                 Live Digital Twin
               </span>
             </div>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-sm font-sans text-[var(--color-industrial-grey)] mt-1">
               No need to walk down to the weaving shed or QA lab. View real-time loom RPM, inspected roll counts, warehouse staging, and read-aloud telephone scripts.
             </p>
           </div>
@@ -223,32 +224,34 @@ export const CustomerOrdersPage: React.FC = () => {
 
         <button
           onClick={() => openBuyerCallModal()}
-          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/50 shrink-0 border border-teal-400/30"
+          className="flex items-center justify-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-widest editorial-border bg-white hover:bg-black/5 transition-colors shrink-0"
         >
-          <PhoneCall className="w-3.5 h-3.5" />
+          <PhoneCall className="w-4 h-4" />
           <span>Launch Call Assistant</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-        <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search order # (ORD-2026-084), customer, company, fabric type or color..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
-          />
-        </div>
+      <div className="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-[var(--color-light-border)]">
+        <h2 className="font-display font-bold text-2xl uppercase tracking-tighter">Order Ledger</h2>
+        
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative">
+            <Search className="w-4 h-4 text-[var(--color-industrial-grey)] absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search order #, customer, company..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="editorial-border pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)] w-64"
+            />
+          </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+            className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
           >
             <option value="all">All Statuses</option>
             <option value="in_production">In Production</option>
@@ -261,7 +264,7 @@ export const CustomerOrdersPage: React.FC = () => {
           <select
             value={selectedPriority}
             onChange={(e) => setSelectedPriority(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+            className="editorial-border px-3 py-1.5 text-xs font-bold uppercase tracking-wider focus:outline-none"
           >
             <option value="all">All Priorities</option>
             <option value="urgent">Urgent</option>
@@ -272,22 +275,22 @@ export const CustomerOrdersPage: React.FC = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
+      <div className="editorial-border bg-white overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[var(--color-ink)] text-white uppercase font-mono text-[10px]">
               <tr>
-                <th className="px-4 py-3">Order Number & Customer</th>
-                <th className="px-4 py-3">Fabric Construction</th>
-                <th className="px-4 py-3">Color & GSM</th>
-                <th className="px-4 py-3">Quantity</th>
-                <th className="px-4 py-3">Production Stage</th>
-                <th className="px-4 py-3">Deadline & ETA</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Value & Actions</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Order Number & Customer</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Fabric Construction</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Color & GSM</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Quantity</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Production Stage</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Deadline & ETA</th>
+                <th className="px-4 py-3 font-bold tracking-widest">Status</th>
+                <th className="px-4 py-3 text-right font-bold tracking-widest">Value & Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[var(--color-light-border)]">
               {filteredOrders.map((o) => {
                 const isOverdue = new Date(o.estimatedCompletionDate) > new Date(o.deadlineDate);
                 const percentCompleted = Math.round((o.completedQuantity / o.orderedQuantity) * 100);
@@ -298,67 +301,68 @@ export const CustomerOrdersPage: React.FC = () => {
                     key={o.id}
                     onClick={() => setSelectedOrder(o)}
                     className={clsx(
-                      'cursor-pointer transition-all duration-300',
+                      'cursor-pointer transition-colors',
                       isRecentlyPlaced
-                        ? 'bg-teal-950/40 hover:bg-teal-950/60 ring-1 ring-teal-500/50'
-                        : 'hover:bg-slate-800/60'
+                        ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500'
+                        : 'hover:bg-[var(--color-paper)]',
+                      isOverdue && !isRecentlyPlaced && 'bg-rose-50'
                     )}
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-white text-xs">{o.orderNumber}</span>
+                        <span className="font-mono font-bold text-sm">{o.orderNumber}</span>
                         {isRecentlyPlaced && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 animate-pulse font-bold">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[var(--color-success-green)] text-white animate-pulse font-bold">
                             ✨ LIVE ORDER
                           </span>
                         )}
                         {o.priority === 'urgent' && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[var(--color-vermilion)] text-white uppercase tracking-widest font-bold">
                             URGENT
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] text-slate-300 font-semibold">{o.customerCompany}</div>
-                      <div className="text-[10px] text-slate-400">{o.customerPo}</div>
+                      <div className="text-[11px] font-bold text-[var(--color-ink)] mt-1">{o.customerCompany}</div>
+                      <div className="text-[10px] text-[var(--color-industrial-grey)]">{o.customerPo}</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="text-slate-200 font-medium">{o.fabricType}</div>
-                      <div className="text-[10px] text-slate-400 truncate max-w-[160px]">{o.yarnSpecs}</div>
+                      <div className="font-bold text-[var(--color-ink)]">{o.fabricType}</div>
+                      <div className="text-[10px] text-[var(--color-industrial-grey)] truncate max-w-[160px] font-mono">{o.yarnSpecs}</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="text-slate-200">{o.color}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">{o.gsm} GSM</div>
+                      <div className="font-bold text-[var(--color-ink)]">{o.color}</div>
+                      <div className="text-[10px] text-[var(--color-industrial-grey)] font-mono">{o.gsm} GSM</div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="font-mono font-semibold text-white">
+                      <div className="font-mono font-bold text-[var(--color-ink)]">
                         {o.completedQuantity.toLocaleString()} / {o.orderedQuantity.toLocaleString()} {o.unit}
                       </div>
-                      <div className="h-1.5 w-24 rounded-full bg-slate-800 mt-1 overflow-hidden">
+                      <div className="h-2 w-24 bg-[var(--color-paper)] mt-1.5 editorial-border overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-teal-500"
+                          className="h-full bg-[var(--color-ink)]"
                           style={{ width: `${percentCompleted}%` }}
                         />
                       </div>
                     </td>
 
                     <td className="px-4 py-3">
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-teal-300 font-medium">
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-[var(--color-ink)]">
                         {stageLabels[o.currentStage]}
                       </span>
                     </td>
 
                     <td className="px-4 py-3">
-                      <div className="text-slate-300 font-mono text-[11px]">Due: {o.deadlineDate}</div>
+                      <div className="font-mono font-bold text-[11px] text-[var(--color-ink)]">Due: {o.deadlineDate}</div>
                       <div
                         className={clsx(
-                          'text-[10px] font-mono flex items-center gap-1',
-                          isOverdue ? 'text-rose-400 font-bold' : 'text-slate-400'
+                          'text-[10px] font-mono flex items-center gap-1 font-bold mt-1',
+                          isOverdue ? 'text-[var(--color-vermilion)]' : 'text-[var(--color-industrial-grey)]'
                         )}
                       >
-                        {isOverdue && <AlertTriangle className="w-3 h-3 text-rose-400" />}
+                        {isOverdue && <AlertTriangle className="w-3 h-3 text-[var(--color-vermilion)]" />}
                         ETA: {o.estimatedCompletionDate}
                       </div>
                     </td>
@@ -368,21 +372,24 @@ export const CustomerOrdersPage: React.FC = () => {
                     </td>
 
                     <td className="px-4 py-3 text-right">
-                      <div className="font-mono font-bold text-white text-xs mb-1">
+                      <div className="font-mono font-bold text-sm mb-2">
                         ₹{o.totalValueUsd.toLocaleString()}
                       </div>
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => openBuyerCallModal(o.id)}
-                          className="px-2 py-1 rounded-md bg-teal-950/80 hover:bg-teal-900/80 text-teal-300 border border-teal-800 text-[11px] font-medium flex items-center gap-1 transition-colors"
+                          onClick={(e) => { e.stopPropagation(); openBuyerCallModal(o.id); }}
+                          className="px-2 py-1 editorial-border hover:bg-black/5 text-[var(--color-ink)] text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 transition-colors"
                           title="View live floor location & telephone script for buyer inquiry"
                         >
-                          <PhoneCall className="w-3 h-3 text-teal-400" />
+                          <PhoneCall className="w-3 h-3" />
                           <span>Call Desk</span>
                         </button>
-                        <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(o)}>
-                          Details
-                        </Button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSelectedOrder(o); }}
+                          className="text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] hover:text-[var(--color-vermilion)] flex items-center gap-1"
+                        >
+                          Details <ChevronRight className="w-3 h-3" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -448,8 +455,8 @@ export const CustomerOrdersPage: React.FC = () => {
                               isDone
                                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
                                 : isCurrent
-                                ? 'bg-teal-500 text-white shadow-[0_0_10px_rgba(20,184,166,0.5)]'
-                                : 'bg-slate-800 text-slate-400'
+                                  ? 'bg-teal-500 text-white shadow-[0_0_10px_rgba(20,184,166,0.5)]'
+                                  : 'bg-slate-800 text-slate-400'
                             )}
                           >
                             {isDone ? '✓' : idx + 1}
@@ -481,46 +488,46 @@ export const CustomerOrdersPage: React.FC = () => {
               </div>
             </div>
 
-              {/* Material Readiness */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
-                    Material Readiness & Yarn Allocation
-                  </h4>
-                  <Link
-                    to="/inventory"
-                    className="text-[11px] font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1"
-                  >
-                    <span>Check Live Warehouse Stock</span>
-                    <ChevronRight className="w-3 h-3" />
-                  </Link>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[11px] text-slate-400">Yarn Stock Allocation</span>
-                      <span className="text-xs font-bold font-mono text-emerald-400">
-                        {selectedOrder.materialReadiness.yarnStockPercent}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-full" />
-                    </div>
+            {/* Material Readiness */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+                  Material Readiness & Yarn Allocation
+                </h4>
+                <Link
+                  to="/inventory"
+                  className="text-[11px] font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1"
+                >
+                  <span>Check Live Warehouse Stock</span>
+                  <ChevronRight className="w-3 h-3" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] text-slate-400">Yarn Stock Allocation</span>
+                    <span className="text-xs font-bold font-mono text-emerald-400">
+                      {selectedOrder.materialReadiness.yarnStockPercent}%
+                    </span>
                   </div>
+                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 w-full" />
+                  </div>
+                </div>
 
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[11px] text-slate-400">Dye / Chemical Recipe</span>
-                      <span className="text-xs font-bold font-mono text-teal-400">
-                        {selectedOrder.materialReadiness.dyesChemicalsPercent}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-teal-500" style={{ width: `${selectedOrder.materialReadiness.dyesChemicalsPercent}%` }} />
-                    </div>
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] text-slate-400">Dye / Chemical Recipe</span>
+                    <span className="text-xs font-bold font-mono text-teal-400">
+                      {selectedOrder.materialReadiness.dyesChemicalsPercent}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-teal-500" style={{ width: `${selectedOrder.materialReadiness.dyesChemicalsPercent}%` }} />
                   </div>
                 </div>
               </div>
+            </div>
 
             {/* Specifications Card */}
             <div>
