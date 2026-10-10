@@ -72,15 +72,11 @@ def get_dashboard_summary(db: Session) -> DashboardSummaryResponse:
         # Sum shift output from machine telemetry if present
         today_output = sum(float(m.shift_output_m or 0.0) for m in db.query(Machine).all())
 
-    # Deterministic OEE calculation: Availability * Performance * Quality
-    availability = (running_machines / total_machines) if total_machines > 0 else 0.0
-    passed_rolls = db.query(FabricRoll).filter(FabricRoll.current_status == RollStatus.PASS).count()
-    total_rolls = db.query(FabricRoll).count()
-    quality_rate = (passed_rolls / total_rolls) if total_rolls > 0 else 1.0
+    # Standard Defensible Industrial OEE Calculation
+    from app.services.oee_service import calculate_plant_oee
+    plant_oee_res = calculate_plant_oee(db)
+    oee = plant_oee_res.oee_percentage if plant_oee_res.oee_percentage is not None else 0.0
 
-    planned_daily_target = 3500.0
-    performance = min(today_output / planned_daily_target, 1.0) if today_output > 0 else 0.0
-    oee = round(availability * performance * quality_rate * 100, 1) if (total_machines > 0 and today_output > 0) else 0.0
 
     # Financials
     monthly_revenue = (

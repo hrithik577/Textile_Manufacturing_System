@@ -17,6 +17,7 @@ from app.models.production import (
 from app.models.workforce import Shift, Worker, AttendanceRecord
 from app.models.quality import FabricRoll, QualityInspection, RollStatus, InspectionResult, RollGrade
 from app.models.dispatch import Shipment, ShipmentItem, ShipmentStatus
+from app.models.audit import AuditLog
 from app.models.finance import CostEntry, Invoice, Payment, CostCategory, InvoiceStatus, PaymentMethod
 from app.models.alert import (
     Alert,

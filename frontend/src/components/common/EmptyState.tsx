@@ -8,6 +8,8 @@ export interface EmptyStateProps {
   icon?: React.ReactNode;
   actionLabel?: string;
   onAction?: () => void;
+  secondaryActionLabel?: string;
+  onSecondaryAction?: () => void;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -16,6 +18,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
   actionLabel,
   onAction,
+  secondaryActionLabel,
+  onSecondaryAction,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center p-12 text-center bg-white editorial-border text-[var(--color-ink)]">
@@ -24,11 +28,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
       <h3 className="text-sm font-bold font-mono uppercase tracking-widest text-[var(--color-ink)]">{title}</h3>
       <p className="mt-1 text-xs font-mono text-[var(--color-industrial-grey)] max-w-sm">{description}</p>
-      {actionLabel && onAction && (
-        <Button variant="primary" size="sm" onClick={onAction} className="mt-5">
-          {actionLabel}
-        </Button>
-      )}
+      <div className="flex items-center gap-3 mt-5">
+        {actionLabel && onAction && (
+          <Button variant="primary" size="sm" onClick={onAction}>
+            {actionLabel}
+          </Button>
+        )}
+        {secondaryActionLabel && onSecondaryAction && (
+          <Button variant="outline" size="sm" onClick={onSecondaryAction}>
+            {secondaryActionLabel}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

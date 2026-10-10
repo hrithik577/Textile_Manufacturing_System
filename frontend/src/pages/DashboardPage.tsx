@@ -37,20 +37,25 @@ export const DashboardPage: React.FC = () => {
 
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [criticalAlert, setCriticalAlert] = useState<AlertItem | null>(null);
+  const [qualityPassRate, setQualityPassRate] = useState<string>('0.0%');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lastRefreshed, setLastRefreshed] = useState<string>('Just Now');
 
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
-      const [sumRes, alertsRes] = await Promise.all([
+      const [sumRes, alertsRes, qcRes] = await Promise.all([
         request<DashboardSummary>('/dashboard/summary', { method: 'GET' }),
         request<AlertItem[]>('/dashboard/alerts?limit=5', { method: 'GET' }),
+        request<any>('/quality/summary', { method: 'GET' }).catch(() => ({ data: null })),
       ]);
       setSummary(sumRes.data);
       if (alertsRes.data && alertsRes.data.length > 0) {
         const crit = alertsRes.data.find((a) => a.severity.toLowerCase() === 'critical') || alertsRes.data[0];
         setCriticalAlert(crit);
+      }
+      if (qcRes.data && qcRes.data.first_pass_yield_pct !== undefined) {
+        setQualityPassRate(`${qcRes.data.first_pass_yield_pct}%`);
       }
       setLastRefreshed(new Date().toLocaleTimeString());
     } catch {
@@ -66,18 +71,18 @@ export const DashboardPage: React.FC = () => {
 
   const fleetUtilization = summary && summary.total_machines_count > 0
     ? ((summary.running_machines_count / summary.total_machines_count) * 100).toFixed(1)
-    : '81.4';
+    : '0.0';
 
   const fleetOfflineCount = summary
     ? summary.total_machines_count - summary.running_machines_count
-    : 1;
+    : 0;
 
   const todayOutput = summary
     ? Math.round(summary.today_production_output_m).toLocaleString()
-    : '15,420';
+    : '0';
 
-  const activeOrdersCount = summary ? summary.active_orders_count : 5;
-  const pendingDispatch = summary ? summary.pending_dispatch_rolls : 24;
+  const activeOrdersCount = summary ? summary.active_orders_count : 0;
+  const pendingDispatch = summary ? summary.pending_dispatch_rolls : 0;
 
   return (
     <div className="max-w-[1600px] mx-auto min-h-[calc(100vh-6rem)] flex flex-col pt-4">
@@ -171,9 +176,9 @@ export const DashboardPage: React.FC = () => {
                 </span>
               </div>
               <div className="text-right">
-                <span className="font-mono text-xs uppercase tracking-widest block opacity-70 mb-1">Target Pace</span>
+                <span className="font-mono text-xs uppercase tracking-widest block opacity-70 mb-1">Target Pace (OEE)</span>
                 <span className="font-display text-3xl lg:text-5xl font-bold tracking-tighter leading-none">
-                  {summary?.overall_oee_percentage ? `${summary.overall_oee_percentage}%` : '96%'}
+                  {summary?.overall_oee_percentage !== undefined ? `${summary.overall_oee_percentage}%` : '0.0%'}
                 </span>
               </div>
             </div>
@@ -189,7 +194,7 @@ export const DashboardPage: React.FC = () => {
               <div className="flex justify-between items-baseline mb-1">
                 <span className="font-sans text-sm font-bold uppercase tracking-wider">Active Orders</span>
                 <span className="font-mono text-xs font-bold text-[var(--color-vermilion)]">
-                  {summary ? `${summary.orders_in_production} In Prod` : '+1'}
+                  {summary ? `${summary.orders_in_production} In Prod` : '0 In Prod'}
                 </span>
               </div>
               <div className="font-display text-4xl font-bold tracking-tight mb-2">
@@ -198,7 +203,7 @@ export const DashboardPage: React.FC = () => {
               <div className="text-xs text-[var(--color-industrial-grey)]">
                 {summary?.monthly_revenue_booked
                   ? `$${summary.monthly_revenue_booked.toLocaleString()} booked sales volume`
-                  : '67,000 m total book volume'}
+                  : '$0 booked sales volume'}
               </div>
               <div className="h-[1px] w-full bg-[var(--color-light-border)] mt-4 group-hover:bg-[var(--color-ink)] transition-colors"></div>
             </div>
@@ -206,11 +211,11 @@ export const DashboardPage: React.FC = () => {
             <div className="group cursor-pointer" onClick={() => navigate('/quality')}>
               <div className="flex justify-between items-baseline mb-1">
                 <span className="font-sans text-sm font-bold uppercase tracking-wider">Quality Pass Rate</span>
-                <span className="font-mono text-xs font-bold text-[var(--color-vermilion)]">97.0%</span>
+                <span className="font-mono text-xs font-bold text-[var(--color-vermilion)]">{qualityPassRate}</span>
               </div>
-              <div className="font-display text-4xl font-bold tracking-tight mb-2">97.0%</div>
+              <div className="font-display text-4xl font-bold tracking-tight mb-2">{qualityPassRate}</div>
               <div className="text-xs text-[var(--color-industrial-grey)]">
-                {summary?.critical_alerts_count ? `${summary.critical_alerts_count} quality/floor alerts` : 'Batch DB-841 on hold'}
+                {summary?.critical_alerts_count ? `${summary.critical_alerts_count} quality/floor alerts` : 'First-pass roll inspections'}
               </div>
               <div className="h-[1px] w-full bg-[var(--color-light-border)] mt-4 group-hover:bg-[var(--color-ink)] transition-colors"></div>
             </div>

@@ -292,3 +292,44 @@ def update_inspection_decision(
     db.commit()
     return {"success": True, "inspection_id": inspection_id, "new_decision": new_decision}
 
+
+@router.get("/summary", summary="Get quality inspection metrics and first-pass yield")
+def get_quality_summary(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    total_rolls = db.query(FabricRoll).count()
+    inspections = db.query(QualityInspection).order_by(QualityInspection.inspection_date.asc()).all()
+    
+    # Track first-pass inspection outcome per roll
+    first_inspections: Dict[int, QualityInspection] = {}
+    for ins in inspections:
+        if ins.roll_id not in first_inspections:
+            first_inspections[ins.roll_id] = ins
+            
+    total_inspected = len(first_inspections)
+    first_pass_good_count = sum(1 for ins in first_inspections.values() if ins.result == InspectionResult.PASS)
+    rework_count = sum(1 for ins in first_inspections.values() if ins.result == InspectionResult.REWORK)
+    reject_count = sum(1 for ins in first_inspections.values() if ins.result == InspectionResult.REJECT)
+    hold_count = sum(1 for ins in first_inspections.values() if ins.result == InspectionResult.HOLD)
+    
+    first_pass_yield_pct = round((first_pass_good_count / total_inspected * 100.0), 1) if total_inspected > 0 else (100.0 if total_rolls == 0 else 0.0)
+    
+    avg_points = (
+        round(sum(float(ins.points_per_100_sqm or 0.0) for ins in inspections) / len(inspections), 2)
+        if inspections
+        else 0.0
+    )
+    
+    return {
+        "total_rolls": total_rolls,
+        "total_inspected_rolls": total_inspected,
+        "first_pass_good_rolls": first_pass_good_count,
+        "first_pass_yield_pct": first_pass_yield_pct,
+        "rework_count": rework_count,
+        "reject_count": reject_count,
+        "hold_count": hold_count,
+        "avg_points_per_100_sqm": avg_points,
+    }
+
+

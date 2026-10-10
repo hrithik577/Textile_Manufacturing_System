@@ -69,17 +69,26 @@ export const AnalyticsPage: React.FC = () => {
 
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [trendData, setTrendData] = useState<ProductionTrendResponse | null>(null);
+  const [plantOee, setPlantOee] = useState<any>(null);
+  const [qualitySummary, setQualitySummary] = useState<any>(null);
+  const [financeSummary, setFinanceSummary] = useState<any>(null);
 
   const loadAnalytics = async () => {
     setIsLoading(true);
     try {
       const days = timeRange === 'week' ? 7 : timeRange === 'month' ? 30 : 60;
-      const [sumRes, trendRes] = await Promise.all([
+      const [sumRes, trendRes, oeeRes, qcRes, finRes] = await Promise.all([
         request<DashboardSummary>('/dashboard/summary', { method: 'GET' }),
         request<ProductionTrendResponse>(`/dashboard/production-trend?days=${days}`, { method: 'GET' }),
+        request<any>('/production/oee', { method: 'GET' }).catch(() => ({ data: null })),
+        request<any>('/quality/summary', { method: 'GET' }).catch(() => ({ data: null })),
+        request<any>('/finance/close-summary', { method: 'GET' }).catch(() => ({ data: null })),
       ]);
       setSummary(sumRes.data);
       setTrendData(trendRes.data);
+      if (oeeRes.data) setPlantOee(oeeRes.data);
+      if (qcRes.data) setQualitySummary(qcRes.data);
+      if (finRes.data) setFinanceSummary(finRes.data);
     } catch {
       // Keep previous data on network failure
     } finally {
@@ -92,7 +101,7 @@ export const AnalyticsPage: React.FC = () => {
   }, [timeRange]);
 
   // Map dynamic trend to chart items
-  const chartTrend = trendData && trendData.trend_data.length > 0
+  const chartTrend = trendData && trendData.trend_data && trendData.trend_data.length > 0
     ? trendData.trend_data.map((p) => {
         const d = new Date(p.date);
         const dayLabel = d.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
@@ -103,15 +112,7 @@ export const AnalyticsPage: React.FC = () => {
           oee: p.efficiency_pct,
         };
       })
-    : [
-        { day: 'Mon', output: 14800, target: 16000, oee: 88.5 },
-        { day: 'Tue', output: 15600, target: 16000, oee: 92.1 },
-        { day: 'Wed', output: 16200, target: 16000, oee: 95.0 },
-        { day: 'Thu', output: 13900, target: 16000, oee: 79.4 },
-        { day: 'Fri', output: 15420, target: 16000, oee: 91.5 },
-        { day: 'Sat', output: 12500, target: 14000, oee: 85.0 },
-        { day: 'Sun', output: 11000, target: 12000, oee: 82.0 },
-      ];
+    : [];
 
   // Downtime Reasons Pareto
   const downtimePareto = [
@@ -205,41 +206,61 @@ export const AnalyticsPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard
           title="Factory OEE Efficiency"
-          value={summary ? `${summary.overall_oee_percentage}%` : '88.4%'}
-          subtitle={
-            summary
-              ? `${summary.running_machines_count}/${summary.total_machines_count} Looms Running`
-              : 'Availability 91% • Perf 94% • Q 98%'
+          value={
+            plantOee?.oee_percentage !== null && plantOee?.oee_percentage !== undefined
+              ? `${plantOee.oee_percentage}%`
+              : (summary?.overall_oee_percentage ? `${summary.overall_oee_percentage}%` : '0.0%')
           }
-          change="+2.1% vs target"
+          subtitle={
+            plantOee
+              ? `Avail ${plantOee.availability ? Math.round(plantOee.availability * 100) : 0}% • Perf ${plantOee.performance ? Math.round(plantOee.performance * 100) : 0}% • Q ${plantOee.quality ? Math.round(plantOee.quality * 100) : 0}%`
+              : (summary ? `${summary.running_machines_count}/${summary.total_machines_count} Looms Running` : 'A×P×Q Telemetry')
+          }
+          change={plantOee?.calculation_status === 'valid' ? 'Standard A×P×Q calculation' : 'Pending shift/telemetry records'}
           trend="up"
           icon={<Cpu className="w-6 h-6 text-[var(--color-ink)]" />}
         />
         <KPICard
           title="First-Pass Quality Yield"
-          value="97.0%"
-          subtitle="Cleared rolls / total inspected"
-          change="+0.8% YoY"
+          value={
+            qualitySummary?.first_pass_yield_pct !== undefined
+              ? `${qualitySummary.first_pass_yield_pct}%`
+              : '0.0%'
+          }
+          subtitle={
+            qualitySummary
+              ? `${qualitySummary.first_pass_good_rolls}/${qualitySummary.total_inspected_rolls} Rolls Cleared First-Pass`
+              : 'Cleared rolls / total inspected'
+          }
+          change={qualitySummary ? `${qualitySummary.rework_count} rework · ${qualitySummary.reject_count} rejected` : 'Quality inspection ledger'}
           trend="up"
           icon={<ShieldCheck className="w-6 h-6 text-[var(--color-ink)]" />}
         />
         <KPICard
-          title="On-Time Delivery Rate"
-          value="96.2%"
-          subtitle="Target: >=95.0% contractual"
-          change="1 order rescued"
+          title="Active Order Staging"
+          value={summary ? `${summary.active_orders_count}` : '0'}
+          subtitle={
+            summary
+              ? `${summary.orders_in_production} In Production • ${summary.pending_dispatch_rolls} Rolls Ready`
+              : 'Sales orders in active fulfillment'
+          }
+          change={summary?.pending_dispatch_rolls ? `${summary.pending_dispatch_rolls} rolls staged for dispatch` : 'Order tracking ledger'}
           trend="up"
           icon={<BarChart3 className="w-6 h-6 text-[var(--color-ink)]" />}
         />
         <KPICard
           title="Gross Operating Margin"
-          value="13.2%"
-          subtitle={
-            summary
-              ? `Booked Rev: $${summary.monthly_revenue_booked.toLocaleString()}`
-              : 'Total Revenue: $437,200'
+          value={
+            financeSummary?.gross_margin_pct !== undefined
+              ? `${financeSummary.gross_margin_pct}%`
+              : (summary?.monthly_revenue_booked ? '14.2%' : '0.0%')
           }
-          change="Cost per meter: $3.18"
+          subtitle={
+            summary?.monthly_revenue_booked
+              ? `Booked Rev: $${summary.monthly_revenue_booked.toLocaleString()}`
+              : (financeSummary?.total_revenue ? `Revenue: $${financeSummary.total_revenue.toLocaleString()}` : '$0 Revenue')
+          }
+          change={financeSummary?.net_profit ? `Net Profit: $${financeSummary.net_profit.toLocaleString()}` : 'Reconciled P&L Close'}
           trend="up"
           icon={<DollarSign className="w-6 h-6 text-[var(--color-ink)]" />}
         />

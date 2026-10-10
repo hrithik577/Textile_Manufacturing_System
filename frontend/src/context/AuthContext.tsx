@@ -3,7 +3,6 @@ import { UserProfile, UserRole } from '../types';
 
 export interface DemoCredential {
   email: string;
-  password: string;
   role: UserRole;
   displayRole: string;
   description: string;
@@ -11,11 +10,10 @@ export interface DemoCredential {
   allowedRoutes: string[];
 }
 
-// ─── Real Seed Credentials Configured in PostgreSQL ────────────────────────
+// ─── Documented Role Profiles for Mill Operations ────────────────────────
 export const DEMO_CREDENTIALS: DemoCredential[] = [
   {
     email: 'manager@everest.com',
-    password: 'Everest@2026!',
     role: 'manager',
     displayRole: 'Plant Operations Manager',
     description: 'Full plant oversight — dashboard, production floor, orders, inventory, dispatch',
@@ -24,7 +22,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'production@everest.com',
-    password: 'Everest@2026!',
     role: 'production',
     displayRole: 'Production Supervisor',
     description: 'Floor looms, batch runs, shifts, workforce attendance',
@@ -33,7 +30,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'quality@everest.com',
-    password: 'Everest@2026!',
     role: 'quality',
     displayRole: 'QA & Inspection Lead',
     description: 'Fabric inspection, 4-point defect grading, roll genealogy',
@@ -42,7 +38,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'inventory@everest.com',
-    password: 'Everest@2026!',
     role: 'inventory',
     displayRole: 'Stores & Yarn Inventory Lead',
     description: 'Yarn gate receipts, warehouse bins, stock movements',
@@ -51,7 +46,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'dispatch@everest.com',
-    password: 'Everest@2026!',
     role: 'dispatch',
     displayRole: 'Dispatch & Logistics Lead',
     description: 'Delivery challans, packaging, duplicate dispatch prevention',
@@ -60,7 +54,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'finance@everest.com',
-    password: 'Everest@2026!',
     role: 'finance',
     displayRole: 'Finance & Controller',
     description: 'Financial close, month-end P&L reconciliation, order cost absorption',
@@ -69,7 +62,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'buyer@nordic.com',
-    password: 'Everest@2026!',
     role: 'buyer',
     displayRole: 'Nordic Apparel Partner',
     description: 'Buyer portal, purchase order placement, real-time dispatch tracking',
@@ -78,7 +70,6 @@ export const DEMO_CREDENTIALS: DemoCredential[] = [
   },
   {
     email: 'owner@everest.com',
-    password: 'Everest@2026!',
     role: 'owner',
     displayRole: 'Mill Executive / Owner',
     description: 'Executive control tower, audit logs, financials, full system permissions',
@@ -204,7 +195,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             userProfile,
             credential: matchedCred || {
               email: user.email,
-              password: '',
               role: user.role as UserRole,
               displayRole: user.role.toUpperCase(),
               description: `Authenticated as ${user.role}`,
@@ -300,7 +290,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userProfile,
         credential: matchedCred || {
           email: user.email,
-          password: '',
           role: user.role as UserRole,
           displayRole: user.role.toUpperCase(),
           description: `Authenticated as ${user.role}`,

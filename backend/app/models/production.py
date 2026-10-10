@@ -92,6 +92,7 @@ class Machine(Base, TimestampMixin):
     
     active_production_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("production_orders.id", ondelete="SET NULL"), nullable=True)
     current_speed_rpm: Mapped[Optional[float]] = mapped_column(Float, default=0.0, nullable=True)
+    rated_speed_mpm: Mapped[Optional[float]] = mapped_column(Float, default=None, nullable=True) # Standard rated speed in metres per minute
     shift_output_m: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     downtime_reason: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     data_source: Mapped[DataSourceType] = mapped_column(

@@ -69,14 +69,37 @@ from app.models.alert import (
     ApprovalStatus,
     ExecutionStatus,
 )
+from app.core.config import settings
 
 
 def seed_database(db: Session):
+    is_prod = settings.ENVIRONMENT.lower() in ("production", "prod")
+    if is_prod and not settings.ALLOW_DEMO_SEED:
+        raise RuntimeError(
+            "Security Violation: Demo database seeding is disabled in production environments. "
+            "To bootstrap production, set ADMIN_BOOTSTRAP_EMAIL and ADMIN_BOOTSTRAP_PASSWORD."
+        )
+
     print("[SEED] Initializing Everest Textile OS database seeding...")
-    Base.metadata.create_all(bind=engine)
     
     today = date.today()
     now = datetime.now(timezone.utc)
+
+    # 0. SECURE ONE-TIME ADMIN BOOTSTRAP (Controlled via ENV)
+    if settings.ADMIN_BOOTSTRAP_EMAIL and settings.ADMIN_BOOTSTRAP_PASSWORD:
+        bootstrap_admin = db.query(User).filter(User.email == settings.ADMIN_BOOTSTRAP_EMAIL.lower()).first()
+        if not bootstrap_admin:
+            bootstrap_admin = User(
+                email=settings.ADMIN_BOOTSTRAP_EMAIL.lower(),
+                name="System Administrator (Bootstrap)",
+                password_hash=get_password_hash(settings.ADMIN_BOOTSTRAP_PASSWORD),
+                role=UserRole.OWNER,
+                is_active=True,
+                customer_id=None,
+            )
+            db.add(bootstrap_admin)
+            db.flush()
+
     demo_password_hash = get_password_hash("Everest@2026!")
 
     # -------------------------------------------------------------
@@ -404,16 +427,16 @@ def seed_database(db: Session):
     # 6. MACHINES (LOOMS & DYEING)
     # -------------------------------------------------------------
     machines_data = [
-        ("M-001", "Airjet Loom 01 (Tsudakoma)", ProcessType.WEAVING, MachineStatus.RUNNING, 850.0, 1450.0, None),
-        ("M-002", "Airjet Loom 02 (Tsudakoma)", ProcessType.WEAVING, MachineStatus.RUNNING, 820.0, 1380.0, None),
-        ("M-003", "Rapier Loom 03 (Picanol)", ProcessType.WEAVING, MachineStatus.BREAKDOWN, 0.0, 420.0, "Weft feeder motor electrical fault"),
-        ("M-004", "Rapier Loom 04 (Picanol)", ProcessType.WEAVING, MachineStatus.IDLE, 0.0, 0.0, None),
-        ("M-005", "Soft Flow Jet Dyeing 01 (Fongs)", ProcessType.DYEING, MachineStatus.RUNNING, 250.0, 800.0, None),
-        ("M-006", "Stenter Finishing Frame 01 (Brueckner)", ProcessType.FINISHING, MachineStatus.RUNNING, 110.0, 2200.0, None),
+        ("M-001", "Airjet Loom 01 (Tsudakoma)", ProcessType.WEAVING, MachineStatus.RUNNING, 850.0, 1.6, 1450.0, None),
+        ("M-002", "Airjet Loom 02 (Tsudakoma)", ProcessType.WEAVING, MachineStatus.RUNNING, 820.0, 1.6, 1380.0, None),
+        ("M-003", "Rapier Loom 03 (Picanol)", ProcessType.WEAVING, MachineStatus.BREAKDOWN, 0.0, 1.4, 420.0, "Weft feeder motor electrical fault"),
+        ("M-004", "Rapier Loom 04 (Picanol)", ProcessType.WEAVING, MachineStatus.IDLE, 0.0, 1.4, 0.0, None),
+        ("M-005", "Soft Flow Jet Dyeing 01 (Fongs)", ProcessType.DYEING, MachineStatus.RUNNING, 250.0, 2.5, 800.0, None),
+        ("M-006", "Stenter Finishing Frame 01 (Brueckner)", ProcessType.FINISHING, MachineStatus.RUNNING, 110.0, 5.0, 2200.0, None),
     ]
 
     created_machines = {}
-    for code, name, p_type, status, speed, output, reason in machines_data:
+    for code, name, p_type, status, speed, rated_mpm, output, reason in machines_data:
         mach = db.query(Machine).filter(Machine.machine_code == code).first()
         if not mach:
             mach = Machine(
@@ -422,6 +445,7 @@ def seed_database(db: Session):
                 process_type=p_type,
                 status=status,
                 current_speed_rpm=speed,
+                rated_speed_mpm=rated_mpm,
                 shift_output_m=output,
                 downtime_reason=reason,
                 data_source=DataSourceType.SIMULATOR,
@@ -429,6 +453,9 @@ def seed_database(db: Session):
             )
             db.add(mach)
             db.flush()
+        else:
+            if mach.rated_speed_mpm is None:
+                mach.rated_speed_mpm = rated_mpm
         created_machines[code] = mach
 
     # -------------------------------------------------------------

@@ -131,7 +131,9 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ---
 
-## 3. Seeded Demo Accounts (Password: `Everest@2026!`)
+## 3. Local Development & Demo Accounts (Local Dev Password: `Everest@2026!`)
+
+> **Security Note:** In production (`ENVIRONMENT=production`), demo seeding is disabled by default (`ALLOW_DEMO_SEED=false`). The initial production administrator account is provisioned once via `ADMIN_BOOTSTRAP_EMAIL` and `ADMIN_BOOTSTRAP_PASSWORD` environment variables.
 
 | Role | Email | Permissions / Scope |
 |---|---|---|

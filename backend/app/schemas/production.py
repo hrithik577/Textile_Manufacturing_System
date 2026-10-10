@@ -73,3 +73,65 @@ class ProductionEventRead(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OEEMachineBreakdown(BaseModel):
+    machine_id: int
+    machine_code: str
+    machine_name: str
+    process_type: str
+    status: str
+    rated_speed_mpm: Optional[float] = None
+    
+    # Availability
+    planned_production_minutes: float
+    downtime_minutes: float
+    runtime_minutes: float
+    availability: Optional[float] = None
+    
+    # Performance
+    actual_output_meters: float
+    expected_output_meters: float
+    performance: Optional[float] = None
+    performance_diagnostic: Optional[str] = None
+    
+    # Quality
+    total_inspected_meters: float
+    first_pass_good_meters: float
+    quality: Optional[float] = None
+    
+    # Overall
+    oee: Optional[float] = None
+    oee_percentage: Optional[float] = None
+    calculation_status: str # valid, insufficient_data, no_planned_time, no_runtime
+    missing_reasons: List[str] = []
+
+
+class PlantOEEResponse(BaseModel):
+    reporting_window_start: datetime
+    reporting_window_end: datetime
+    data_freshness: datetime
+    data_completeness_pct: float
+    data_mode: str # "live" or "demo"
+    
+    # Plant Aggregate Ratios
+    total_planned_minutes: float
+    total_runtime_minutes: float
+    total_downtime_minutes: float
+    availability: Optional[float] = None
+    
+    total_actual_meters: float
+    total_expected_meters: float
+    performance: Optional[float] = None
+    
+    total_inspected_meters: float
+    total_first_pass_good_meters: float
+    quality: Optional[float] = None
+    
+    oee: Optional[float] = None
+    oee_percentage: Optional[float] = None
+    
+    calculation_status: str # valid, insufficient_data
+    missing_reasons: List[str] = []
+    machine_breakdowns: List[OEEMachineBreakdown] = []
+

@@ -35,6 +35,11 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
+    # Demo Seeding & Administrative Bootstrap
+    ALLOW_DEMO_SEED: bool = False
+    ADMIN_BOOTSTRAP_EMAIL: str = "admin@everesttextiles.com"
+    ADMIN_BOOTSTRAP_PASSWORD: str = ""
+
     # Simulator Shared Secret for integrations
     SIMULATOR_SHARED_SECRET: str = "simulator-dev-secret-key-2026"
 
@@ -47,6 +52,8 @@ class Settings(BaseSettings):
         if is_prod:
             if self.DEBUG:
                 raise ValueError("Security Violation: DEBUG mode must be False in production.")
+            if self.ALLOW_DEMO_SEED:
+                raise ValueError("Security Violation: ALLOW_DEMO_SEED must not be enabled in production environments.")
             if not self.SECRET_KEY or self.SECRET_KEY == "everest_textile_secret_key_change_in_production_2026_super_secure" or len(self.SECRET_KEY) < 32:
                 raise ValueError("Security Violation: SECRET_KEY must be a non-default, strong key with at least 32 characters in production.")
             if not self.SIMULATOR_SHARED_SECRET or self.SIMULATOR_SHARED_SECRET == "simulator-dev-secret-key-2026" or len(self.SIMULATOR_SHARED_SECRET) < 16:

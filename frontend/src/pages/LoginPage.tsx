@@ -34,7 +34,11 @@ export const LoginPage: React.FC = () => {
 
   const fillCredential = (cred: DemoCredential) => {
     setEmail(cred.email);
-    setPassword(cred.password);
+    if (import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_CREDENTIALS === 'true') {
+      setPassword(import.meta.env.VITE_DEV_PASSWORD || 'Everest@2026!');
+    } else {
+      setPassword('');
+    }
   };
 
   const handleContinueDashboard = () => {

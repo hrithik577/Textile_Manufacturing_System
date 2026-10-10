@@ -16,6 +16,7 @@ from app.api.v1.endpoints import (
     recovery_plans,
     integrations,
     yarniq,
+    system,
 )
 
 api_router = APIRouter()
@@ -36,3 +37,5 @@ api_router.include_router(alerts.router)
 api_router.include_router(recovery_plans.router)
 api_router.include_router(integrations.router)
 api_router.include_router(yarniq.router)
+api_router.include_router(system.router)
+

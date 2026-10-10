@@ -32,7 +32,7 @@
 
 ### Endpoints
 * `POST /api/v1/auth/login`
-  - **Request:** `{"email": "manager@everest.com", "password": "Everest@2026!"}`
+  - **Request:** `{"email": "manager@everest.com", "password": "<account_password>"}`
   - **Response (200):**
     ```json
     {
