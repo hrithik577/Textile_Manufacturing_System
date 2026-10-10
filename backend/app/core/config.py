@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     SIMULATOR_SHARED_SECRET: str = "simulator-dev-secret-key-2026"
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", "backend/.env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="allow",
