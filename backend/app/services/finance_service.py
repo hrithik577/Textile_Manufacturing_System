@@ -200,7 +200,7 @@ def get_finance_summary(db: Session, current_user: User) -> FinanceSummaryRespon
     gross_margin_pct = round((gross_margin / total_revenue_booked * 100) if total_revenue_booked > 0 else 0.0, 2)
 
     return FinanceSummaryResponse(
-        currency="USD",
+        currency="INR",
         total_revenue_booked=round(total_revenue_booked, 2),
         total_invoiced=round(total_invoiced, 2),
         total_collected_cash=round(total_collected_cash, 2),

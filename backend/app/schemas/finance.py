@@ -7,7 +7,7 @@ from app.models.finance import CostCategory, InvoiceStatus, PaymentMethod
 class CostEntryCreate(BaseModel):
     category: CostCategory
     amount: float = Field(gt=0)
-    currency: str = "USD"
+    currency: str = "INR"
     sales_order_id: Optional[int] = None
     production_order_id: Optional[int] = None
     description: Optional[str] = None
@@ -54,7 +54,7 @@ class InvoiceCreate(BaseModel):
     customer_id: int
     sales_order_id: Optional[int] = None
     total_amount: float = Field(gt=0)
-    currency: str = "USD"
+    currency: str = "INR"
     issue_date: date = Field(default_factory=date.today)
     due_date: date
     notes: Optional[str] = None
@@ -80,7 +80,7 @@ class InvoiceRead(BaseModel):
 
 
 class FinanceSummaryResponse(BaseModel):
-    currency: str = "USD"
+    currency: str = "INR"
     total_revenue_booked: float # Total of confirmed sales orders
     total_invoiced: float
     total_collected_cash: float

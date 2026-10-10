@@ -292,7 +292,7 @@ export const CustomerOrdersPage: React.FC = () => {
 
                     <td className="px-4 py-3 text-right">
                       <div className="font-mono font-bold text-white text-xs">
-                        ${o.totalValueUsd.toLocaleString()}
+                        ₹{o.totalValueUsd.toLocaleString()}
                       </div>
                       <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(o)}>
                         Details
@@ -327,7 +327,7 @@ export const CustomerOrdersPage: React.FC = () => {
               <div className="text-right">
                 <span className="text-[10px] uppercase font-mono text-slate-400 block">TOTAL CONTRACT VALUE</span>
                 <span className="text-lg font-bold font-mono text-teal-400">
-                  ${selectedOrder.totalValueUsd.toLocaleString()}
+                  ₹{selectedOrder.totalValueUsd.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -463,27 +463,27 @@ export const CustomerOrdersPage: React.FC = () => {
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
                 <div className="flex justify-between text-slate-300">
                   <span>Raw Materials (Yarn):</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.rawMaterialCostUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.rawMaterialCostUsd.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-slate-300">
                   <span>Weaving Operations:</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.weavingCostUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.weavingCostUsd.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-slate-300">
                   <span>Dyeing & Chemistry:</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.dyeingCostUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.dyeingCostUsd.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-slate-300">
                   <span>Finishing & QA:</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.finishingCostUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.finishingCostUsd.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-slate-300">
                   <span>Labor & Plant Overheads:</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.laborOverheadsUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.laborOverheadsUsd.toLocaleString()}</span>
                 </div>
                 <div className="pt-2 border-t border-slate-800 flex justify-between font-bold text-white">
                   <span>Total Manufacturing Cost:</span>
-                  <span className="font-mono">${selectedOrder.costBreakdown.totalCostUsd.toLocaleString()}</span>
+                  <span className="font-mono">₹{selectedOrder.costBreakdown.totalCostUsd.toLocaleString()}</span>
                 </div>
                 <div className="pt-1 flex justify-between font-bold text-teal-400">
                   <span>Projected Gross Margin:</span>

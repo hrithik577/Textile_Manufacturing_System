@@ -46,7 +46,7 @@ class SalesOrder(Base, TimestampMixin):
         nullable=False
     )
     
-    currency: Mapped[str] = mapped_column(String(10), default="USD", nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     total_amount: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 

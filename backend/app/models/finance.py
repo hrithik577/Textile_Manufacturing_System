@@ -40,7 +40,7 @@ class CostEntry(Base, TimestampMixin):
         index=True
     )
     amount: Mapped[float] = mapped_column(Float, nullable=False)
-    currency: Mapped[str] = mapped_column(String(10), default="USD", nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     
     sales_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("sales_orders.id", ondelete="SET NULL"), nullable=True, index=True)
     production_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("production_orders.id", ondelete="SET NULL"), nullable=True, index=True)
@@ -63,7 +63,7 @@ class Invoice(Base, TimestampMixin):
     
     total_amount: Mapped[float] = mapped_column(Float, nullable=False)
     paid_amount: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
-    currency: Mapped[str] = mapped_column(String(10), default="USD", nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     
     status: Mapped[InvoiceStatus] = mapped_column(
         Enum(InvoiceStatus, name="invoice_status"),

@@ -970,8 +970,8 @@ export const mockRescueIssues: RescueIssue[] = [
     impactAnalysis: {
       delayDays: 5.2,
       costImpactUsd: 4800,
-      orderAtRisk: 'ORD-2026-097 ($82,500 total value)',
-      description: 'Breaching Patagonia’s contractual delivery SLA triggers a 2.5% late penalty per week ($2,062) plus airfreight expediting costs ($2,738).',
+      orderAtRisk: 'ORD-2026-097 (₹82,500 total value)',
+      description: 'Breaching Patagonia’s contractual delivery SLA triggers a 2.5% late penalty per week (₹2,062) plus airfreight expediting costs (₹2,738).',
     },
     status: 'detected',
     recoveryPlans: [
@@ -993,7 +993,7 @@ export const mockRescueIssues: RescueIssue[] = [
         ],
         pros: [
           'Recovers delivery schedule completely (ETA 2026-10-16 vs Deadline 2026-10-15)',
-          'Low net financial cost ($1,450 vs $4,800 penalty)',
+          'Low net financial cost (₹1,450 vs ₹4,800 penalty)',
           'Airjet loom produces higher pick uniformity on 50D filament',
         ],
         cons: [
@@ -1021,7 +1021,7 @@ export const mockRescueIssues: RescueIssue[] = [
           'Restores Loom #3 to active factory fleet',
         ],
         cons: [
-          'Higher maintenance labor cost ($2,800)',
+          'Higher maintenance labor cost (₹2,800)',
           'Still carries a potential 1-day delivery risk if recalibration takes longer',
         ],
         requiredApprovals: ['Plant Manager (Vikram Mehta)'],
@@ -1046,7 +1046,7 @@ export const mockRescueIssues: RescueIssue[] = [
           'Allows Loom #3 normal maintenance schedule',
         ],
         cons: [
-          'Highest logistics cost ($3,900 airfreight surcharge)',
+          'Highest logistics cost (₹3,900 airfreight surcharge)',
           'Requires explicit buyer written consent',
         ],
         requiredApprovals: ['Plant Manager (Vikram Mehta)', 'Buyer Contact (Sarah Jenkins)'],
@@ -1074,8 +1074,8 @@ export const mockRescueIssues: RescueIssue[] = [
     impactAnalysis: {
       delayDays: 2.0,
       costImpactUsd: 2100,
-      orderAtRisk: 'ORD-2026-092 ($92,400 total value)',
-      description: 'Without corrective shade leveling, entire 4,500m batch risks customer rejection and total write-off ($11,200 material loss).',
+      orderAtRisk: 'ORD-2026-092 (₹92,400 total value)',
+      description: 'Without corrective shade leveling, entire 4,500m batch risks customer rejection and total write-off (₹11,200 material loss).',
     },
     status: 'evaluating',
     recoveryPlans: [
@@ -1095,7 +1095,7 @@ export const mockRescueIssues: RescueIssue[] = [
           'Re-inspect roll spectrophotometer reading',
         ],
         pros: [
-          'Lowest cost recovery ($650 chemicals)',
+          'Lowest cost recovery (₹650 chemicals)',
           'Saves 100% of fabric batch with zero scrap',
           'Ready for finishing within 18 hours',
         ],
@@ -1125,8 +1125,8 @@ export const mockRescueIssues: RescueIssue[] = [
     impactAnalysis: {
       delayDays: 1.5,
       costImpactUsd: 450,
-      orderAtRisk: 'ORD-2026-089 ($79,200 total value)',
-      description: 'Dyehouse idle time costing $150/hr overhead.',
+      orderAtRisk: 'ORD-2026-089 (₹79,200 total value)',
+      description: 'Dyehouse idle time costing ₹150/hr overhead.',
     },
     status: 'plan_selected',
     selectedPlanId: 'plan-003-a',
@@ -1148,7 +1148,7 @@ export const mockRescueIssues: RescueIssue[] = [
         ],
         pros: [
           'Immediate resolution (1.5 hours)',
-          'Minimal transport cost ($120)',
+          'Minimal transport cost (₹120)',
           'Dyehouse resumes schedule before noon',
         ],
         cons: [

@@ -17,7 +17,7 @@ def test_create_and_get_order(client: TestClient, auth_headers, seeded_users):
             "order_date": str(date.today()),
             "required_delivery_date": str(delivery),
             "priority": "high",
-            "currency": "USD",
+            "currency": "INR",
             "items": [
                 {
                     "fabric_type": "Cotton Poplin 120 GSM",

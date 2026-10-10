@@ -355,7 +355,7 @@ export const RescueEnginePage: React.FC = () => {
                   <div className="flex items-center gap-2 text-rose-300 font-mono font-bold text-xs">
                     <span>Delay: +{activeIssue.impactAnalysis.delayDays} Days</span>
                     <span>|</span>
-                    <span>Cost: +${activeIssue.impactAnalysis.costImpactUsd}</span>
+                    <span>Cost: +₹{activeIssue.impactAnalysis.costImpactUsd}</span>
                   </div>
                   <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
                     {activeIssue.impactAnalysis.description}
@@ -452,7 +452,7 @@ export const RescueEnginePage: React.FC = () => {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-slate-400 text-[11px]">Extra Cost:</span>
-                          <span className="font-bold text-white">${plan.estimatedCostUsd}</span>
+                          <span className="font-bold text-white">₹{plan.estimatedCostUsd}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-slate-400 text-[11px]">Risk Profile:</span>
@@ -571,7 +571,7 @@ export const RescueEnginePage: React.FC = () => {
               <div className="flex items-center gap-3 text-slate-300 font-mono text-xs">
                 <span>Schedule: {activePlan.estimatedDelayChangeDays} Days</span>
                 <span>•</span>
-                <span>Budget: +${activePlan.estimatedCostUsd}</span>
+                <span>Budget: +₹{activePlan.estimatedCostUsd}</span>
                 <span>•</span>
                 <span>Feasibility: {activePlan.feasibilityScorePercent}%</span>
               </div>

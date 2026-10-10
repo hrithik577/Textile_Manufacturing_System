@@ -223,10 +223,10 @@ export const DashboardPage: React.FC = () => {
                 <span className="text-xs text-slate-400">Detected 07:42 AM</span>
               </div>
               <h3 className="text-sm sm:text-base font-bold text-white font-display mt-1">
-                Loom #3 Servo Trip — Critical 5.2 Day Delivery Slip on Patagonia Order ($82.5k)
+                Loom #3 Servo Trip — Critical 5.2 Day Delivery Slip on Patagonia Order (₹82.5k)
               </h3>
               <p className="text-xs text-slate-300 mt-0.5 max-w-3xl">
-                Everest Rescue Engine has prepared 3 recovery plans. Recommended Plan A (Airjet Loom Reallocation) restores the schedule within 72 hours for $1,450.
+                Everest Rescue Engine has prepared 3 recovery plans. Recommended Plan A (Airjet Loom Reallocation) restores the schedule within 72 hours for ₹1,450.
               </p>
             </div>
           </div>

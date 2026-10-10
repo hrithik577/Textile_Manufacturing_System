@@ -326,7 +326,7 @@ def seed_database(db: Session):
             required_delivery_date=today + timedelta(days=12),
             status=OrderStatus.IN_PRODUCTION,
             priority=OrderPriority.HIGH,
-            currency="USD",
+            currency="INR",
             total_amount=18500.0,
             notes="Eco-twill cotton batch for Stockholm Spring collection",
             items=[
@@ -353,7 +353,7 @@ def seed_database(db: Session):
             required_delivery_date=today - timedelta(days=1), # Completed demo
             status=OrderStatus.COMPLETED,
             priority=OrderPriority.NORMAL,
-            currency="USD",
+            currency="INR",
             total_amount=14250.0,
             notes="Poly-Viscose performance stretch suiting",
             items=[
@@ -380,7 +380,7 @@ def seed_database(db: Session):
             required_delivery_date=today + timedelta(days=20),
             status=OrderStatus.CONFIRMED,
             priority=OrderPriority.URGENT,
-            currency="USD",
+            currency="INR",
             total_amount=24000.0,
             notes="Luxe Milan high-thread sateen weave",
             items=[
@@ -595,7 +595,7 @@ def seed_database(db: Session):
         c_entry = CostEntry(
             category=cat,
             amount=amt,
-            currency="USD",
+            currency="INR",
             sales_order_id=so_id,
             production_order_id=po_id,
             description=desc,
@@ -611,7 +611,7 @@ def seed_database(db: Session):
             sales_order_id=so_apex.id,
             total_amount=14250.0,
             paid_amount=14250.0,
-            currency="USD",
+            currency="INR",
             status=InvoiceStatus.PAID,
             issue_date=today - timedelta(days=5),
             due_date=today + timedelta(days=25),
@@ -636,7 +636,7 @@ def seed_database(db: Session):
             sales_order_id=so_nordic.id,
             total_amount=18500.0,
             paid_amount=9250.0,
-            currency="USD",
+            currency="INR",
             status=InvoiceStatus.PARTIALLY_PAID,
             issue_date=today - timedelta(days=3),
             due_date=today + timedelta(days=27),

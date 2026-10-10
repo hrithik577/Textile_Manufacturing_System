@@ -140,8 +140,8 @@ export const AnalyticsPage: React.FC = () => {
         <KPICard
           title="Gross Operating Margin"
           value="13.2%"
-          subtitle="Total Revenue: $437,200"
-          change="Cost per meter: $3.18"
+          subtitle="Total Revenue: ₹437,200"
+          change="Cost per meter: ₹3.18"
           trend="up"
           icon={<DollarSign className="w-5 h-5 text-indigo-400" />}
         />

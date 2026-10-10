@@ -35,7 +35,7 @@ class SalesOrderBase(BaseModel):
     order_date: date = Field(default_factory=date.today)
     required_delivery_date: date
     priority: OrderPriority = OrderPriority.NORMAL
-    currency: str = "USD"
+    currency: str = "INR"
     notes: Optional[str] = None
 
 
@@ -90,7 +90,7 @@ class OrderTimelineResponse(BaseModel):
 class OrderCostSummaryResponse(BaseModel):
     order_id: int
     order_number: str
-    currency: str = "USD"
+    currency: str = "INR"
     
     # Revenue & Invoicing
     agreed_order_value: float

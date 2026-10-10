@@ -91,7 +91,7 @@
       "customer_id": 1,
       "required_delivery_date": "2026-11-15",
       "priority": "high",
-      "currency": "USD",
+      "currency": "INR",
       "items": [
         {
           "fabric_type": "100% Organic Cotton Twill 210 GSM",
