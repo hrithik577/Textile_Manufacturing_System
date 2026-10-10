@@ -96,8 +96,8 @@ class FabricRoll(BaseModel):
     machine_id: str
     length_meters: float
     defect_count: int = 0
-    grade: str = "A"  # A, B, C, Reject
-    status: str = "inspected"  # inspected, quarantine, dispatch_ready, rejected
+    grade: str = "A"  # A, B, C, Scrap
+    status: str = "uninspected"  # uninspected, pass, rework, rejected
     created_at: datetime
     source: str = "simulator"
 

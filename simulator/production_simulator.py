@@ -127,15 +127,14 @@ class ProductionSimulator:
                 if expected_rolls > completed_rolls_count:
                     self._roll_counter += 1
                     roll_defect_count = self._rng.randint(0, 5) if has_defect else self._rng.randint(0, 1)
-                    is_quarantine = roll_defect_count >= 4
                     roll = FabricRoll(
                         roll_id=f"ROLL-{self._roll_counter:04d}",
                         order_id=order.order_id,
                         machine_id=machine.machine_id,
                         length_meters=100.0,
                         defect_count=roll_defect_count,
-                        grade="Reject" if is_quarantine else ("B" if roll_defect_count > 1 else "A"),
-                        status="quarantine" if is_quarantine else "dispatch_ready",
+                        grade="A", # Default pending inspection
+                        status="uninspected",
                         created_at=current_time,
                         source="simulator",
                     )
@@ -172,3 +171,42 @@ class ProductionSimulator:
                         },
                     )
                     break
+
+        # Simulate periodic inspection of uninspected rolls
+        self.inspect_rolls(current_time)
+
+    def inspect_rolls(self, current_time: datetime) -> None:
+        """Simulates manual inspection of waiting rolls with pass/rework/reject outcomes."""
+        for roll in self.rolls:
+            if roll.status != "uninspected":
+                continue
+                
+            # Randomly leave some rolls waiting to be checked (20% chance)
+            if self._rng.random() < 0.2:
+                continue
+
+            # Grade and determine status based on defect count
+            if roll.defect_count >= 4:
+                roll.grade = "Scrap"
+                roll.status = "rejected"
+            elif roll.defect_count >= 2:
+                roll.grade = "B"
+                roll.status = "rework"
+            else:
+                roll.grade = "A"
+                roll.status = "pass"
+                
+            # Emit inspection event
+            self.events.create_event(
+                event_type="quality_inspection_completed",
+                timestamp=current_time,
+                machine_id=roll.machine_id,
+                production_order_id=roll.order_id,
+                details={
+                    "roll_id": roll.roll_id,
+                    "grade": roll.grade,
+                    "status": roll.status,
+                    "defects": roll.defect_count,
+                },
+            )
+
