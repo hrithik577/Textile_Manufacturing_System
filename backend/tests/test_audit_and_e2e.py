@@ -813,3 +813,17 @@ def test_phase14_complete_end_to_end_acceptance_scenario(client: TestClient, aut
     assert c_data["total_revenue"] >= 0
     assert len(c_data["order_cost_sheets"]) >= 1
 
+
+def test_liveness_and_readiness_probes(client: TestClient):
+    # Liveness probe
+    liveness_res = client.get("/health")
+    assert liveness_res.status_code == 200
+    assert liveness_res.json()["status"] == "healthy"
+
+    # Readiness probe checking database connectivity
+    readiness_res = client.get("/ready")
+    assert readiness_res.status_code == 200
+    assert readiness_res.json()["status"] == "ready"
+    assert readiness_res.json()["database"] == "connected"
+
+
