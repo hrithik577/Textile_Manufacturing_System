@@ -13,10 +13,16 @@ from app.api.v1.router import api_router
 import app.models # noqa
 
 
+import logging
+
+logger = logging.getLogger("everest_os")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize database tables if not created
-    Base.metadata.create_all(bind=engine)
+    # Schema lifecycle is strictly managed via Alembic migrations.
+    # Run `alembic upgrade head` to apply database migrations.
+    logger.info("Everest Textile OS backend initialized. Database schema governed by Alembic.")
     yield
 
 

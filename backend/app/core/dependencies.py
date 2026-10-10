@@ -1,3 +1,4 @@
+import secrets
 from typing import List, Optional
 from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -19,21 +20,13 @@ def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     db: Session = Depends(get_db),
 ) -> User:
-    """Validate JWT token and return the current user."""
+    """Validate JWT token and return the current user. Strictly enforces auth across all environments."""
     if not credentials or not credentials.credentials:
-        if settings.ENVIRONMENT == "development":
-            owner = db.query(User).filter(User.role == UserRole.OWNER).first()
-            if owner:
-                return owner
         raise UnauthenticatedException("Bearer token required")
     
     token = credentials.credentials
     payload = decode_token(token)
     if not payload:
-        if settings.ENVIRONMENT == "development":
-            owner = db.query(User).filter(User.role == UserRole.OWNER).first()
-            if owner:
-                return owner
         raise UnauthenticatedException("Invalid or expired token")
     
     user_id = payload.get("sub")
@@ -81,17 +74,26 @@ def verify_simulator_secret(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     db: Session = Depends(get_db),
 ) -> bool:
-    """Verify simulator access via either shared secret header or valid JWT token."""
-    if x_simulator_secret and x_simulator_secret == settings.SIMULATOR_SHARED_SECRET:
-        return True
-    
-    if credentials:
-        payload = decode_token(credentials.credentials)
-        if payload:
+    """
+    Verify simulator access via constant-time shared secret comparison or authorized operator Bearer token.
+    Fails closed if secret is unconfigured or mismatched. Never bypasses auth via DEBUG mode.
+    """
+    # 1. Verify shared secret via constant-time comparison
+    configured_secret = getattr(settings, "SIMULATOR_SHARED_SECRET", None)
+    if x_simulator_secret:
+        if not configured_secret or len(configured_secret) < 16:
+            raise UnauthenticatedException("Simulator service is unconfigured or disabled")
+        if secrets.compare_digest(x_simulator_secret, configured_secret):
             return True
-            
-    # For local hackathon convenience if debug is active, accept requests with warning
-    if settings.DEBUG:
-        return True
+        raise UnauthenticatedException("Invalid simulator secret")
+    
+    # 2. Or verify valid authenticated internal operator token
+    if credentials and credentials.credentials:
+        payload = decode_token(credentials.credentials)
+        if payload and payload.get("sub"):
+            user = db.query(User).filter(User.id == int(payload["sub"])).first()
+            if user and user.is_active and user.role in [UserRole.OWNER, UserRole.MANAGER, UserRole.PRODUCTION]:
+                return True
+            raise UnauthorizedAccessException("Token does not have simulator ingest permissions")
 
-    raise UnauthenticatedException("Valid X-Simulator-Secret header or Bearer token is required")
+    raise UnauthenticatedException("Valid X-Simulator-Secret header or authorized Bearer token is required")
