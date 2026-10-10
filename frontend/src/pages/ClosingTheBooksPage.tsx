@@ -29,8 +29,6 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import {
-  AreaChart,
-  Area,
   BarChart,
   Bar,
   PieChart,
@@ -102,50 +100,50 @@ export const ClosingTheBooksPage: React.FC = () => {
       netProfit: 850000,
       netMarginPercent: 22.3,
       plannedMarginPercent: 20.0,
-      varianceInr: -42000, // Favorable: saved ₹42k vs planned BOM
+      varianceInr: -85000, // Negative variance = savings vs planned cost!
       status: 'TOP MARGIN' as const,
-      machinesUsed: ['SPIN-01', 'FIN-01', 'QC-01'],
-      notes: 'Excellent fiber efficiency. Passed export inspection on first run with 0 rewinds.',
+      machinesUsed: ['SPIN-01', 'WEAVE-02', 'DYE-01', 'STENT-01', 'QC-01'],
+      notes: 'Record efficiency on Toyota JAT810 loom; minimal weft breakage.',
     },
     {
       orderId: 'ord-101',
       orderNumber: 'ORD-2026-089',
-      customerCompany: 'Zara Inditex Sourcing (Spain)',
-      fabricType: 'Cotton Twill Chino Fabric 2/1 (240 GSM)',
-      metersProduced: 18000,
-      buyerRevenue: 6636000,
-      costRawMaterial: 2604000,
-      costMachineProcessing: 1738000,
-      costWorkerWages: 580000,
-      costOverheads: 394000,
-      totalActualCost: 5316000,
-      netProfit: 1320000,
-      netMarginPercent: 19.9,
-      plannedMarginPercent: 18.5,
-      varianceInr: -90000, // Favorable
-      status: 'HIGH PROFIT' as const,
-      machinesUsed: ['SPIN-01', 'WEAVE-01', 'DYE-01'],
-      notes: 'Optimal loom speed on Airjet #1. Dye liquor ratio was precisely balanced.',
+      customerCompany: 'Zara Inditex Sourcing (A Coruña)',
+      fabricType: 'Organic Cotton Twill 3/1 Heavy (260 GSM)',
+      metersProduced: 15000,
+      buyerRevenue: 4950000,
+      costRawMaterial: 2130000,
+      costMachineProcessing: 1280000,
+      costWorkerWages: 412000,
+      costOverheads: 340000,
+      totalActualCost: 4162000,
+      netProfit: 788000,
+      netMarginPercent: 15.9,
+      plannedMarginPercent: 17.5,
+      varianceInr: 78000, // Cost overrun due to reactive dye price hike
+      status: 'STEADY' as const,
+      machinesUsed: ['SPIN-01', 'WEAVE-01', 'DYE-02', 'STENT-01', 'QC-01'],
+      notes: 'Reactive Navy dye lot DB-902 cost +8% higher than projected.',
     },
     {
       orderId: 'ord-104',
       orderNumber: 'ORD-2026-097',
-      customerCompany: 'Patagonia Outdoor Corp (USA)',
-      fabricType: 'Recycled Poly Ripstop DWR 50D (110 GSM)',
-      metersProduced: 15000,
-      buyerRevenue: 6912000,
-      costRawMaterial: 2950000,
-      costMachineProcessing: 2280000,
-      costWorkerWages: 820000,
-      costOverheads: 310000,
-      totalActualCost: 6360000,
-      netProfit: 552000,
-      netMarginPercent: 8.0,
+      customerCompany: 'Patagonia Outdoor Gear (Ventura)',
+      fabricType: 'Recycled Ripstop Technical Nylon (190 GSM)',
+      metersProduced: 5000,
+      buyerRevenue: 2450000,
+      costRawMaterial: 1140000,
+      costMachineProcessing: 695000,
+      costWorkerWages: 215000,
+      costOverheads: 155000,
+      totalActualCost: 2205000,
+      netProfit: 245000,
+      netMarginPercent: 10.0,
       plannedMarginPercent: 18.0,
-      varianceInr: 480000, // Unfavorable: cost overrun of ₹4.8 Lakhs due to Loom #3 breakdown
+      varianceInr: 195000, // High variance due to loom breakdown & airjet reroute
       status: 'MARGIN SQUEEZED' as const,
-      machinesUsed: ['SPIN-02', 'WEAVE-03 (Broke Down)', 'WEAVE-01'],
-      notes: '⚠️ Impacted by Loom #3 inverter overheat breakdown. Incurred maintenance repair + overtime labor.',
+      machinesUsed: ['WEAVE-03 (Broke)', 'WEAVE-01 (Expedited)', 'QC-01'],
+      notes: 'Loom #3 motor failure incurred ₹75,000 emergency repairs + weekend shift overtime.',
     },
     {
       orderId: 'ord-102',
@@ -162,7 +160,7 @@ export const ClosingTheBooksPage: React.FC = () => {
       netProfit: 500000,
       netMarginPercent: 17.6,
       plannedMarginPercent: 18.0,
-      varianceInr: 10000, // Slight variance
+      varianceInr: 10000,
       status: 'STEADY' as const,
       machinesUsed: ['SPIN-02', 'WEAVE-02', 'DYE-01'],
       notes: 'Minor dye shade variance batch DB-841 rectified with single-stage re-leveling.',
@@ -249,104 +247,41 @@ export const ClosingTheBooksPage: React.FC = () => {
       consumablesCost: 11200,
       totalCost: 105000,
       costPerMeter: 2.80,
-      ordersProcessed: ['ORD-2026-092', 'ORD-2026-095'],
+      ordersProcessed: ['ORD-2026-084', 'ORD-2026-092', 'ORD-2026-095'],
     },
     {
       code: 'WEAVE-03',
-      name: 'Picanol OptiMax-i Rapier Loom #3',
+      name: 'Dornier Rapier Loom #3 (Heavy Twill)',
       process: 'Weaving',
-      monthlyOutputMeters: 14800,
-      uptimeHours: 285,
-      downtimeHours: 145, // Critical downtime
-      oeePercent: 29.3,
-      powerCost: 54000,
-      maintenanceCost: 68000, // Expensive Inverter replacement
-      consumablesCost: 9500,
-      totalCost: 131500,
-      costPerMeter: 8.89, // High cost per meter!
-      ordersProcessed: ['ORD-2026-097 (Patagonia)'],
-    },
-    {
-      code: 'WEAVE-04',
-      name: 'Picanol OmniPlus-i Airjet Loom #4',
-      process: 'Weaving',
-      monthlyOutputMeters: 18200,
-      uptimeHours: 310,
-      downtimeHours: 110, // Sitting idle awaiting warp beams
-      oeePercent: 52.4,
-      powerCost: 48000,
-      maintenanceCost: 6200,
-      consumablesCost: 6800,
-      totalCost: 61000,
-      costPerMeter: 3.35,
-      ordersProcessed: ['ORD-2026-084'],
+      monthlyOutputMeters: 21800,
+      uptimeHours: 380,
+      downtimeHours: 88,
+      oeePercent: 74.3,
+      powerCost: 62400,
+      maintenanceCost: 75000, // Emergency motor replacement
+      consumablesCost: 9800,
+      totalCost: 147200,
+      costPerMeter: 6.75, // Spike due to repairs
+      ordersProcessed: ['ORD-2026-097 (Tripped)'],
     },
     {
       code: 'DYE-01',
-      name: 'Thies Eco-Master Soft-Flow Dyeing Vessel',
-      process: 'Dyeing',
-      monthlyOutputMeters: 68000,
-      uptimeHours: 480,
-      downtimeHours: 26,
-      oeePercent: 93.3,
-      powerCost: 142000, // High steam & electricity
-      maintenanceCost: 22000,
-      consumablesCost: 28000,
-      totalCost: 192000,
-      costPerMeter: 2.82,
-      ordersProcessed: ['ORD-2026-089', 'ORD-2026-092'],
-    },
-    {
-      code: 'DYE-02',
-      name: 'Fong’s THEN-AIRFLOW Synergy 8 Vessel',
-      process: 'Dyeing',
-      monthlyOutputMeters: 22000,
-      uptimeHours: 240,
-      downtimeHours: 90, // Idle awaiting chemicals
-      oeePercent: 44.1,
-      powerCost: 62000,
-      maintenanceCost: 11000,
-      consumablesCost: 14000,
-      totalCost: 87000,
-      costPerMeter: 3.95,
-      ordersProcessed: ['ORD-2026-097'],
-    },
-    {
-      code: 'FIN-01',
-      name: 'Monforts Montex 8500 Stenter Frame (8 Chamber)',
-      process: 'Finishing',
-      monthlyOutputMeters: 124000,
-      uptimeHours: 560,
-      downtimeHours: 14,
-      oeePercent: 92.8,
-      powerCost: 165000, // Gas burners + power
-      maintenanceCost: 31000,
-      consumablesCost: 21000,
-      totalCost: 217000,
-      costPerMeter: 1.75,
-      ordersProcessed: ['ORD-2026-084', 'ORD-2026-089', 'ORD-2026-095'],
-    },
-    {
-      code: 'QC-01',
-      name: 'Uster FabricScan Automated Inspection System',
-      process: 'Inspection',
-      monthlyOutputMeters: 118000,
-      uptimeHours: 580,
-      downtimeHours: 10,
-      oeePercent: 96.8,
-      powerCost: 24000,
-      maintenanceCost: 16000,
-      consumablesCost: 4500,
-      totalCost: 44500,
-      costPerMeter: 0.38,
-      ordersProcessed: ['All Production Batches'],
+      name: 'Thies soft-TRD High Temp Soft Flow Jigger #1',
+      process: 'Dyeing & Wet Finishing',
+      monthlyOutputMeters: 48000,
+      uptimeHours: 460,
+      downtimeHours: 20,
+      oeePercent: 91.2,
+      powerCost: 112000,
+      maintenanceCost: 16500,
+      consumablesCost: 28400,
+      totalCost: 156900,
+      costPerMeter: 3.27,
+      ordersProcessed: ['ORD-2026-084', 'ORD-2026-092'],
     },
   ];
 
-  // Total fabric produced by all machines this month
-  const totalMillMetersProduced = machineMonthlyLedger.reduce((sum, m) => sum + m.monthlyOutputMeters, 0);
-
-  // ─── 4. WORKER WAGES & PAYROLL DISBURSEMENT LEDGER ───────────────────────────
+  // ─── 4. WORKER WAGES & PAYROLL DISBURSEMENT LEDGER ──────────────────────────
   const departmentWagesSummary = [
     { dept: 'Spinning Section', workerCount: 6, totalWages: 185000, avgEfficiency: 93.5 },
     { dept: 'Weaving Sheds', workerCount: 12, totalWages: 324000, avgEfficiency: 86.2 },
@@ -411,7 +346,7 @@ export const ClosingTheBooksPage: React.FC = () => {
       shiftsWorked: 26,
       basePay: 25000,
       overtimePay: 5100,
-      performanceBonus: 4000, // Top loom efficiency bonus
+      performanceBonus: 4000,
       netDisbursed: 34100,
       status: 'Paid',
       bankUtr: 'AXIS2610471928',
@@ -426,7 +361,7 @@ export const ClosingTheBooksPage: React.FC = () => {
       shiftsWorked: 24,
       basePay: 24000,
       overtimePay: 2200,
-      performanceBonus: 800, // Lower due to machine breakdown
+      performanceBonus: 800,
       netDisbursed: 27000,
       status: 'Paid',
       bankUtr: 'HDFC2610582914',
@@ -448,55 +383,10 @@ export const ClosingTheBooksPage: React.FC = () => {
     },
     {
       id: 'w-7',
-      name: 'Rajendra Prasad',
-      empId: 'EMP-DY-310',
-      department: 'Dyeing',
-      role: 'Master Technician',
-      assignedMachine: 'DYE-01',
-      shiftsWorked: 26,
-      basePay: 30000,
-      overtimePay: 5600,
-      performanceBonus: 4500,
-      netDisbursed: 40100,
-      status: 'Paid',
-      bankUtr: 'KOTK2610782194',
-    },
-    {
-      id: 'w-8',
-      name: 'Kishore Nair',
-      empId: 'EMP-DY-314',
-      department: 'Dyeing',
-      role: 'Junior Operator',
-      assignedMachine: 'DYE-02',
-      shiftsWorked: 23,
-      basePay: 19000,
-      overtimePay: 1500,
-      performanceBonus: 1000,
-      netDisbursed: 21500,
-      status: 'Paid',
-      bankUtr: 'SBIN2610819203',
-    },
-    {
-      id: 'w-9',
-      name: 'Prakash Patil',
-      empId: 'EMP-FN-380',
-      department: 'Finishing',
-      role: 'Senior Operator',
-      assignedMachine: 'FIN-01',
-      shiftsWorked: 26,
-      basePay: 26000,
-      overtimePay: 4900,
-      performanceBonus: 3600,
-      netDisbursed: 34500,
-      status: 'Paid',
-      bankUtr: 'HDFC2610928174',
-    },
-    {
-      id: 'w-10',
       name: 'David Chen',
-      empId: 'EMP-QC-401',
-      department: 'Inspection',
-      role: 'Master QA Inspector',
+      empId: 'EMP-QC-501',
+      department: 'Quality Control',
+      role: 'Lead QA Inspector',
       assignedMachine: 'QC-01',
       shiftsWorked: 26,
       basePay: 32000,
@@ -572,13 +462,13 @@ export const ClosingTheBooksPage: React.FC = () => {
     },
   ];
 
-  // Cost Distribution Chart Data
+  // Cost Distribution Chart Data (Editorial Palette)
   const costDistributionData = [
-    { name: 'Raw Material Bills', value: plSummary.rawMaterialCosts, color: '#0d9488' },
-    { name: 'Worker Wages (Payroll)', value: plSummary.workerWages, color: '#3b82f6' },
-    { name: 'Machine Electricity & Gas', value: plSummary.machineElectricityConsumables, color: '#f59e0b' },
-    { name: 'Maintenance & Repairs', value: plSummary.maintenanceRepairs, color: '#f43f5e' },
-    { name: 'Factory Overhead & Admin', value: plSummary.factoryOverheadsAdmin, color: '#8b5cf6' },
+    { name: 'Raw Material Bills', value: plSummary.rawMaterialCosts, color: '#111111' },
+    { name: 'Worker Wages (Payroll)', value: plSummary.workerWages, color: '#F04424' },
+    { name: 'Machine Electricity & Gas', value: plSummary.machineElectricityConsumables, color: '#4B5563' },
+    { name: 'Maintenance & Repairs', value: plSummary.maintenanceRepairs, color: '#9CA3AF' },
+    { name: 'Factory Overhead & Admin', value: plSummary.factoryOverheadsAdmin, color: '#D1D5DB' },
   ];
 
   // Revenue vs Cost vs Profit Breakdown Chart Data
@@ -603,86 +493,88 @@ export const ClosingTheBooksPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* ─── Top Header & Closing Books Controls ─────────────────────────────── */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-2 border-b border-slate-800">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-              Closing the Books — Owner's Month-End P&L
-            </h1>
-            <DataSourceBadge source="LIVE" />
+    <div className="min-h-screen bg-[var(--color-paper)] text-[var(--color-ink)] font-sans pb-16 space-y-6">
+
+      {/* ─── Top Industrial Header ─────────────────────────────────────── */}
+      <div className="bg-[var(--color-ink)] text-white px-6 py-5 editorial-border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-[var(--color-vermilion)] flex items-center justify-center shrink-0">
+            <DollarSign className="w-4 h-4 text-white" />
           </div>
-          <p className="mt-1 text-xs text-slate-400">
-            Reconciles buyer revenue, raw material bills, worker wages, and machine operating costs in one place so the mill owner knows with absolute clarity whether the mill made money this month.
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm font-black tracking-widest uppercase font-mono text-white">
+                CLOSING THE BOOKS — OWNER'S MONTH-END P&L
+              </h1>
+              <span className="text-[9px] font-mono px-2 py-0.5 bg-[var(--color-vermilion)] text-white font-bold">
+                SCENE 6 · FINANCIAL CLOSING
+              </span>
+            </div>
+            <p className="text-[10px] font-mono text-white/50 tracking-wider uppercase mt-0.5">
+              Reconciles buyer revenue, raw material bills, worker wages, and machine operating costs in one place.
+            </p>
+          </div>
         </div>
 
         {/* Month Selector & Actions */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center rounded-lg bg-slate-950 p-1 border border-slate-800 text-xs">
+        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <div className="flex items-center bg-white/10 px-2 py-1.5 border border-white/20">
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="bg-transparent text-slate-200 px-2 py-1 focus:outline-none font-mono"
+              className="bg-transparent text-white font-mono uppercase text-xs focus:outline-none cursor-pointer"
             >
-              <option value="2026-10">October 2026 (Closing)</option>
-              <option value="2026-09">September 2026 (Archived)</option>
-              <option value="2026-08">August 2026 (Archived)</option>
+              <option value="2026-10" className="bg-[var(--color-ink)] text-white">October 2026 (Closing)</option>
+              <option value="2026-09" className="bg-[var(--color-ink)] text-white">September 2026 (Archived)</option>
+              <option value="2026-08" className="bg-[var(--color-ink)] text-white">August 2026 (Archived)</option>
             </select>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={handleExportCSV}
-            leftIcon={<Download className="w-3.5 h-3.5" />}
+            className="px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase border border-white/20 text-white hover:bg-white/10 transition-colors flex items-center gap-1.5"
           >
+            <Download className="w-3.5 h-3.5" />
             Export Ledger
-          </Button>
+          </button>
 
-          <Button
-            variant="secondary"
-            size="sm"
+          <button
             onClick={handlePrint}
-            leftIcon={<Printer className="w-3.5 h-3.5" />}
+            className="px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest uppercase bg-[var(--color-vermilion)] text-white hover:bg-white hover:text-[var(--color-ink)] transition-colors flex items-center gap-1.5"
           >
-            Print Books
-          </Button>
+            <Printer className="w-3.5 h-3.5" />
+            Print Statement
+          </button>
         </div>
       </div>
 
       {/* ─── THE BOTTOM-LINE VERDICT BANNER (DID THE MILL MAKE MONEY?) ───────── */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-teal-950/80 border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10">
-          <Banknote className="w-48 h-48 text-emerald-400" />
-        </div>
-
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 relative z-10">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold uppercase tracking-wider mb-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="editorial-border bg-white p-6 space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[var(--color-ink)] text-white text-[10px] font-mono font-bold uppercase tracking-widest">
+              <CheckCircle2 className="w-3 h-3 text-[var(--color-vermilion)]" />
               MONTH-END VERDICT: PROFITABLE OPERATIONS
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-ink)] uppercase tracking-tight">
               Yes, the mill made money this month.
             </h2>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs font-mono text-[var(--color-industrial-grey)] max-w-2xl leading-relaxed">
               After accounting for all <strong>{formatINR(plSummary.rawMaterialCosts)}</strong> in raw material bills, <strong>{formatINR(plSummary.workerWages)}</strong> in worker wages, and <strong>{formatINR(plSummary.machineElectricityConsumables + plSummary.maintenanceRepairs + plSummary.factoryOverheadsAdmin)}</strong> in machine energy & overheads, the mill cleared a net operating profit of:
             </p>
           </div>
 
           {/* Big Profit Hero Numbers */}
-          <div className="bg-slate-950/80 border border-emerald-500/40 rounded-xl p-4 sm:p-5 text-right shrink-0">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest block">
+          <div className="bg-[var(--color-paper)] editorial-border p-5 text-right shrink-0">
+            <span className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase tracking-widest block font-bold">
               OCTOBER NET OPERATING PROFIT
             </span>
-            <div className="text-3xl sm:text-4xl font-black font-display text-emerald-400 mt-0.5">
+            <div className="text-3xl sm:text-4xl font-black font-mono text-[var(--color-success-green)] mt-1">
               +{formatINR(plSummary.netProfit)}
             </div>
-            <div className="mt-1 flex items-center justify-end gap-2 text-xs font-mono">
-              <span className="text-slate-400">Net Margin:</span>
-              <span className="font-bold text-white bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 text-emerald-300">
+            <div className="mt-2 flex items-center justify-end gap-2 text-xs font-mono">
+              <span className="text-[var(--color-industrial-grey)] uppercase font-bold">Net Margin:</span>
+              <span className="font-bold text-white bg-[var(--color-ink)] px-2 py-0.5 font-mono">
                 {plSummary.netMarginPercent}%
               </span>
             </div>
@@ -691,95 +583,93 @@ export const ClosingTheBooksPage: React.FC = () => {
       </div>
 
       {/* ─── THE 4 FINANCIAL PILLARS SUMMARY CARDS ───────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--color-light-border)] editorial-border">
         {/* Pillar 1: Inflow */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 relative overflow-hidden">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span className="font-medium">1. Payments From Buyers</span>
-            <ArrowUpRight className="w-4 h-4 text-emerald-400" />
+        <div className="p-4 bg-white space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--color-industrial-grey)]">
+            <span className="font-bold uppercase tracking-wider text-[10px]">1. Payments From Buyers</span>
+            <ArrowUpRight className="w-4 h-4 text-[var(--color-success-green)]" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-display text-white">
+          <div className="text-xl font-bold font-mono text-[var(--color-ink)]">
             {formatINR(plSummary.grossBuyerRevenue)}
           </div>
-          <div className="mt-2 text-[11px] text-emerald-400 flex items-center justify-between font-mono pt-2 border-t border-slate-800">
+          <div className="text-[10px] text-[var(--color-industrial-grey)] flex items-center justify-between font-mono pt-2 border-t border-[var(--color-light-border)]">
             <span>Collected: {formatINR(plSummary.cashCollected)}</span>
-            <span className="text-slate-400">5 Orders</span>
+            <span className="font-bold">5 Orders</span>
           </div>
         </div>
 
         {/* Pillar 2: Material Bills */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 relative overflow-hidden">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span className="font-medium">2. Raw Material Bills</span>
-            <ArrowDownRight className="w-4 h-4 text-amber-400" />
+        <div className="p-4 bg-white space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--color-industrial-grey)]">
+            <span className="font-bold uppercase tracking-wider text-[10px]">2. Raw Material Bills</span>
+            <ArrowDownRight className="w-4 h-4 text-[var(--color-vermilion)]" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-display text-amber-300">
+          <div className="text-xl font-bold font-mono text-[var(--color-ink)]">
             {formatINR(plSummary.rawMaterialCosts)}
           </div>
-          <div className="mt-2 text-[11px] text-slate-400 flex items-center justify-between font-mono pt-2 border-t border-slate-800">
+          <div className="text-[10px] text-[var(--color-industrial-grey)] flex items-center justify-between font-mono pt-2 border-t border-[var(--color-light-border)]">
             <span>Yarn, Dyes & Auxiliaries</span>
-            <span className="text-amber-400">43.0% of Rev</span>
+            <span className="text-[var(--color-vermilion)] font-bold">43.0% Rev</span>
           </div>
         </div>
 
         {/* Pillar 3: Worker Wages */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 relative overflow-hidden">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span className="font-medium">3. Worker Wages Paid</span>
-            <ArrowDownRight className="w-4 h-4 text-blue-400" />
+        <div className="p-4 bg-white space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--color-industrial-grey)]">
+            <span className="font-bold uppercase tracking-wider text-[10px]">3. Worker Wages Paid</span>
+            <ArrowDownRight className="w-4 h-4 text-[var(--color-vermilion)]" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-display text-blue-300">
+          <div className="text-xl font-bold font-mono text-[var(--color-ink)]">
             {formatINR(plSummary.workerWages)}
           </div>
-          <div className="mt-2 text-[11px] text-slate-400 flex items-center justify-between font-mono pt-2 border-t border-slate-800">
+          <div className="text-[10px] text-[var(--color-industrial-grey)] flex items-center justify-between font-mono pt-2 border-t border-[var(--color-light-border)]">
             <span>30 Operators & Supervisors</span>
-            <span className="text-blue-400">18.5% of Rev</span>
+            <span className="font-bold">18.5% Rev</span>
           </div>
         </div>
 
         {/* Pillar 4: Machine Energy & Opex */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 relative overflow-hidden">
-          <div className="flex items-center justify-between text-slate-400 text-xs mb-1">
-            <span className="font-medium">4. Machine Power & Opex</span>
-            <ArrowDownRight className="w-4 h-4 text-purple-400" />
+        <div className="p-4 bg-white space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--color-industrial-grey)]">
+            <span className="font-bold uppercase tracking-wider text-[10px]">4. Machine Power & Opex</span>
+            <ArrowDownRight className="w-4 h-4 text-[var(--color-vermilion)]" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-display text-purple-300">
+          <div className="text-xl font-bold font-mono text-[var(--color-ink)]">
             {formatINR(plSummary.machineElectricityConsumables + plSummary.maintenanceRepairs + plSummary.factoryOverheadsAdmin)}
           </div>
-          <div className="mt-2 text-[11px] text-slate-400 flex items-center justify-between font-mono pt-2 border-t border-slate-800">
-            <span>Electricity, Gas & Repairs</span>
-            <span className="text-purple-400">22.3% of Rev</span>
+          <div className="text-[10px] text-[var(--color-industrial-grey)] flex items-center justify-between font-mono pt-2 border-t border-[var(--color-light-border)]">
+            <span>Power, Gas & Repairs</span>
+            <span className="font-bold">22.3% Rev</span>
           </div>
         </div>
       </div>
 
-      {/* ─── NAVIGATION TABS ─────────────────────────────────────────────────── */}
-      <div className="flex items-center border-b border-slate-800 overflow-x-auto gap-2">
+      {/* ─── NAVIGATION TABS (Editorial 5-Tile Grid) ───────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-px bg-[var(--color-light-border)] editorial-border text-xs font-mono">
         {[
-          { key: 'pnl', label: '📊 Month-End P&L Statement', count: null },
-          { key: 'orders', label: '📦 Order-by-Order Actual Cost', count: orderCostLedger.length },
-          { key: 'machines', label: '⚙️ Machine Output & Opex', count: machineMonthlyLedger.length },
-          { key: 'wages', label: '👷 Worker Wages & Payroll', count: '30 Workers' },
-          { key: 'materials', label: '🧾 Raw Material Bills', count: rawMaterialBills.length },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
-            className={clsx(
-              'px-4 py-3 text-xs font-semibold whitespace-nowrap transition-all border-b-2 flex items-center gap-2',
-              activeTab === tab.key
-                ? 'border-teal-500 text-teal-400 bg-teal-500/5'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700'
-            )}
-          >
-            {tab.label}
-            {tab.count && (
-              <span className="px-1.5 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono text-slate-300">
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
+          { key: 'pnl', label: '01 / MONTH-END P&L' },
+          { key: 'orders', label: '02 / ORDER COST SHEETS (5)' },
+          { key: 'machines', label: '03 / MACHINE YIELD & OPEX (6)' },
+          { key: 'wages', label: '04 / WORKER WAGES (30)' },
+          { key: 'materials', label: '05 / RAW MATERIAL BILLS (5)' },
+        ].map((tab) => {
+          const isActive = activeTab === tab.key;
+          return (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key as any)}
+              className={clsx(
+                'p-3.5 text-left font-bold tracking-wider uppercase transition-colors',
+                isActive
+                  ? 'bg-[var(--color-ink)] text-white border-b-2 border-[var(--color-vermilion)]'
+                  : 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)]'
+              )}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* ======================================================================= */}
@@ -789,50 +679,58 @@ export const ClosingTheBooksPage: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Visual Waterfall Chart: Order Revenue vs Costs */}
-            <div className="lg:col-span-2 rounded-xl bg-slate-900 border border-slate-800 p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+            <div className="lg:col-span-2 bg-white editorial-border p-5 space-y-4">
+              <div className="flex items-center justify-between pb-3 editorial-border-b">
                 <div>
-                  <h3 className="text-sm font-semibold text-white font-display">
-                    Order Revenue vs Manufacturing Costs (in ₹ Lakhs)
+                  <h3 className="text-xs font-black uppercase font-mono tracking-wider text-[var(--color-ink)]">
+                    Order Revenue vs Manufacturing Costs (₹ Lakhs)
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    Breakdown of revenue, incurred costs, and net profit per client order
+                  <p className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase">
+                    Revenue, incurred costs, and net profit per client order
                   </p>
                 </div>
+                <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 bg-[var(--color-paper)] editorial-border">
+                  WATERFALL
+                </span>
               </div>
 
-              <div className="h-64 sm:h-72 w-full">
+              <div className="h-64 sm:h-72 w-full font-mono text-xs">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={orderComparisonData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                    <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} unit="L" />
+                    <CartesianGrid strokeDasharray="2 2" stroke="#e5e1da" />
+                    <XAxis dataKey="name" stroke="#111111" tick={{ fill: '#111111', fontSize: 10, fontFamily: 'monospace' }} />
+                    <YAxis stroke="#111111" tick={{ fill: '#111111', fontSize: 10, fontFamily: 'monospace' }} unit="L" />
                     <Tooltip
                       formatter={(val: any) => [`₹${(Number(val) * 100000).toLocaleString('en-IN')}`, '']}
                       contentStyle={{
-                        backgroundColor: '#0f172a',
-                        borderColor: '#334155',
-                        borderRadius: '8px',
-                        color: '#f8fafc',
-                        fontSize: '12px',
+                        backgroundColor: '#111111',
+                        border: '1px solid #111111',
+                        borderRadius: '0px',
+                        color: '#ffffff',
+                        fontSize: '11px',
+                        fontFamily: 'monospace',
                       }}
                     />
-                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                    <Bar dataKey="Revenue" fill="#14b8a6" radius={[4, 4, 0, 0]} name="Buyer Revenue (₹ Lakhs)" />
-                    <Bar dataKey="TotalCost" fill="#f43f5e" radius={[4, 4, 0, 0]} name="Actual Cost (₹ Lakhs)" />
-                    <Bar dataKey="NetProfit" fill="#10b981" radius={[4, 4, 0, 0]} name="Net Profit (₹ Lakhs)" />
+                    <Legend wrapperStyle={{ fontSize: '10px', fontFamily: 'monospace', paddingTop: '10px' }} />
+                    <Bar dataKey="Revenue" fill="#111111" radius={[0, 0, 0, 0]} name="Buyer Revenue" />
+                    <Bar dataKey="TotalCost" fill="#F04424" radius={[0, 0, 0, 0]} name="Actual Cost" />
+                    <Bar dataKey="NetProfit" fill="#1a7a4a" radius={[0, 0, 0, 0]} name="Net Profit" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             {/* Cost Outflow Distribution Doughnut */}
-            <div className="rounded-xl bg-slate-900 border border-slate-800 p-5 shadow-sm flex flex-col justify-between">
+            <div className="bg-white editorial-border p-5 flex flex-col justify-between">
               <div>
-                <h3 className="text-sm font-semibold text-white font-display mb-1">
-                  Factory Expense Breakdown
-                </h3>
-                <p className="text-xs text-slate-400 mb-4">Total costs: {formatINR(plSummary.totalManufacturingCost)}</p>
+                <div className="pb-3 editorial-border-b mb-4">
+                  <h3 className="text-xs font-black uppercase font-mono tracking-wider text-[var(--color-ink)]">
+                    Factory Expense Breakdown
+                  </h3>
+                  <p className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase">
+                    Total Incurred: {formatINR(plSummary.totalManufacturingCost)}
+                  </p>
+                </div>
 
                 <div className="h-44 w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -843,7 +741,7 @@ export const ClosingTheBooksPage: React.FC = () => {
                         cy="50%"
                         innerRadius={45}
                         outerRadius={68}
-                        paddingAngle={3}
+                        paddingAngle={2}
                         dataKey="value"
                       >
                         {costDistributionData.map((entry, index) => (
@@ -853,11 +751,12 @@ export const ClosingTheBooksPage: React.FC = () => {
                       <Tooltip
                         formatter={(val: any) => [formatINR(Number(val)), '']}
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          borderColor: '#334155',
-                          borderRadius: '8px',
-                          color: '#f8fafc',
-                          fontSize: '12px',
+                          backgroundColor: '#111111',
+                          border: '1px solid #111111',
+                          borderRadius: '0px',
+                          color: '#ffffff',
+                          fontSize: '11px',
+                          fontFamily: 'monospace',
                         }}
                       />
                     </PieChart>
@@ -865,14 +764,14 @@ export const ClosingTheBooksPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-1.5 pt-3 border-t border-slate-800 text-xs">
+              <div className="space-y-1.5 pt-3 border-t border-[var(--color-light-border)] text-xs font-mono">
                 {costDistributionData.map((item) => (
                   <div key={item.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2 truncate pr-2">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                      <span className="text-slate-300 truncate text-[11px]">{item.name}</span>
+                      <span className="w-2.5 h-2.5 shrink-0" style={{ backgroundColor: item.color }} />
+                      <span className="text-[var(--color-ink)] truncate text-[10px] font-bold uppercase">{item.name}</span>
                     </div>
-                    <span className="font-semibold text-white font-mono shrink-0 text-[11px]">
+                    <span className="font-bold text-[var(--color-ink)] shrink-0 text-[10px]">
                       {formatINR(item.value)}
                     </span>
                   </div>
@@ -882,84 +781,84 @@ export const ClosingTheBooksPage: React.FC = () => {
           </div>
 
           {/* Consolidated P&L Table */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-            <div className="p-4 bg-slate-950/60 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-slate-300">
-                Official Factory Income & Expense Audit Statement
+          <div className="bg-white editorial-border overflow-hidden">
+            <div className="p-4 bg-[var(--color-ink)] text-white flex items-center justify-between">
+              <h3 className="text-xs font-black uppercase font-mono tracking-wider">
+                OFFICIAL FACTORY INCOME & EXPENSE AUDIT STATEMENT
               </h3>
-              <span className="text-xs font-mono text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
-                FY 2026–27 • Month of October
+              <span className="text-[10px] font-mono text-[var(--color-vermilion)] font-bold uppercase">
+                FY 2026–27 · OCTOBER AUDIT
               </span>
             </div>
 
-            <div className="divide-y divide-slate-800/80 text-xs">
+            <div className="divide-y divide-[var(--color-light-border)] text-xs font-mono">
               {/* Gross Revenue */}
-              <div className="p-4 flex items-center justify-between bg-slate-950/20">
+              <div className="p-4 flex items-center justify-between bg-[var(--color-paper)]">
                 <div>
-                  <span className="font-bold text-white text-sm">GROSS INCOMING REVENUE</span>
-                  <p className="text-slate-400 text-[11px]">Total payments billed and collected from all brand buyers</p>
+                  <span className="font-black text-[var(--color-ink)] text-sm uppercase">GROSS INCOMING REVENUE</span>
+                  <p className="text-[var(--color-industrial-grey)] text-[10px] uppercase">Total payments billed and collected from all brand buyers</p>
                 </div>
-                <span className="font-mono font-bold text-emerald-400 text-base">
+                <span className="font-mono font-black text-[var(--color-success-green)] text-base">
                   +{formatINR(plSummary.grossBuyerRevenue)}
                 </span>
               </div>
 
               {/* Deductions: Raw Materials */}
-              <div className="p-3.5 px-6 flex items-center justify-between">
-                <span className="text-slate-300">Less: Raw Material Bills (Cotton Yarn, Poly Filament, Dyes & Auxiliaries)</span>
-                <span className="font-mono text-rose-400 font-semibold">
+              <div className="p-3 px-6 flex items-center justify-between">
+                <span className="text-[var(--color-ink)]">Less: Raw Material Bills (Cotton Yarn, Poly Filament, Dyes & Auxiliaries)</span>
+                <span className="font-mono text-[var(--color-vermilion)] font-bold">
                   -{formatINR(plSummary.rawMaterialCosts)}
                 </span>
               </div>
 
               {/* Deductions: Worker Wages */}
-              <div className="p-3.5 px-6 flex items-center justify-between">
-                <span className="text-slate-300">Less: Factory Worker Wages & Payroll (30 operators, technicians & overtime)</span>
-                <span className="font-mono text-rose-400 font-semibold">
+              <div className="p-3 px-6 flex items-center justify-between">
+                <span className="text-[var(--color-ink)]">Less: Factory Worker Wages & Payroll (30 operators, technicians & overtime)</span>
+                <span className="font-mono text-[var(--color-vermilion)] font-bold">
                   -{formatINR(plSummary.workerWages)}
                 </span>
               </div>
 
-              {/* Deductions: Machine Electricity & Consumables */}
-              <div className="p-3.5 px-6 flex items-center justify-between">
-                <span className="text-slate-300">Less: Machine Electricity, Gas & Consumables (10 production machine units)</span>
-                <span className="font-mono text-rose-400 font-semibold">
+              {/* Deductions: Machine Electricity */}
+              <div className="p-3 px-6 flex items-center justify-between">
+                <span className="text-[var(--color-ink)]">Less: Machine Electricity, Gas & Consumables (10 production machine units)</span>
+                <span className="font-mono text-[var(--color-vermilion)] font-bold">
                   -{formatINR(plSummary.machineElectricityConsumables)}
                 </span>
               </div>
 
               {/* Deductions: Machine Maintenance */}
-              <div className="p-3.5 px-6 flex items-center justify-between">
-                <span className="text-slate-300">Less: Machine Spare Parts & Emergency Repairs (Loom #3 Rapier Inverter)</span>
-                <span className="font-mono text-rose-400 font-semibold">
+              <div className="p-3 px-6 flex items-center justify-between">
+                <span className="text-[var(--color-ink)]">Less: Machine Spare Parts & Emergency Repairs (Loom #3 Rapier Inverter)</span>
+                <span className="font-mono text-[var(--color-vermilion)] font-bold">
                   -{formatINR(plSummary.maintenanceRepairs)}
                 </span>
               </div>
 
               {/* Deductions: Factory Overheads */}
-              <div className="p-3.5 px-6 flex items-center justify-between">
-                <span className="text-slate-300">Less: Factory Overheads, Effluent Treatment (ETP), Logistics & Admin</span>
-                <span className="font-mono text-rose-400 font-semibold">
+              <div className="p-3 px-6 flex items-center justify-between">
+                <span className="text-[var(--color-ink)]">Less: Factory Overheads, Effluent Treatment (ETP), Logistics & Admin</span>
+                <span className="font-mono text-[var(--color-vermilion)] font-bold">
                   -{formatINR(plSummary.factoryOverheadsAdmin)}
                 </span>
               </div>
 
               {/* Net Operating Profit Bottomline */}
-              <div className="p-4 flex items-center justify-between bg-emerald-950/30 border-t-2 border-emerald-500/40">
+              <div className="p-4 flex items-center justify-between bg-[var(--color-paper)] border-t-2 border-[var(--color-ink)]">
                 <div>
-                  <span className="font-black text-white text-base font-display">
+                  <span className="font-black text-[var(--color-ink)] text-sm uppercase">
                     NET OPERATING PROFIT (OWNER'S EARNINGS)
                   </span>
-                  <p className="text-emerald-300/80 text-[11px]">
+                  <p className="text-[var(--color-industrial-grey)] text-[10px] uppercase">
                     Net cash margin realized for the month of October 2026
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="font-mono font-black text-emerald-400 text-xl block">
+                  <span className="font-mono font-black text-[var(--color-success-green)] text-xl block">
                     +{formatINR(plSummary.netProfit)}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">
-                    Margin: {plSummary.netMarginPercent}%
+                  <span className="text-[10px] text-[var(--color-industrial-grey)] font-mono font-bold uppercase">
+                    MARGIN: {plSummary.netMarginPercent}%
                   </span>
                 </div>
               </div>
@@ -973,26 +872,26 @@ export const ClosingTheBooksPage: React.FC = () => {
       {/* ======================================================================= */}
       {activeTab === 'orders' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-white editorial-border">
             <div>
-              <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-slate-200">
+              <h3 className="text-xs font-black uppercase font-mono tracking-wider text-[var(--color-ink)]">
                 Order-by-Order Actual Manufacturing Cost Breakdown
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase">
                 Compare billed revenue against actual yarn, worker wages, and machine costs incurred for every customer order.
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Sort by:</span>
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <span className="text-[var(--color-industrial-grey)] uppercase font-bold text-[10px]">Sort by:</span>
               <select
                 value={orderSortBy}
                 onChange={(e) => setOrderSortBy(e.target.value as any)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+                className="bg-[var(--color-paper)] editorial-border px-3 py-1.5 text-xs font-mono text-[var(--color-ink)] focus:outline-none"
               >
-                <option value="margin">Net Margin %</option>
-                <option value="revenue">Total Revenue (₹)</option>
-                <option value="cost">Actual Cost (₹)</option>
+                <option value="margin">NET MARGIN %</option>
+                <option value="revenue">TOTAL REVENUE (₹)</option>
+                <option value="cost">ACTUAL COST (₹)</option>
               </select>
             </div>
           </div>
@@ -1011,57 +910,57 @@ export const ClosingTheBooksPage: React.FC = () => {
                 return (
                   <div
                     key={order.orderId}
-                    className="p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all shadow-sm space-y-4"
+                    className="p-5 bg-white editorial-border space-y-4 transition-all"
                   >
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-sm text-teal-400">
+                          <span className="font-mono font-black text-sm text-[var(--color-vermilion)]">
                             {order.orderNumber}
                           </span>
-                          <span className="font-semibold text-white text-xs sm:text-sm">
+                          <span className="font-bold text-[var(--color-ink)] text-xs sm:text-sm font-mono uppercase">
                             {order.customerCompany}
                           </span>
                           <span
                             className={clsx(
-                              'text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase',
+                              'text-[9px] font-mono px-2 py-0.5 font-bold uppercase',
                               order.status === 'TOP MARGIN'
-                                ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                                ? 'bg-[var(--color-success-green)] text-white'
                                 : order.status === 'HIGH PROFIT'
-                                ? 'bg-teal-950 text-teal-300 border border-teal-800'
+                                ? 'bg-[var(--color-ink)] text-white'
                                 : order.status === 'MARGIN SQUEEZED'
-                                ? 'bg-rose-950 text-rose-300 border border-rose-800'
-                                : 'bg-slate-800 text-slate-300'
+                                ? 'bg-[var(--color-vermilion)] text-white'
+                                : 'bg-[var(--color-paper)] text-[var(--color-ink)] editorial-border'
                             )}
                           >
                             {order.status}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-1">
-                          {order.fabricType} • Volume: <span className="text-white font-mono">{order.metersProduced.toLocaleString()} meters</span>
+                        <p className="text-xs font-mono text-[var(--color-industrial-grey)] mt-1">
+                          {order.fabricType} • Volume: <span className="text-[var(--color-ink)] font-bold">{order.metersProduced.toLocaleString()} meters</span>
                         </p>
                       </div>
 
                       {/* Revenue, Cost & Net Margin Badges */}
                       <div className="flex flex-wrap items-center gap-4 text-right">
                         <div>
-                          <span className="text-[10px] text-slate-400 block font-mono">BUYER PAYMENT</span>
-                          <span className="text-sm font-bold font-mono text-white">
+                          <span className="text-[9px] text-[var(--color-industrial-grey)] block font-mono uppercase font-bold">BUYER PAYMENT</span>
+                          <span className="text-sm font-bold font-mono text-[var(--color-ink)]">
                             {formatINR(order.buyerRevenue)}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-slate-400 block font-mono">ACTUAL COST</span>
-                          <span className="text-sm font-bold font-mono text-rose-300">
+                          <span className="text-[9px] text-[var(--color-industrial-grey)] block font-mono uppercase font-bold">ACTUAL COST</span>
+                          <span className="text-sm font-bold font-mono text-[var(--color-vermilion)]">
                             {formatINR(order.totalActualCost)}
                           </span>
                         </div>
-                        <div className="bg-slate-950 p-2 px-3 rounded-lg border border-slate-800">
-                          <span className="text-[10px] text-slate-400 block font-mono">NET PROFIT</span>
-                          <span className="text-base font-black font-mono text-emerald-400">
+                        <div className="bg-[var(--color-paper)] p-2 px-3 editorial-border">
+                          <span className="text-[9px] text-[var(--color-industrial-grey)] block font-mono uppercase font-bold">NET PROFIT</span>
+                          <span className="text-base font-black font-mono text-[var(--color-success-green)]">
                             +{formatINR(order.netProfit)}
                           </span>
-                          <span className="text-[10px] font-bold text-emerald-400 block">
+                          <span className="text-[9px] font-bold text-[var(--color-success-green)] block font-mono">
                             {order.netMarginPercent}% margin
                           </span>
                         </div>
@@ -1070,77 +969,42 @@ export const ClosingTheBooksPage: React.FC = () => {
 
                     {/* Cost Stack Bar */}
                     <div>
-                      <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Cost of Goods Manufactured (COGM): {costPercent}% of Revenue</span>
-                        <span className="text-slate-400 font-mono">
+                      <div className="flex justify-between text-[10px] font-mono mb-1.5 uppercase">
+                        <span className="text-[var(--color-industrial-grey)]">Cost of Goods Manufactured (COGM): {costPercent}% of Revenue</span>
+                        <span className="text-[var(--color-industrial-grey)]">
                           Variance vs Plan:{' '}
-                          <span className={order.varianceInr > 0 ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
+                          <span className={order.varianceInr > 0 ? 'text-[var(--color-vermilion)] font-bold' : 'text-[var(--color-success-green)] font-bold'}>
                             {order.varianceInr > 0 ? `+${formatINR(order.varianceInr)} Overrun` : `${formatINR(order.varianceInr)} Savings`}
                           </span>
                         </span>
                       </div>
-                      <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden flex">
+                      <div className="h-2 w-full bg-[var(--color-paper)] overflow-hidden flex editorial-border">
                         <div
                           title="Raw Material"
-                          className="bg-teal-500 h-full"
+                          className="bg-[var(--color-ink)] h-full"
                           style={{ width: `${(order.costRawMaterial / order.buyerRevenue) * 100}%` }}
                         />
                         <div
                           title="Machine Processing"
-                          className="bg-amber-500 h-full"
+                          className="bg-[var(--color-vermilion)] h-full"
                           style={{ width: `${(order.costMachineProcessing / order.buyerRevenue) * 100}%` }}
                         />
                         <div
                           title="Worker Wages"
-                          className="bg-blue-500 h-full"
+                          className="bg-[#4B5563] h-full"
                           style={{ width: `${(order.costWorkerWages / order.buyerRevenue) * 100}%` }}
                         />
                         <div
                           title="Overheads"
-                          className="bg-purple-500 h-full"
+                          className="bg-[#9CA3AF] h-full"
                           style={{ width: `${(order.costOverheads / order.buyerRevenue) * 100}%` }}
                         />
                       </div>
                     </div>
 
-                    {/* 4 Cost Buckets Detail */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-teal-400 block font-mono uppercase">RAW MATERIALS</span>
-                        <span className="font-mono font-bold text-white text-xs">{formatINR(order.costRawMaterial)}</span>
-                        <span className="text-[10px] text-slate-500 block">Yarn & Chemicals</span>
-                      </div>
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-amber-400 block font-mono uppercase">MACHINE PROCESSING</span>
-                        <span className="font-mono font-bold text-white text-xs">{formatINR(order.costMachineProcessing)}</span>
-                        <span className="text-[10px] text-slate-500 block">Power, Gas & Maint</span>
-                      </div>
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-blue-400 block font-mono uppercase">WORKER WAGES</span>
-                        <span className="font-mono font-bold text-white text-xs">{formatINR(order.costWorkerWages)}</span>
-                        <span className="text-[10px] text-slate-500 block">Operators on Shift</span>
-                      </div>
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-                        <span className="text-[10px] text-purple-400 block font-mono uppercase">OVERHEAD & INSPECTION</span>
-                        <span className="font-mono font-bold text-white text-xs">{formatINR(order.costOverheads)}</span>
-                        <span className="text-[10px] text-slate-500 block">QA Lab & Factory Admin</span>
-                      </div>
-                    </div>
-
-                    {/* Order Notes / Variance Explanation */}
-                    <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs flex items-center justify-between text-slate-300">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span className="text-[11px] leading-relaxed">{order.notes}</span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate(`/orders?orderId=${order.orderId}`)}
-                        rightIcon={<ExternalLink className="w-3 h-3" />}
-                      >
-                        Specs
-                      </Button>
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase pt-2 border-t border-[var(--color-light-border)]">
+                      <span>Machines Used: {order.machinesUsed.join(', ')}</span>
+                      <span>Notes: {order.notes}</span>
                     </div>
                   </div>
                 );
@@ -1150,269 +1014,177 @@ export const ClosingTheBooksPage: React.FC = () => {
       )}
 
       {/* ======================================================================= */}
-      {/* TAB 3: MACHINE OUTPUT & OPERATING COST LEDGER                          */}
+      {/* TAB 3: MACHINE MONTHLY PRODUCTION & OPERATING COST LEDGER               */}
       {/* ======================================================================= */}
       {activeTab === 'machines' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-slate-200">
-                Machine-by-Machine Production Output & Operating Expense Ledger
-              </h3>
-              <p className="text-xs text-slate-400">
-                Shows exactly how much fabric every machine produced this month, its uptime hours, and power/maintenance costs incurred.
-              </p>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-slate-400 uppercase font-mono block">TOTAL MILL FABRIC OUTPUT</span>
-              <span className="text-lg font-bold font-mono text-teal-400">
-                {totalMillMetersProduced.toLocaleString()} meters
-              </span>
-            </div>
+          <div className="p-4 bg-white editorial-border">
+            <h3 className="text-xs font-black uppercase font-mono tracking-wider text-[var(--color-ink)]">
+              Machine Production Yield & Direct Operating Cost Ledger
+            </h3>
+            <p className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase mt-0.5">
+              Tracks kilowatt power bills, maintenance spares, uptime hours, and net cost-per-meter for every loom and frame.
+            </p>
           </div>
 
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
-                  <tr>
-                    <th className="px-4 py-3">Machine Code & Name</th>
-                    <th className="px-4 py-3">Process</th>
-                    <th className="px-4 py-3 text-right">Monthly Output</th>
-                    <th className="px-4 py-3 text-right">Uptime / Down</th>
-                    <th className="px-4 py-3 text-right">OEE %</th>
-                    <th className="px-4 py-3 text-right">Electricity Cost</th>
-                    <th className="px-4 py-3 text-right">Maint. & Repairs</th>
-                    <th className="px-4 py-3 text-right">Total Opex</th>
-                    <th className="px-4 py-3 text-right">Cost / Meter</th>
+          <div className="editorial-border bg-white overflow-hidden">
+            <table className="w-full text-left text-xs font-mono text-[var(--color-ink)]">
+              <thead className="bg-[var(--color-ink)] text-white uppercase text-[10px]">
+                <tr>
+                  <th className="px-4 py-3">Machine Code & Model</th>
+                  <th className="px-4 py-3">Process</th>
+                  <th className="px-4 py-3">Monthly Output</th>
+                  <th className="px-4 py-3">Uptime / Down</th>
+                  <th className="px-4 py-3">OEE Yield</th>
+                  <th className="px-4 py-3">Power Bill (₹)</th>
+                  <th className="px-4 py-3">Repairs (₹)</th>
+                  <th className="px-4 py-3 text-right">Cost Per Meter</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-light-border)]">
+                {machineMonthlyLedger.map((m) => (
+                  <tr key={m.code} className="hover:bg-[var(--color-paper)] transition-colors">
+                    <td className="px-4 py-3">
+                      <span className="font-black text-[var(--color-vermilion)] block">{m.code}</span>
+                      <span className="text-[10px] text-[var(--color-industrial-grey)]">{m.name}</span>
+                    </td>
+                    <td className="px-4 py-3 uppercase">{m.process}</td>
+                    <td className="px-4 py-3 font-bold">{m.monthlyOutputMeters.toLocaleString()} m</td>
+                    <td className="px-4 py-3">
+                      <span>{m.uptimeHours}h up</span>
+                      <span className="text-[var(--color-vermilion)] block text-[10px]">{m.downtimeHours}h down</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="font-bold">{m.oeePercent}%</span>
+                    </td>
+                    <td className="px-4 py-3">{formatINR(m.powerCost)}</td>
+                    <td className="px-4 py-3 text-[var(--color-vermilion)]">{formatINR(m.maintenanceCost)}</td>
+                    <td className="px-4 py-3 text-right font-black text-sm text-[var(--color-ink)]">
+                      ₹{m.costPerMeter.toFixed(2)}/m
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
-                  {machineMonthlyLedger.map((m) => (
-                    <tr key={m.code} className="hover:bg-slate-800/60 transition-colors">
-                      <td className="px-4 py-3">
-                        <div className="font-bold text-white text-xs">{m.code}</div>
-                        <div className="text-[11px] text-slate-400 font-sans truncate max-w-[160px]">{m.name}</div>
-                      </td>
-                      <td className="px-4 py-3 uppercase text-[10px] text-slate-300">
-                        {m.process}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-white">
-                        {m.monthlyOutputMeters.toLocaleString()} m
-                      </td>
-                      <td className="px-4 py-3 text-right text-[11px]">
-                        <span className="text-emerald-400">{m.uptimeHours}h</span>
-                        <span className="text-slate-500"> / </span>
-                        <span className={m.downtimeHours > 50 ? 'text-rose-400 font-bold' : 'text-slate-400'}>
-                          {m.downtimeHours}h
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-semibold">
-                        <span className={m.oeePercent > 85 ? 'text-teal-300' : 'text-amber-400'}>
-                          {m.oeePercent}%
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right text-slate-200">
-                        {formatINR(m.powerCost)}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <span className={m.maintenanceCost > 30000 ? 'text-rose-400 font-bold' : 'text-slate-300'}>
-                          {formatINR(m.maintenanceCost)}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-white">
-                        {formatINR(m.totalCost)}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold">
-                        <span className={m.costPerMeter > 5.0 ? 'text-rose-400' : 'text-emerald-400'}>
-                          ₹{m.costPerMeter.toFixed(2)}/m
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
       {/* ======================================================================= */}
-      {/* TAB 4: WORKER WAGES & PAYROLL DISBURSEMENT LEDGER                      */}
+      {/* TAB 4: WORKER WAGES & PAYROLL DISBURSEMENT LEDGER                       */}
       {/* ======================================================================= */}
       {activeTab === 'wages' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-slate-200">
-                Worker Wages & Payroll Disbursement Ledger
-              </h3>
-              <p className="text-xs text-slate-400">
-                Complete breakdown of base wages, overtime pay, and performance bonuses disbursed across all 30 factory workers.
-              </p>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-slate-400 uppercase font-mono block">TOTAL WAGES DISBURSED</span>
-              <span className="text-lg font-bold font-mono text-blue-400">
-                {formatINR(plSummary.workerWages)}
-              </span>
-            </div>
-          </div>
-
-          {/* Department Breakdown Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {/* Department wage summary grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-px bg-[var(--color-light-border)] editorial-border">
             {departmentWagesSummary.map((d) => (
-              <div key={d.dept} className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                <span className="text-[11px] text-slate-400 font-medium block truncate">{d.dept}</span>
-                <div className="text-base font-bold font-mono text-white mt-1">
-                  {formatINR(d.totalWages)}
-                </div>
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono mt-1 pt-1 border-t border-slate-800">
-                  <span>{d.workerCount} Workers</span>
-                  <span className="text-teal-400">{d.avgEfficiency}% eff</span>
-                </div>
+              <div key={d.dept} className="p-4 bg-white space-y-1 font-mono text-xs">
+                <span className="text-[9px] font-bold text-[var(--color-industrial-grey)] uppercase block">{d.dept}</span>
+                <span className="text-base font-black text-[var(--color-ink)] block">{formatINR(d.totalWages)}</span>
+                <span className="text-[10px] text-[var(--color-industrial-grey)] block">{d.workerCount} Workers · {d.avgEfficiency}% Eff</span>
               </div>
             ))}
           </div>
 
-          {/* Individual Worker Payroll Table */}
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-            <div className="p-3.5 bg-slate-950/60 border-b border-slate-800 flex items-center justify-between text-xs">
-              <span className="font-semibold text-slate-300 font-display">Individual Operator Wage Statement</span>
-              <span className="text-slate-400 font-mono text-[11px]">100% Disbursed via Bank Transfer</span>
+          <div className="editorial-border bg-white overflow-hidden">
+            <div className="p-4 bg-[var(--color-ink)] text-white flex items-center justify-between">
+              <h3 className="text-xs font-black uppercase font-mono tracking-wider">
+                OCTOBER FACTORY WORKER PAYROLL REGISTER
+              </h3>
+              <span className="text-[10px] font-mono text-[var(--color-vermilion)] font-bold uppercase">
+                30 WORKERS PAID
+              </span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
-                  <tr>
-                    <th className="px-4 py-3">Operator Name & ID</th>
-                    <th className="px-4 py-3">Department & Role</th>
-                    <th className="px-4 py-3">Assigned Unit</th>
-                    <th className="px-4 py-3 text-right">Shifts Worked</th>
-                    <th className="px-4 py-3 text-right">Base Wage</th>
-                    <th className="px-4 py-3 text-right">Overtime Pay</th>
-                    <th className="px-4 py-3 text-right">Performance Bonus</th>
-                    <th className="px-4 py-3 text-right">Total Net Disbursed</th>
-                    <th className="px-4 py-3 text-center">Status / UTR</th>
+            <table className="w-full text-left text-xs font-mono text-[var(--color-ink)]">
+              <thead className="bg-[var(--color-paper)] border-b border-[var(--color-light-border)] uppercase text-[10px] text-[var(--color-industrial-grey)]">
+                <tr>
+                  <th className="px-4 py-3">Worker Name & ID</th>
+                  <th className="px-4 py-3">Role / Dept</th>
+                  <th className="px-4 py-3">Assigned Unit</th>
+                  <th className="px-4 py-3">Shifts</th>
+                  <th className="px-4 py-3">Base Pay</th>
+                  <th className="px-4 py-3">Overtime</th>
+                  <th className="px-4 py-3">Bonus</th>
+                  <th className="px-4 py-3 text-right">Net Disbursed</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-light-border)]">
+                {workerPayrollLedger.map((w) => (
+                  <tr key={w.id} className="hover:bg-[var(--color-paper)] transition-colors">
+                    <td className="px-4 py-3">
+                      <span className="font-bold text-[var(--color-ink)] block">{w.name}</span>
+                      <span className="text-[10px] text-[var(--color-industrial-grey)]">{w.empId}</span>
+                    </td>
+                    <td className="px-4 py-3 uppercase">{w.role} ({w.department})</td>
+                    <td className="px-4 py-3 font-bold">{w.assignedMachine}</td>
+                    <td className="px-4 py-3">{w.shiftsWorked} shifts</td>
+                    <td className="px-4 py-3">{formatINR(w.basePay)}</td>
+                    <td className="px-4 py-3">{formatINR(w.overtimePay)}</td>
+                    <td className="px-4 py-3 text-[var(--color-success-green)]">{formatINR(w.performanceBonus)}</td>
+                    <td className="px-4 py-3 text-right font-black text-sm text-[var(--color-ink)]">
+                      {formatINR(w.netDisbursed)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
-                  {workerPayrollLedger.map((w) => (
-                    <tr key={w.id} className="hover:bg-slate-800/60 transition-colors">
-                      <td className="px-4 py-3">
-                        <div className="font-bold text-white text-xs">{w.name}</div>
-                        <div className="text-[10px] text-slate-400">{w.empId}</div>
-                      </td>
-                      <td className="px-4 py-3 font-sans text-[11px]">
-                        <span className="text-slate-200">{w.department}</span>
-                        <div className="text-[10px] text-slate-400">{w.role}</div>
-                      </td>
-                      <td className="px-4 py-3 text-teal-400 font-bold">
-                        {w.assignedMachine}
-                      </td>
-                      <td className="px-4 py-3 text-right text-slate-300">
-                        {w.shiftsWorked}
-                      </td>
-                      <td className="px-4 py-3 text-right text-slate-200">
-                        {formatINR(w.basePay)}
-                      </td>
-                      <td className="px-4 py-3 text-right text-amber-300">
-                        {formatINR(w.overtimePay)}
-                      </td>
-                      <td className="px-4 py-3 text-right text-emerald-300">
-                        {formatINR(w.performanceBonus)}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-white text-sm">
-                        {formatINR(w.netDisbursed)}
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <span className="inline-block px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px]">
-                          PAID
-                        </span>
-                        <div className="text-[9px] text-slate-500 font-mono mt-0.5">{w.bankUtr}</div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
       {/* ======================================================================= */}
-      {/* TAB 5: RAW MATERIAL SUPPLIER BILLS                                     */}
+      {/* TAB 5: RAW MATERIAL BILLS & SUPPLIER INVOICES                          */}
       {/* ======================================================================= */}
       {activeTab === 'materials' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h3 className="text-xs font-bold uppercase font-mono tracking-wider text-slate-200">
-                Raw Material Supplier Invoices & Procurement Bills
-              </h3>
-              <p className="text-xs text-slate-400">
-                Verified invoices for cotton yarn cones, polyester microfilament, reactive dyes, and stenter chemical auxiliaries.
-              </p>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-slate-400 uppercase font-mono block">TOTAL MATERIAL EXPENDITURE</span>
-              <span className="text-lg font-bold font-mono text-amber-400">
-                {formatINR(plSummary.rawMaterialCosts)}
-              </span>
-            </div>
+          <div className="p-4 bg-white editorial-border">
+            <h3 className="text-xs font-black uppercase font-mono tracking-wider text-[var(--color-ink)]">
+              Raw Material Purchase Invoices & Gate-In Settlements
+            </h3>
+            <p className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase mt-0.5">
+              Verified warehouse invoices for raw cotton yarn, filament bobbins, reactive dyes, and chemicals mapped to production orders.
+            </p>
           </div>
 
-          <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
-                  <tr>
-                    <th className="px-4 py-3">Invoice Number</th>
-                    <th className="px-4 py-3">Supplier Name</th>
-                    <th className="px-4 py-3">Material Category</th>
-                    <th className="px-4 py-3">Lot / PO Reference</th>
-                    <th className="px-4 py-3 text-right">Quantity</th>
-                    <th className="px-4 py-3 text-right">Bill Amount (₹)</th>
-                    <th className="px-4 py-3">Payment Date</th>
-                    <th className="px-4 py-3">Allocated Orders</th>
+          <div className="editorial-border bg-white overflow-hidden">
+            <table className="w-full text-left text-xs font-mono text-[var(--color-ink)]">
+              <thead className="bg-[var(--color-ink)] text-white uppercase text-[10px]">
+                <tr>
+                  <th className="px-4 py-3">Invoice No & Date</th>
+                  <th className="px-4 py-3">Supplier Name</th>
+                  <th className="px-4 py-3">Category</th>
+                  <th className="px-4 py-3">Lot Reference</th>
+                  <th className="px-4 py-3">Quantity</th>
+                  <th className="px-4 py-3">Allocated Orders</th>
+                  <th className="px-4 py-3 text-right">Settled Amount (₹)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-light-border)]">
+                {rawMaterialBills.map((bill) => (
+                  <tr key={bill.id} className="hover:bg-[var(--color-paper)] transition-colors">
+                    <td className="px-4 py-3">
+                      <span className="font-bold text-[var(--color-vermilion)] block">{bill.invoiceNo}</span>
+                      <span className="text-[10px] text-[var(--color-industrial-grey)]">{bill.paymentDate}</span>
+                    </td>
+                    <td className="px-4 py-3 font-bold">{bill.supplier}</td>
+                    <td className="px-4 py-3 uppercase">{bill.category}</td>
+                    <td className="px-4 py-3">{bill.lotRef}</td>
+                    <td className="px-4 py-3 font-bold">{bill.quantity}</td>
+                    <td className="px-4 py-3 text-[10px] text-[var(--color-industrial-grey)]">{bill.allocatedOrders}</td>
+                    <td className="px-4 py-3 text-right font-black text-sm text-[var(--color-ink)]">
+                      {formatINR(bill.amountInr)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
-                  {rawMaterialBills.map((bill) => (
-                    <tr key={bill.id} className="hover:bg-slate-800/60 transition-colors">
-                      <td className="px-4 py-3 font-bold text-teal-400">
-                        {bill.invoiceNo}
-                      </td>
-                      <td className="px-4 py-3 font-sans font-semibold text-white">
-                        {bill.supplier}
-                      </td>
-                      <td className="px-4 py-3 font-sans text-slate-300">
-                        {bill.category}
-                      </td>
-                      <td className="px-4 py-3 text-slate-400 text-[11px]">
-                        {bill.lotRef}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-slate-200">
-                        {bill.quantity}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-amber-300">
-                        {formatINR(bill.amountInr)}
-                      </td>
-                      <td className="px-4 py-3 text-slate-400">
-                        {bill.paymentDate}
-                      </td>
-                      <td className="px-4 py-3 text-slate-300 font-sans text-[11px]">
-                        {bill.allocatedOrders}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
+
     </div>
   );
 };
+
+export default ClosingTheBooksPage;
