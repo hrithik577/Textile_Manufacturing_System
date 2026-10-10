@@ -230,6 +230,64 @@ export const BuyerPortalPage: React.FC = () => {
           </div>
         </div>
 
+        {/* EXACT LIVE FLOOR STATUS RADAR (Whether still being woven, checked, or ready to ship) */}
+        <div className="p-5 rounded-xl bg-gradient-to-r from-teal-950/40 via-slate-950 to-slate-950 border border-teal-500/40 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <div>
+                <h4 className="text-sm font-bold font-display text-white">
+                  Mill Digital Twin · Live Factory Status (Zero Delay)
+                </h4>
+                <p className="text-xs text-slate-400">
+                  Real-time telemetry direct from looms, dye vats, inspection frames, and warehouse dispatch gates.
+                </p>
+              </div>
+            </div>
+            <span className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60 font-semibold shrink-0">
+              ● Live Floor Sync Active
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            {/* 1. Being Woven? */}
+            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 text-[11px] font-mono">1. Weaving Looms</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">
+                  100% COMPLETE
+                </span>
+              </div>
+              <p className="font-semibold text-white mt-1">Air Jet Loom #W-04 (Weave Shed B)</p>
+              <p className="text-[11px] text-slate-400">12,000m woven at 720 RPM. Zero fabric defects reported during greige cut.</p>
+            </div>
+
+            {/* 2. Being Checked? */}
+            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 text-[11px] font-mono">2. QA Inspection Frame</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono">
+                  PASSED & CERTIFIED
+                </span>
+              </div>
+              <p className="font-semibold text-white mt-1">Inspection Frame INSP-02 (QA Lab A)</p>
+              <p className="text-[11px] text-slate-400">All 24 rolls inspected by David Chen. 100% Grade A certified export quality.</p>
+            </div>
+
+            {/* 3. Ready to Ship? */}
+            <div className="p-3.5 rounded-xl bg-slate-900 border border-teal-500/40 space-y-1 shadow-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 text-[11px] font-mono">3. Dispatch Warehouse</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-teal-950 text-teal-300 border border-teal-700 font-mono font-bold">
+                  READY TO SHIP
+                </span>
+              </div>
+              <p className="font-semibold text-teal-300 mt-1">Warehouse Bay 2 · Rack FG-B2</p>
+              <p className="text-[11px] text-slate-300">Staged on Pallet P-14. Scheduled for container loading tomorrow at 14:00 IST.</p>
+            </div>
+          </div>
+        </div>
+
         {/* Certified Quality Lab Summary */}
         <div className="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">

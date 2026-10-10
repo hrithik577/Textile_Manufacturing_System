@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { TopNav } from './TopNav';
 import { ToastContainer } from '../common/ToastContainer';
 import { SearchModal } from '../common/SearchModal';
+import { BuyerCallAssistantModal } from '../orders/BuyerCallAssistantModal';
 import { useApp } from '../../context/AppContext';
 import { AlertTriangle, Info } from 'lucide-react';
 
@@ -53,6 +54,7 @@ export const AppLayout: React.FC = () => {
       {/* Global Modals & Overlays */}
       <ToastContainer />
       <SearchModal />
+      <BuyerCallAssistantModal />
     </div>
   );
 };

@@ -24,6 +24,10 @@ interface AppContextType {
   removeToast: (id: string) => void;
   searchModalOpen: boolean;
   setSearchModalOpen: (open: boolean) => void;
+  buyerCallModalOpen: boolean;
+  setBuyerCallModalOpen: (open: boolean) => void;
+  selectedCallOrderId: string | null;
+  openBuyerCallModal: (orderId?: string) => void;
   resetSimulatedData: () => void;
   lastOrderEvent: { order: CustomerOrder; timestamp: number } | null;
   notifyNewOrder: (order: CustomerOrder) => void;
@@ -215,12 +219,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [notifyNewOrder]);
 
-  // Keyboard shortcut listener for Cmd+K / Ctrl+K search modal
+  const [buyerCallModalOpen, setBuyerCallModalOpen] = useState(false);
+  const [selectedCallOrderId, setSelectedCallOrderId] = useState<string | null>(null);
+
+  const openBuyerCallModal = useCallback((orderId?: string) => {
+    if (orderId) setSelectedCallOrderId(orderId);
+    setBuyerCallModalOpen(true);
+  }, []);
+
+  // Keyboard shortcut listener for Cmd+K / Ctrl+K search modal and Alt+B for Buyer Call Assistant
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setSearchModalOpen((prev) => !prev);
+      }
+      if (e.altKey && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        setBuyerCallModalOpen((prev) => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -241,6 +257,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         removeToast,
         searchModalOpen,
         setSearchModalOpen,
+        buyerCallModalOpen,
+        setBuyerCallModalOpen,
+        selectedCallOrderId,
+        openBuyerCallModal,
         resetSimulatedData,
         lastOrderEvent,
         notifyNewOrder,

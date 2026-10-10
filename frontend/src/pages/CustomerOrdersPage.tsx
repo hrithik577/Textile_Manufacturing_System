@@ -18,6 +18,9 @@ import {
   User,
   CheckCircle2,
   ExternalLink,
+  PhoneCall,
+  MapPin,
+  MessageSquare,
 } from 'lucide-react';
 import { CustomerOrder, OrderStatus, PriorityLevel, ProductionStage } from '../types';
 import { ordersService } from '../services/orders';
@@ -31,7 +34,7 @@ import { clsx } from 'clsx';
 
 export const CustomerOrdersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { addToast, lastOrderEvent } = useApp();
+  const { addToast, lastOrderEvent, openBuyerCallModal } = useApp();
 
   const [orders, setOrders] = useState<CustomerOrder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -167,6 +170,17 @@ export const CustomerOrdersPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => openBuyerCallModal()}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-teal-950/80 to-slate-900 border border-teal-500/50 hover:border-teal-400 text-teal-300 font-semibold text-xs transition-all shadow-md shadow-teal-950/40 group hover:scale-[1.02]"
+            title="Open Instant Buyer Telephony Status Desk (Alt+B)"
+          >
+            <PhoneCall className="w-4 h-4 text-teal-400 group-hover:animate-bounce" />
+            <span>Buyer On Call Desk</span>
+            <kbd className="hidden sm:inline px-1.5 py-0.2 rounded bg-teal-950 border border-teal-800 text-[9px] font-mono text-teal-300">
+              Alt+B
+            </kbd>
+          </button>
           <Link
             to="/place-order"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/40 border border-teal-500/50"
@@ -183,6 +197,37 @@ export const CustomerOrdersPage: React.FC = () => {
             Refresh
           </Button>
         </div>
+      </div>
+
+      {/* BUYER TELEPHONY INQUIRY ASSISTANT HIGHLIGHT BANNER */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-teal-950/30 via-slate-900 to-slate-900 border border-teal-500/30 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/40 flex items-center justify-center shrink-0">
+            <PhoneCall className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold font-display text-white">
+                Buyer Asking: "Is My Fabric Ready & When Will It Ship?"
+              </h3>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-950 text-teal-300 border border-teal-800">
+                Live Digital Twin
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-0.5">
+              No need to walk down to the weaving shed or QA lab. View real-time loom RPM, inspected roll counts, warehouse staging, and read-aloud telephone scripts.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => openBuyerCallModal()}
+          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/50 shrink-0 border border-teal-400/30"
+        >
+          <PhoneCall className="w-3.5 h-3.5" />
+          <span>Launch Call Assistant</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
       </div>
 
       {/* Filter and Search Bar */}
@@ -322,12 +367,22 @@ export const CustomerOrdersPage: React.FC = () => {
                     </td>
 
                     <td className="px-4 py-3 text-right">
-                      <div className="font-mono font-bold text-white text-xs">
+                      <div className="font-mono font-bold text-white text-xs mb-1">
                         ₹{o.totalValueUsd.toLocaleString()}
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(o)}>
-                        Details
-                      </Button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => openBuyerCallModal(o.id)}
+                          className="px-2 py-1 rounded-md bg-teal-950/80 hover:bg-teal-900/80 text-teal-300 border border-teal-800 text-[11px] font-medium flex items-center gap-1 transition-colors"
+                          title="View live floor location & telephone script for buyer inquiry"
+                        >
+                          <PhoneCall className="w-3 h-3 text-teal-400" />
+                          <span>Call Desk</span>
+                        </button>
+                        <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(o)}>
+                          Details
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 );

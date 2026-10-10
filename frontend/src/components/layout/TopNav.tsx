@@ -17,6 +17,7 @@ import {
   RefreshCw,
   ExternalLink,
   LogOut,
+  PhoneCall,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { DataSourceBadge } from '../common/DataSourceBadge';
@@ -38,6 +39,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     alerts,
     dismissAlert,
     setSearchModalOpen,
+    openBuyerCallModal,
   } = useApp();
   const { logout, session } = useAuth();
 
@@ -111,6 +113,19 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
           <span className="text-slate-400">Search orders, looms, lots...</span>
           <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400">
             Ctrl+K
+          </kbd>
+        </button>
+
+        {/* Buyer Call Desk Quick Trigger */}
+        <button
+          onClick={() => openBuyerCallModal()}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-teal-950/80 to-slate-900 border border-teal-500/50 hover:border-teal-400 text-teal-300 text-xs font-semibold shadow-md shadow-teal-950/40 hover:scale-[1.02] transition-all group"
+          title="Instant Order Location Desk for Incoming Buyer Calls (Alt+B)"
+        >
+          <PhoneCall className="w-3.5 h-3.5 text-teal-400 group-hover:animate-bounce" />
+          <span className="hidden sm:inline">Buyer On Call?</span>
+          <kbd className="hidden lg:inline px-1.5 py-0.2 rounded bg-teal-950 border border-teal-800 text-[9px] font-mono text-teal-300">
+            Alt+B
           </kbd>
         </button>
 
