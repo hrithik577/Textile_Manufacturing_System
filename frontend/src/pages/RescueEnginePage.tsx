@@ -552,39 +552,39 @@ export const RescueEnginePage: React.FC = () => {
         maxWidth="lg"
       >
         {activePlan && (
-          <div className="space-y-4 text-xs text-slate-300">
-            <div className="p-4 rounded-xl bg-teal-950/30 border border-teal-500/40 space-y-2">
-              <h4 className="font-bold text-white text-sm font-display">{activePlan.title}</h4>
-              <div className="flex items-center gap-3 text-slate-300 font-mono text-xs">
-                <span>Schedule: {activePlan.estimatedDelayChangeDays} Days</span>
+          <div className="space-y-4 text-xs text-[var(--color-ink)]">
+            <div className="p-4 bg-[var(--color-ink)] text-white space-y-2">
+              <h4 className="font-bold text-white text-sm font-mono uppercase tracking-wider">{activePlan.title}</h4>
+              <div className="flex flex-wrap items-center gap-3 text-white/70 font-mono text-xs pt-2 border-t border-white/15">
+                <span>Schedule: <strong className="text-[var(--color-vermilion)]">{activePlan.estimatedDelayChangeDays} Days</strong></span>
                 <span>•</span>
-                <span>Budget: +₹{activePlan.estimatedCostUsd}</span>
+                <span>Budget: <strong>+₹{activePlan.estimatedCostUsd}</strong></span>
                 <span>•</span>
-                <span>Feasibility: {activePlan.feasibilityScorePercent}%</span>
+                <span>Feasibility: <strong className="text-[var(--color-success-green)]">{activePlan.feasibilityScorePercent}%</strong></span>
               </div>
             </div>
 
             <div>
-              <label className="text-slate-300 font-medium block mb-1">
+              <label className="text-[var(--color-ink)] font-mono text-[10px] uppercase font-bold tracking-widest block mb-1.5">
                 Management Approval Rationale / Floor Instruction *
               </label>
               <textarea
                 rows={3}
                 value={approvalNotes}
                 onChange={(e) => setApprovalNotes(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500"
+                className="w-full bg-white editorial-border px-3 py-2 text-[var(--color-ink)] font-mono text-xs focus:outline-none focus:border-[var(--color-vermilion)] rounded-none resize-none"
               />
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-              <span className="text-[11px] text-slate-400">
-                Logged in as: <strong className="text-white">{currentUser.name}</strong>
+            <div className="flex items-center justify-between pt-4 border-t border-[var(--color-light-border)]">
+              <span className="text-[10px] font-mono text-[var(--color-industrial-grey)] uppercase">
+                Logged in as: <strong className="text-[var(--color-ink)]">{currentUser.name}</strong>
               </span>
               <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => setApprovalModalOpen(false)}>
+                <Button variant="outline" size="sm" onClick={() => setApprovalModalOpen(false)}>
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" onClick={handleApprovePlan} leftIcon={<Check className="w-4 h-4" />}>
+                <Button variant="primary" size="sm" onClick={handleApprovePlan} leftIcon={<Check className="w-3.5 h-3.5" />}>
                   Authorize Recovery Execution
                 </Button>
               </div>
@@ -601,20 +601,20 @@ export const RescueEnginePage: React.FC = () => {
         subtitle="Provide reason for rejection to prompt the Rescue Engine for revision."
         maxWidth="md"
       >
-        <div className="space-y-4 text-xs">
+        <div className="space-y-4 text-xs text-[var(--color-ink)]">
           <div>
-            <label className="text-slate-300 font-medium block mb-1">Rejection Reason *</label>
+            <label className="text-[var(--color-ink)] font-mono text-[10px] uppercase font-bold tracking-widest block mb-1.5">Rejection Reason *</label>
             <textarea
               rows={3}
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder="e.g. Excessive overtime cost; prefer splitting batch or customer buffer."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-rose-500"
+              className="w-full bg-white editorial-border px-3 py-2 text-[var(--color-ink)] font-mono text-xs focus:outline-none focus:border-[var(--color-vermilion)] rounded-none resize-none"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
-            <Button variant="secondary" size="sm" onClick={() => setRejectModalOpen(false)}>
+          <div className="flex justify-end gap-2 pt-3 border-t border-[var(--color-light-border)]">
+            <Button variant="outline" size="sm" onClick={() => setRejectModalOpen(false)}>
               Cancel
             </Button>
             <Button variant="danger" size="sm" onClick={handleRejectPlan}>

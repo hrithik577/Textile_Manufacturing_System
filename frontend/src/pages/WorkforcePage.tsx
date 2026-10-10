@@ -33,12 +33,17 @@ export const WorkforcePage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 editorial-border-b">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">
-            Workforce, Shifts & Machine Rosters
-          </h1>
-          <p className="mt-1 text-xs text-slate-400">
+          <div className="flex items-center gap-3 mb-1">
+            <h1 className="text-2xl sm:text-3xl font-black font-mono text-[var(--color-ink)] uppercase tracking-tight">
+              Workforce, Shifts & Machine Rosters
+            </h1>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-[var(--color-vermilion)] text-white uppercase">
+              Floor Shift Roster
+            </span>
+          </div>
+          <p className="text-xs font-mono text-[var(--color-industrial-grey)] uppercase">
             Shift scheduling, machine operator skill matrices, attendance tracking, and individual operator efficiency ratings.
           </p>
         </div>
@@ -55,63 +60,63 @@ export const WorkforcePage: React.FC = () => {
 
       {/* Shift Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-slate-900 border border-teal-500/40 space-y-2">
+        <div className="p-4 editorial-border bg-white space-y-2 border-l-4 border-l-[var(--color-vermilion)]">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-white text-xs font-display flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-bold text-[var(--color-ink)] text-xs font-mono uppercase flex items-center gap-1.5">
+              <span className="w-2 h-2 bg-[var(--color-vermilion)] animate-pulse" />
               Morning Shift (06:00 - 14:00)
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+            <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[var(--color-vermilion)] text-white font-bold uppercase">
               ACTIVE NOW
             </span>
           </div>
-          <div className="flex justify-between text-xs pt-2 border-t border-slate-800 font-mono">
-            <span className="text-slate-400">Present: 28 / 30 Operators</span>
-            <span className="text-teal-400 font-bold">95.2% Floor Efficiency</span>
+          <div className="flex justify-between text-xs pt-2 border-t border-[var(--color-light-border)] font-mono">
+            <span className="text-[var(--color-industrial-grey)]">Present: 28 / 30 Operators</span>
+            <span className="text-[var(--color-ink)] font-bold">95.2% Floor Efficiency</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+        <div className="p-4 editorial-border bg-white space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-slate-300 text-xs font-display">
+            <span className="font-bold text-[var(--color-ink)] text-xs font-mono uppercase">
               Evening Shift (14:00 - 22:00)
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+            <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[var(--color-paper)] text-[var(--color-industrial-grey)] font-bold uppercase border border-[var(--color-light-border)]">
               UPCOMING
             </span>
           </div>
-          <div className="flex justify-between text-xs pt-2 border-t border-slate-800 font-mono">
-            <span className="text-slate-400">Scheduled: 30 Operators</span>
-            <span className="text-slate-300">Briefing in 3.5 hrs</span>
+          <div className="flex justify-between text-xs pt-2 border-t border-[var(--color-light-border)] font-mono">
+            <span className="text-[var(--color-industrial-grey)]">Scheduled: 30 Operators</span>
+            <span className="text-[var(--color-ink)] font-bold">Briefing in 3.5 hrs</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+        <div className="p-4 editorial-border bg-white space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-slate-300 text-xs font-display">
+            <span className="font-bold text-[var(--color-ink)] text-xs font-mono uppercase">
               Night Shift (22:00 - 06:00)
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+            <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[var(--color-paper)] text-[var(--color-industrial-grey)] font-bold uppercase border border-[var(--color-light-border)]">
               SCHEDULED
             </span>
           </div>
-          <div className="flex justify-between text-xs pt-2 border-t border-slate-800 font-mono">
-            <span className="text-slate-400">Scheduled: 24 Operators</span>
-            <span className="text-slate-300">Continuous Weaving</span>
+          <div className="flex justify-between text-xs pt-2 border-t border-[var(--color-light-border)] font-mono">
+            <span className="text-[var(--color-industrial-grey)]">Scheduled: 24 Operators</span>
+            <span className="text-[var(--color-ink)] font-bold">Continuous Weaving</span>
           </div>
         </div>
       </div>
 
       {/* Filter and Search */}
-      <div className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+      <div className="flex flex-col md:flex-row items-center gap-3 p-3 bg-white editorial-border">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--color-industrial-grey)] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search employee name, ID, or assigned machine..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+            className="w-full bg-[var(--color-paper)] editorial-border pl-9 pr-3 py-2 text-xs font-mono text-[var(--color-ink)] placeholder:text-[var(--color-industrial-grey)] focus:outline-none focus:border-[var(--color-vermilion)] rounded-none"
           />
         </div>
 
@@ -119,58 +124,62 @@ export const WorkforcePage: React.FC = () => {
           <select
             value={selectedShift}
             onChange={(e) => setSelectedShift(e.target.value as any)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-teal-500"
+            className="bg-[var(--color-paper)] editorial-border px-3 py-2 text-xs font-mono text-[var(--color-ink)] focus:outline-none focus:border-[var(--color-vermilion)] rounded-none"
           >
-            <option value="all">All Shifts</option>
-            <option value="Morning">Morning Shift</option>
-            <option value="Evening">Evening Shift</option>
-            <option value="Night">Night Shift</option>
+            <option value="all">ALL SHIFTS</option>
+            <option value="Morning">MORNING SHIFT</option>
+            <option value="Evening">EVENING SHIFT</option>
+            <option value="Night">NIGHT SHIFT</option>
           </select>
         </div>
       </div>
 
       {/* Workforce Roster Table */}
-      <div className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm">
+      <div className="editorial-border bg-white overflow-hidden shadow-none">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+          <table className="w-full text-left text-xs font-mono text-[var(--color-ink)]">
+            <thead className="bg-[var(--color-ink)] text-white uppercase text-[10px] tracking-wider">
               <tr>
                 <th className="px-4 py-3">Employee Name & ID</th>
                 <th className="px-4 py-3">Department</th>
                 <th className="px-4 py-3">Skill Level</th>
-                <th className="px-4 py-3">Assigned Machine Node</th>
-                <th className="px-4 py-3">Current Shift</th>
+                <th className="px-4 py-3">Assigned Machine</th>
+                <th className="px-4 py-3">Active Shift</th>
                 <th className="px-4 py-3">Attendance</th>
-                <th className="px-4 py-3 text-right">Efficiency Score</th>
+                <th className="px-4 py-3 text-right">Efficiency Rate</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[var(--color-light-border)]">
               {filteredWorkers.map((worker) => (
-                <tr key={worker.id} className="hover:bg-slate-800/60 transition-colors">
+                <tr key={worker.id} className="hover:bg-[var(--color-paper)] transition-colors">
                   <td className="px-4 py-3">
-                    <div className="font-bold text-white text-xs">{worker.name}</div>
-                    <div className="text-[10px] font-mono text-slate-400">{worker.employeeId}</div>
+                    <span className="font-bold text-[var(--color-ink)] block">{worker.name}</span>
+                    <span className="text-[10px] text-[var(--color-industrial-grey)]">{worker.employeeId}</span>
                   </td>
-                  <td className="px-4 py-3 uppercase font-mono text-[10px] text-slate-300">
-                    {worker.department}
-                  </td>
+                  <td className="px-4 py-3 uppercase">{worker.department}</td>
                   <td className="px-4 py-3">
-                    <span className="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-teal-300 font-medium">
+                    <span className="px-1.5 py-0.5 text-[9px] bg-[var(--color-paper)] editorial-border font-bold">
                       {worker.skillLevel}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-200 font-medium">
-                    {worker.assignedMachine}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs">{worker.shift}</td>
+                  <td className="px-4 py-3 font-bold">{worker.assignedMachine}</td>
+                  <td className="px-4 py-3">{worker.shift}</td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      Present on Floor
+                    <span
+                      className={clsx(
+                        'px-1.5 py-0.5 text-[9px] font-bold uppercase',
+                        worker.status === 'On Duty'
+                          ? 'bg-[var(--color-success-green)] text-white'
+                          : worker.status === 'On Break'
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-gray-100 text-gray-800'
+                      )}
+                    >
+                      {worker.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono font-bold text-emerald-400 text-xs">
-                    {worker.efficiencyScore}%
+                  <td className="px-4 py-3 text-right font-bold text-sm text-[var(--color-vermilion)]">
+                    {worker.efficiencyRate}%
                   </td>
                 </tr>
               ))}
@@ -181,3 +190,5 @@ export const WorkforcePage: React.FC = () => {
     </div>
   );
 };
+
+export default WorkforcePage;

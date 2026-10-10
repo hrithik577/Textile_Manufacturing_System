@@ -69,6 +69,8 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
     settings: { title: "System Configuration", subtitle: "Factory tolerances, API endpoints & simulation parameters" },
     buyer: { title: "Buyer Order Portal", subtitle: "Direct customer tracking, certified test reports & dispatch tracking" },
     'place-order': { title: "B2B Order Placement Studio", subtitle: "Configure fabric batches, calculate transparent pricing in ₹ (INR) & dispatch to mill" },
+    yarniq: { title: "YarnIQ Procurement Copilot", subtitle: "Autonomous yarn readiness, stock lot ledger & predictive PO replenishment" },
+    'closing-the-books': { title: "Closing The Books", subtitle: "Authoritative month-end true unit cost, machine yield & financial P&L" },
   };
 
   const currentKey = pathnames[0] || 'dashboard';
@@ -78,41 +80,41 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 lg:px-8 bg-slate-900/90 border-b border-slate-800 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 lg:px-8 bg-[var(--color-ink)] text-white editorial-border-b">
       {/* Left: Mobile Menu + Breadcrumbs & Title */}
       <div className="flex items-center gap-4 min-w-0">
         <button
           onClick={onMobileMenuClick}
-          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 lg:hidden"
+          className="p-2 text-white/60 hover:text-white rounded-none lg:hidden"
           aria-label="Open navigation menu"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span className="text-slate-400 hover:text-slate-300">Everest OS</span>
+          <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-white/50">
+            <span className="hover:text-white/80">EVEREST OS</span>
             <span>/</span>
-            <span className="text-teal-400 font-medium capitalize font-display">
+            <span className="text-[var(--color-vermilion)] font-bold">
               {currentKey}
             </span>
           </div>
-          <h2 className="text-base font-bold text-white font-display truncate">
+          <h2 className="text-sm font-black text-white font-mono uppercase tracking-wider truncate mt-0.5">
             {pageInfo.title}
           </h2>
         </div>
       </div>
 
       {/* Right: Search, Demo Mode Toggle, Notifications, Role Switcher */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         {/* Global Search Bar Trigger */}
         <button
           onClick={() => setSearchModalOpen(true)}
-          className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs transition-colors"
+          className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/20 text-white/70 hover:text-white text-xs font-mono uppercase tracking-wider transition-colors"
         >
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-400">Search orders, looms, lots...</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400">
+          <Search className="w-3.5 h-3.5 text-[var(--color-vermilion)]" />
+          <span>Search Looms & Lots...</span>
+          <kbd className="px-1.5 py-0.2 bg-white/10 border border-white/20 text-[9px] font-mono text-white/60">
             Ctrl+K
           </kbd>
         </button>
@@ -120,12 +122,12 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
         {/* Buyer Call Desk Quick Trigger */}
         <button
           onClick={() => openBuyerCallModal()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-teal-950/80 to-slate-900 border border-teal-500/50 hover:border-teal-400 text-teal-300 text-xs font-semibold shadow-md shadow-teal-950/40 hover:scale-[1.02] transition-all group"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-vermilion)] hover:bg-white hover:text-[var(--color-ink)] text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors border border-[var(--color-vermilion)]"
           title="Instant Order Location Desk for Incoming Buyer Calls (Alt+B)"
         >
-          <PhoneCall className="w-3.5 h-3.5 text-teal-400 group-hover:animate-bounce" />
-          <span className="hidden sm:inline">Buyer On Call?</span>
-          <kbd className="hidden lg:inline px-1.5 py-0.2 rounded bg-teal-950 border border-teal-800 text-[9px] font-mono text-teal-300">
+          <PhoneCall className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">Buyer Call Desk</span>
+          <kbd className="hidden lg:inline px-1 py-0.2 bg-black/30 text-[9px] font-mono">
             Alt+B
           </kbd>
         </button>
@@ -133,10 +135,10 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
         {/* Place Order Studio Quick Action */}
         <Link
           to="/place-order"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs transition-all shadow-md shadow-teal-950/40 border border-teal-500/50 hover:scale-105 duration-150"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold text-xs font-mono uppercase tracking-wider transition-colors"
           title="Open Buyer B2B Order Placement Studio"
         >
-          <ShoppingBag className="w-3.5 h-3.5" />
+          <ShoppingBag className="w-3.5 h-3.5 text-[var(--color-vermilion)]" />
           <span className="hidden sm:inline">Place Order</span>
         </Link>
 
@@ -146,7 +148,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
           <button
             onClick={toggleDemoMode}
             className={clsx(
-              'hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors',
+              'hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider border transition-colors',
               isDemoMode
                 ? 'bg-amber-950/40 text-amber-300 border-amber-800 hover:bg-amber-950/70'
                 : 'bg-emerald-950/40 text-emerald-300 border-emerald-800 hover:bg-emerald-950/70'
@@ -154,7 +156,7 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
             title="Toggle between Virtual Factory Simulation mode and Live Backend API"
           >
             <RefreshCw className="w-3 h-3 text-current" />
-            <span className="text-[11px]">{isDemoMode ? 'Sim Mode' : 'Live API'}</span>
+            <span>{isDemoMode ? 'Sim Mode' : 'Live API'}</span>
           </button>
         </div>
 
@@ -162,14 +164,14 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
         <div className="relative">
           <button
             onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="relative p-2 text-white/70 hover:text-white transition-colors"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
             {alerts.length > 0 && (
               <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full bg-[var(--color-vermilion)] opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 bg-[var(--color-vermilion)]"></span>
               </span>
             )}
           </button>
@@ -181,49 +183,49 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                 className="fixed inset-0 z-30"
                 onClick={() => setNotificationsOpen(false)}
               />
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl p-4 z-40 animate-in fade-in zoom-in-95 duration-150">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-none bg-[var(--color-ink)] border border-white/20 shadow-2xl p-4 z-40 text-white font-mono text-xs">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <div className="flex items-center gap-2">
-                    <AlertOctagon className="w-4 h-4 text-rose-400" />
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider font-display">
-                      Operational Alerts ({alerts.length})
+                    <AlertOctagon className="w-4 h-4 text-[var(--color-vermilion)]" />
+                    <h4 className="text-xs font-bold uppercase tracking-wider">
+                      OPERATIONAL ALERTS ({alerts.length})
                     </h4>
                   </div>
-                  <span className="text-[10px] text-slate-400">Everest Telemetry Stream</span>
+                  <span className="text-[9px] text-white/50 uppercase">TELEMETRY STREAM</span>
                 </div>
 
                 <div className="mt-3 max-h-72 overflow-y-auto space-y-2 pr-1">
                   {alerts.length === 0 ? (
-                    <p className="text-xs text-slate-400 text-center py-4">No active operational alerts.</p>
+                    <p className="text-xs text-white/50 text-center py-4">No active operational alerts.</p>
                   ) : (
                     alerts.map((alert) => (
                       <div
                         key={alert.id}
-                        className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 hover:border-slate-700 text-xs space-y-1.5 transition-colors"
+                        className="p-3 bg-white/5 border border-white/10 text-xs space-y-1.5 transition-colors"
                       >
                         <div className="flex items-start justify-between">
-                          <span className="font-semibold text-white font-display text-[11px] leading-tight">
+                          <span className="font-bold text-white text-[11px] leading-tight uppercase">
                             {alert.title}
                           </span>
-                          <span className="text-[10px] text-slate-400 shrink-0 ml-2">
+                          <span className="text-[9px] text-white/50 shrink-0 ml-2">
                             {alert.timestamp}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">{alert.message}</p>
+                        <p className="text-[11px] text-white/70 leading-relaxed font-sans">{alert.message}</p>
                         <div className="pt-1 flex items-center justify-between">
                           <button
                             onClick={() => {
                               setNotificationsOpen(false);
                               navigate(alert.actionUrl);
                             }}
-                            className="text-[11px] font-medium text-teal-400 hover:text-teal-300 flex items-center gap-1"
+                            className="text-[10px] font-bold text-[var(--color-vermilion)] hover:underline flex items-center gap-1 uppercase"
                           >
                             <span>{alert.actionLabel}</span>
                             <ExternalLink className="w-3 h-3" />
                           </button>
                           <button
                             onClick={() => dismissAlert(alert.id)}
-                            className="text-[10px] text-slate-400 hover:text-slate-300"
+                            className="text-[10px] text-white/40 hover:text-white uppercase"
                           >
                             Dismiss
                           </button>
@@ -241,42 +243,42 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
         <div className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-800 transition-colors border border-slate-800 bg-slate-950/60"
+            className="flex items-center gap-2 p-1.5 border border-white/20 bg-white/5 hover:bg-white/10 transition-colors"
           >
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-teal-600/30 border border-teal-500/50 text-teal-300 text-xs font-bold font-mono">
+            <div className="flex items-center justify-center w-7 h-7 bg-[var(--color-vermilion)] text-white text-xs font-black font-mono">
               {currentUser.avatarInitials}
             </div>
             <div className="hidden sm:block text-left min-w-0 pr-1">
-              <p className="text-xs font-semibold text-white truncate font-display leading-tight">
+              <p className="text-xs font-bold text-white truncate font-mono uppercase leading-tight">
                 {currentUser.name}
               </p>
-              <p className="text-[10px] text-slate-400 truncate leading-tight capitalize">
+              <p className="text-[9px] text-white/50 truncate leading-tight capitalize font-mono">
                 {currentUser.role.replace(/_/g, ' ')}
               </p>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
+            <ChevronDown className="w-3.5 h-3.5 text-white/60 hidden sm:block" />
           </button>
 
           {profileOpen && (
             <>
               <div className="fixed inset-0 z-30" onClick={() => setProfileOpen(false)} />
-              <div className="absolute right-0 mt-2 w-64 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl p-3 z-40 animate-in fade-in zoom-in-95 duration-150">
-                <div className="pb-2.5 mb-2 border-b border-slate-800">
-                  <p className="text-xs font-bold text-white font-display">{currentUser.name}</p>
-                  <p className="text-[11px] text-slate-400 truncate">{currentUser.email}</p>
-                  <p className="text-[10px] text-teal-400 font-mono mt-0.5">{currentUser.department}</p>
+              <div className="absolute right-0 mt-2 w-64 rounded-none bg-[var(--color-ink)] border border-white/20 shadow-2xl p-3 z-40 text-white font-mono text-xs">
+                <div className="pb-2.5 mb-2 border-b border-white/10">
+                  <p className="text-xs font-bold text-white uppercase">{currentUser.name}</p>
+                  <p className="text-[10px] text-white/50 truncate font-sans">{currentUser.email}</p>
+                  <p className="text-[9px] text-[var(--color-vermilion)] uppercase mt-0.5 font-bold">{currentUser.department}</p>
                 </div>
 
                 {/* Auth session info */}
                 {session && (
-                  <div className="mb-2 px-1">
-                    <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded px-2 py-0.5">
-                      {session.credential.accessLevel.toUpperCase()} ACCESS
+                  <div className="mb-2">
+                    <span className="text-[9px] font-mono text-[var(--color-vermilion)] bg-white/5 border border-white/10 px-2 py-0.5 block uppercase font-bold">
+                      {session.credential.accessLevel.toUpperCase()} ACCESS TIER
                     </span>
                   </div>
                 )}
 
-                <p className="text-[10px] font-mono uppercase text-slate-400 px-1 mb-1.5">
+                <p className="text-[9px] uppercase text-white/50 mb-1.5 font-bold tracking-wider">
                   Switch Active Role:
                 </p>
                 <div className="space-y-1">
@@ -289,37 +291,37 @@ export const TopNav: React.FC<TopNavProps> = ({ onMobileMenuClick }) => {
                         setProfileOpen(false);
                       }}
                       className={clsx(
-                        'w-full flex items-center justify-between p-2 rounded-lg text-xs text-left transition-colors',
+                        'w-full flex items-center justify-between p-2 text-xs text-left transition-colors',
                         currentUser.id === user.id
-                          ? 'bg-teal-600/20 text-teal-300 font-semibold border border-teal-500/30'
-                          : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                          ? 'bg-[var(--color-vermilion)] text-white font-bold'
+                          : 'text-white/70 hover:bg-white/10 hover:text-white'
                       )}
                     >
                       <div className="truncate">
                         <span className="block capitalize truncate">{user.role.replace(/_/g, ' ')}</span>
-                        <span className="text-[10px] text-slate-400 block truncate">{user.name}</span>
+                        <span className="text-[9px] opacity-75 block truncate font-sans">{user.name}</span>
                       </div>
-                      {currentUser.id === user.id && <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />}
+                      {currentUser.id === user.id && <CheckCircle2 className="w-3.5 h-3.5 text-white shrink-0" />}
                     </button>
                   ))}
                 </div>
 
                 {/* Login & Logout actions */}
-                <div className="mt-2 pt-2 border-t border-slate-800 space-y-1">
+                <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
                   <button
                     onClick={() => {
                       setProfileOpen(false);
                       navigate('/login');
                     }}
-                    className="w-full flex items-center gap-2 p-2 rounded-lg text-xs text-left text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                    className="w-full flex items-center gap-2 p-2 text-xs text-left text-white/70 hover:bg-white/10 hover:text-white transition-colors uppercase font-bold"
                   >
-                    <LogIn className="w-3.5 h-3.5 text-[#F04424]" />
+                    <LogIn className="w-3.5 h-3.5 text-[var(--color-vermilion)]" />
                     <span>Open Login / Role Portal</span>
                   </button>
                   <button
                     id="btn-logout"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2 p-2 rounded-lg text-xs text-left text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                    className="w-full flex items-center gap-2 p-2 text-xs text-left text-[var(--color-vermilion)] hover:bg-[var(--color-vermilion)]/20 transition-colors uppercase font-bold"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     Sign Out

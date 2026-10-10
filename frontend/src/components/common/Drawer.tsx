@@ -46,34 +46,34 @@ export const Drawer: React.FC<DrawerProps> = ({
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
         <div
           className={clsx(
-            'w-screen bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col h-full text-slate-100 z-10 animate-in slide-in-from-right duration-200',
+            'w-screen bg-[var(--color-paper)] border-l-2 border-[var(--color-ink)] shadow-2xl flex flex-col h-full text-[var(--color-ink)] z-10 animate-in slide-in-from-right duration-200 rounded-none',
             widthStyles[width]
           )}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-800 bg-slate-900/90">
-            <div>
-              <h2 className="text-lg font-semibold font-display text-white">{title}</h2>
-              {subtitle && <p className="mt-0.5 text-xs text-slate-400">{subtitle}</p>}
+          <div className="flex items-center justify-between px-6 py-4 bg-[var(--color-ink)] text-white">
+            <div className="min-w-0 pr-4">
+              <h2 className="text-xs font-black font-mono tracking-widest uppercase text-white truncate">{title}</h2>
+              {subtitle && <p className="mt-0.5 text-[10px] font-mono tracking-wider text-white/50 uppercase truncate">{subtitle}</p>}
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus:outline-none"
+              className="p-1 text-white/60 hover:text-white transition-colors focus:outline-none shrink-0"
               aria-label="Close drawer"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">{children}</div>
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white text-[var(--color-ink)]">{children}</div>
         </div>
       </div>
     </div>
