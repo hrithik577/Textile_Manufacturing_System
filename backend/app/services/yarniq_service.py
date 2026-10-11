@@ -1432,7 +1432,7 @@ def ask_procurement_copilot(
     overall_status = ReadinessStatus.READY.value
     used_gemini = False
 
-    if api_key and not api_key.startswith("AIzaSyAQ.") and len(api_key) > 20:
+    if api_key and api_key.startswith("AIzaSy") and len(api_key) >= 35:
         try:
             from google import genai
             from google.genai import types as genai_types
