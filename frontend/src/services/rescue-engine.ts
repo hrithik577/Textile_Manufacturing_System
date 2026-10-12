@@ -4,12 +4,21 @@ import { mockRescueIssues } from './mock-data';
 
 export const rescueEngineService = {
   async getIssues(): Promise<{ data: RescueIssue[]; isSimulated: boolean }> {
-    return request<RescueIssue[]>('/rescue-engine/issues', { method: 'GET' }, mockRescueIssues);
+    // Backend returns data in RescueIssue shape from /rescue-engine/issues
+    return request<RescueIssue[]>(
+      '/rescue-engine/issues',
+      { method: 'GET', allowReadFallback: true },
+      mockRescueIssues
+    );
   },
 
   async getIssueById(id: string): Promise<{ data: RescueIssue | null; isSimulated: boolean }> {
     const fallback = mockRescueIssues.find((i) => i.id === id || i.issueCode === id) || null;
-    return request<RescueIssue | null>(`/rescue-engine/issues/${id}`, { method: 'GET' }, fallback);
+    return request<RescueIssue | null>(
+      `/rescue-engine/issues/${id}`,
+      { method: 'GET', allowReadFallback: true },
+      fallback
+    );
   },
 
   async approveRecoveryPlan(

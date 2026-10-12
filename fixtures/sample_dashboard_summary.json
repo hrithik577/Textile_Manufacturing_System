@@ -1,0 +1,61 @@
+{
+  "mill_name": "Everest Textile Mills - Unit 1",
+  "data_source": "simulator",
+  "timestamp": "2026-10-10T08:45:00Z",
+  "active_anomalies": [
+    {
+      "anomaly_id": "ANOM-0001",
+      "anomaly_type": "active_order_on_broken_machine",
+      "affected_entity_type": "machine",
+      "affected_entity_id": "M-LOOM-01",
+      "severity": "critical",
+      "observed_value": 0.0,
+      "expected_value": 50.0,
+      "threshold": 37.5,
+      "explanation": "Machine M-LOOM-01 (Toyota JAT810 Air-Jet Loom 1) is in breakdown state (main_drive_motor_bearing_failure) while assigned to active order PO-NORM-101. Production is completely stalled.",
+      "supporting_event_ids": ["SIM-EVT-00003"]
+    }
+  ],
+  "ranked_bottlenecks": [
+    {
+      "rank": 1,
+      "stage_name": "Weaving",
+      "process_type": "weaving",
+      "severity": "critical",
+      "queue_units": 826.25,
+      "capacity_utilization_percent": 0.0,
+      "actual_output_rate": 0.0,
+      "evidence_summary": "1 machine(s) in breakdown: M-LOOM-01; WIP queue of 826.2 units awaiting processing; Operating at 0.0% of nominal capacity"
+    },
+    {
+      "rank": 2,
+      "stage_name": "Dyeing Finishing",
+      "process_type": "dyeing_finishing",
+      "severity": "low",
+      "queue_units": 0.0,
+      "capacity_utilization_percent": 100.0,
+      "actual_output_rate": 67.5,
+      "evidence_summary": "Normal throughput balance"
+    }
+  ],
+  "orders_at_risk": [
+    {
+      "order_id": "PO-NORM-101",
+      "customer_name": "Nordic Apparel Group",
+      "deadline": "2026-10-11T08:00:00Z",
+      "estimated_completion": "2026-10-11T08:08:41Z",
+      "estimated_lateness_hours": 0.1,
+      "risk_category": "critical",
+      "contributing_factors": [
+        "Assigned production machine is currently in BREAKDOWN state (0 output/hr)",
+        "Remaining quantity: 826.2 meters; Projected hours to finish: 23.4h; Available buffer before deadline: 23.2h"
+      ],
+      "assumptions": [
+        "Assuming nominal operational efficiency across remaining stages",
+        "Assuming no further unpredicted mechanical breakdowns",
+        "Included estimated repair/reassignment duration of 6.0 hours"
+      ]
+    }
+  ],
+  "active_recovery_plan_id": "RP-0001"
+}

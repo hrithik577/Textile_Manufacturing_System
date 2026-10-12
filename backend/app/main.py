@@ -1,22 +1,30 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.exceptions import TextileAppException
 from app.db.base import Base
-from app.db.session import engine
+from app.db.session import engine, get_db
 from app.api.v1.router import api_router
 # Import all models to ensure metadata registration
 import app.models # noqa
 
 
+import logging
+
+logger = logging.getLogger("everest_os")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize database tables if not created
-    Base.metadata.create_all(bind=engine)
+    # Schema lifecycle is strictly managed via Alembic migrations.
+    # Run `alembic upgrade head` to apply database migrations.
+    logger.info("Everest Textile OS backend initialized. Database schema governed by Alembic.")
     yield
 
 
@@ -98,7 +106,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 @app.get("/health", tags=["Health"])
 @app.get(f"{settings.API_V1_STR}/health", tags=["Health"])
 def health_check():
-    """Health check endpoint to verify backend operational readiness."""
+    """Liveness probe to verify backend application process health."""
     return {
         "status": "healthy",
         "service": settings.PROJECT_NAME,
@@ -107,5 +115,29 @@ def health_check():
     }
 
 
+@app.get("/ready", tags=["Health"])
+@app.get(f"{settings.API_V1_STR}/ready", tags=["Health"])
+def readiness_check(db: Session = Depends(get_db)):
+    """Readiness probe checking database connectivity and system operational state."""
+    try:
+        db.execute(text("SELECT 1"))
+        return {
+            "status": "ready",
+            "database": "connected",
+            "service": settings.PROJECT_NAME,
+            "version": "1.0.0",
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={
+                "status": "unhealthy",
+                "database": "disconnected",
+                "error": str(e),
+            },
+        )
+
+
 # Include v1 API Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
+

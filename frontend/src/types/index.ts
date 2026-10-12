@@ -37,7 +37,7 @@ export interface MachineLog {
 
 export type OrderStatus = 'draft' | 'in_production' | 'at_risk' | 'quality_hold' | 'ready_to_dispatch' | 'partially_dispatched' | 'completed' | 'cancelled';
 export type ProductionStage = 'yarn_spinning' | 'fabric_weaving' | 'dyeing_finishing' | 'quality_inspection' | 'packing_storage' | 'dispatched';
-export type PriorityLevel = 'standard' | 'high' | 'urgent';
+export type PriorityLevel = 'standard' | 'high' | 'urgent' | 'normal' | 'medium' | 'critical';
 
 export interface CustomerOrder {
   id: string;
@@ -63,6 +63,8 @@ export interface CustomerOrder {
   estimatedCompletionDate: string;
   priority: PriorityLevel;
   totalValueUsd: number;
+  totalAmountInr?: number;
+  unitPriceInr?: number;
   costBreakdown: {
     rawMaterialCostUsd: number;
     weavingCostUsd: number;
@@ -119,9 +121,67 @@ export interface StockMovement {
   notes?: string;
 }
 
+export interface InwardGateEntry {
+  id: string;
+  gatePassNumber: string;
+  vehicleNumber: string;
+  driverName: string;
+  driverPhone?: string;
+  supplierName: string;
+  challanInvoiceNumber: string;
+  yarnSku: string;
+  yarnName: string;
+  yarnType: string;
+  yarnColor: string;
+  yarnColorHex?: string;
+  lotNumber: string;
+  bagCount: number;
+  coneCount?: number;
+  grossWeightKg: number;
+  tareWeightKg: number;
+  netWeightKg: number;
+  moisturePercent: number;
+  earmarkedOrderId?: string;
+  earmarkedOrderNumber?: string;
+  earmarkedCustomer?: string;
+  allocatedStorageLocation: string;
+  entryTimestamp: string;
+  receivedBy: string;
+  inspectionStatus: 'passed' | 'quarantine' | 'rejected';
+  notes?: string;
+}
+
+export interface YarnFeasibilityResult {
+  orderId?: string;
+  orderNumber?: string;
+  customerName?: string;
+  fabricType: string;
+  lengthMeters: number;
+  widthInches: number;
+  gsm: number;
+  yarnSpecs: string;
+  calculatedYarnNeededKg: number;
+  warpYarnKg: number;
+  weftYarnKg: number;
+  wastageFactorPercent: number;
+  matchingInventoryItemId: string;
+  matchingYarnSku: string;
+  matchingYarnName: string;
+  totalStockKg: number;
+  reservedStockKg: number;
+  availableStockKg: number;
+  deficitKg: number;
+  feasibilityStatus: 'ready' | 'partial' | 'deficit';
+  readyToStartPercent: number;
+  dailyBurnRateKg: number;
+  runwayDays: number;
+  recommendedSupplier: string;
+  estimatedLeadTimeDays: number;
+}
+
 export type QualityDecision = 'pass' | 'rework' | 'hold' | 'reject';
 export type DefectCategory = 'none' | 'weft_bar' | 'warp_streak' | 'color_shade_variance' | 'hole_snag' | 'oil_stain' | 'gsm_variance' | 'bowing_skewing' | 'selvedge_defect';
-export type QualityGrade = 'Grade A (Export)' | 'Grade B' | 'Commercial' | 'Reject';
+export type QualityGrade = 'Grade A (Export)' | 'Grade B' | 'Grade B (Quality Hold)' | 'Commercial' | 'Reject';
 
 export interface QualityInspection {
   id: string;
@@ -260,6 +320,7 @@ export interface OperationalAlert {
   timestamp: string;
   actionUrl: string;
   actionLabel: string;
+  severity?: string;
 }
 
 export interface ShiftWorker {
@@ -272,9 +333,23 @@ export interface ShiftWorker {
   skillLevel: 'Master Technician' | 'Senior Operator' | 'Junior Operator' | 'Trainee';
   attendanceStatus: 'present' | 'absent' | 'on_break';
   efficiencyScore: number;
+  status?: string;
+  efficiencyRate?: number;
 }
 
-export type UserRole = 'plant_manager' | 'production_supervisor' | 'quality_inspector' | 'inventory_lead' | 'buyer';
+export type UserRole =
+  | 'owner'
+  | 'manager'
+  | 'plant_manager'
+  | 'production'
+  | 'production_supervisor'
+  | 'quality'
+  | 'quality_inspector'
+  | 'inventory'
+  | 'inventory_lead'
+  | 'dispatch'
+  | 'finance'
+  | 'buyer';
 
 export interface UserProfile {
   id: string;

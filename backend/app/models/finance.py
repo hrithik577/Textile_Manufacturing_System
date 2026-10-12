@@ -1,7 +1,7 @@
 import enum
 from datetime import date, datetime, timezone
 from typing import List, Optional
-from sqlalchemy import String, Integer, Float, Date, DateTime, ForeignKey, Enum, Text
+from sqlalchemy import String, Integer, Float, Numeric, Date, DateTime, ForeignKey, Enum, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, TimestampMixin
 
@@ -39,8 +39,8 @@ class CostEntry(Base, TimestampMixin):
         nullable=False,
         index=True
     )
-    amount: Mapped[float] = mapped_column(Float, nullable=False)
-    currency: Mapped[str] = mapped_column(String(10), default="USD", nullable=False)
+    amount: Mapped[float] = mapped_column(Numeric(14, 2), nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     
     sales_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("sales_orders.id", ondelete="SET NULL"), nullable=True, index=True)
     production_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("production_orders.id", ondelete="SET NULL"), nullable=True, index=True)
@@ -61,9 +61,9 @@ class Invoice(Base, TimestampMixin):
     customer_id: Mapped[int] = mapped_column(Integer, ForeignKey("customers.id", ondelete="RESTRICT"), nullable=False, index=True)
     sales_order_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("sales_orders.id", ondelete="SET NULL"), nullable=True, index=True)
     
-    total_amount: Mapped[float] = mapped_column(Float, nullable=False)
-    paid_amount: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
-    currency: Mapped[str] = mapped_column(String(10), default="USD", nullable=False)
+    total_amount: Mapped[float] = mapped_column(Numeric(14, 2), nullable=False)
+    paid_amount: Mapped[float] = mapped_column(Numeric(14, 2), default=0.0, nullable=False)
+    currency: Mapped[str] = mapped_column(String(10), default="INR", nullable=False)
     
     status: Mapped[InvoiceStatus] = mapped_column(
         Enum(InvoiceStatus, name="invoice_status"),
@@ -88,7 +88,7 @@ class Payment(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     invoice_id: Mapped[int] = mapped_column(Integer, ForeignKey("invoices.id", ondelete="CASCADE"), nullable=False, index=True)
     
-    amount: Mapped[float] = mapped_column(Float, nullable=False)
+    amount: Mapped[float] = mapped_column(Numeric(14, 2), nullable=False)
     payment_date: Mapped[date] = mapped_column(Date, default=date.today, nullable=False)
     payment_method: Mapped[PaymentMethod] = mapped_column(
         Enum(PaymentMethod, name="payment_method"),

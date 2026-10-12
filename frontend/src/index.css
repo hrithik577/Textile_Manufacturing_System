@@ -1,14 +1,30 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Oswald', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-paper: #F4F2ED;
+  --color-pure-white: #FFFFFF;
+  --color-ink: #111111;
+  --color-vermilion: #F04424;
+  --color-industrial-grey: #858585;
+  --color-light-border: #D9D6D0;
+  --color-success-green: #287A55;
+}
+
 @layer base {
   :root {
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Oswald', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
   body {
     font-family: var(--font-sans);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
   }
 
   h1, h2, h3, h4, .font-display {
@@ -20,6 +36,28 @@
   }
 }
 
+@layer utilities {
+  .editorial-label {
+    @apply font-sans text-xs uppercase tracking-widest font-semibold text-industrial-grey;
+  }
+  
+  .editorial-border {
+    @apply border-ink border-solid border;
+  }
+
+  .editorial-border-b {
+    @apply border-b border-solid border-ink;
+  }
+
+  .editorial-border-light {
+    @apply border border-solid border-light-border;
+  }
+
+  .editorial-border-light-b {
+    @apply border-b border-solid border-light-border;
+  }
+}
+
 /* Custom industrial scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -27,19 +65,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4);
+  background: var(--color-paper);
+  border-left: 1px solid var(--color-light-border);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
-  border-radius: 9999px;
+  background: var(--color-ink);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: var(--color-vermilion);
 }
 
-/* Pulse animation for simulated/live indicators */
 @keyframes pulse-subtle {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -47,18 +84,4 @@
 
 .animate-pulse-subtle {
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Glass & Card enhancements */
-.card-industrial {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-}
-
-.dark .card-industrial,
-.card-industrial-dark {
-  background: #1e293b;
-  border: 1px solid #334155;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
 }

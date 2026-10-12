@@ -32,7 +32,7 @@
 
 ### Endpoints
 * `POST /api/v1/auth/login`
-  - **Request:** `{"email": "manager@everest.com", "password": "Everest@2026!"}`
+  - **Request:** `{"email": "manager@everest.com", "password": "<account_password>"}`
   - **Response (200):**
     ```json
     {
@@ -91,7 +91,7 @@
       "customer_id": 1,
       "required_delivery_date": "2026-11-15",
       "priority": "high",
-      "currency": "USD",
+      "currency": "INR",
       "items": [
         {
           "fabric_type": "100% Organic Cotton Twill 210 GSM",
@@ -101,6 +101,35 @@
           "target_quantity": 5000.0,
           "unit": "m",
           "unit_price": 3.70
+        }
+      ]
+    }
+    ```
+* `POST /api/v1/orders/place`
+  - **Description:** Buyer / Client Portal direct order placement. Automatically associates/creates client account, calculates totals, and creates sales order with line items in `INR`.
+  - **Request Body:**
+    ```json
+    {
+      "customer_company": "Patagonia Sourcing Ltd",
+      "customer_name": "Sarah Jenkins",
+      "customer_email": "sarah.j@patagonia-demo.com",
+      "customer_phone": "+1-415-555-0199",
+      "customer_po": "PO-PAT-2026-99",
+      "delivery_destination": "Port of Los Angeles, USA",
+      "required_delivery_date": "2026-11-20",
+      "priority": "urgent",
+      "currency": "INR",
+      "notes": "Fast track export run with GOTS certification",
+      "items": [
+        {
+          "fabric_type": "100% Organic Cotton Twill 210 GSM",
+          "color_code": "Nordic Navy",
+          "gsm": 210,
+          "width_inches": 58.0,
+          "target_quantity": 4000.0,
+          "unit": "m",
+          "unit_price": 280.0,
+          "notes": "Weave: 2/1 Twill | Finish: Enzyme Softener"
         }
       ]
     }

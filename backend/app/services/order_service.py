@@ -1,9 +1,10 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import List, Optional, Tuple
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.core.exceptions import NotFoundException, ConflictException, UnauthorizedAccessException
 from app.models.user import User, UserRole
+from app.models.customer import Customer
 from app.models.order import SalesOrder, SalesOrderItem, OrderStatus, OrderPriority
 from app.models.production import ProductionOrder, ProductionStatus, MachineEvent, ProductionEvent
 from app.models.quality import FabricRoll, QualityInspection, RollStatus
@@ -11,6 +12,7 @@ from app.models.dispatch import Shipment, ShipmentItem, ShipmentStatus
 from app.models.finance import CostEntry, Invoice, Payment, CostCategory
 from app.schemas.order import (
     SalesOrderCreate,
+    PortalOrderPlacementCreate,
     SalesOrderUpdate,
     OrderTimelineResponse,
     OrderTimelineEvent,
@@ -118,6 +120,93 @@ def create_order(db: Session, order_in: SalesOrderCreate, current_user: User) ->
         entity_type="sales_order",
         entity_id=str(sales_order.id),
         changes_summary={"order_number": sales_order.order_number, "total_amount": total_amount},
+    )
+    
+    db.commit()
+    db.refresh(sales_order)
+    return sales_order
+
+
+def place_portal_order(db: Session, portal_in: PortalOrderPlacementCreate) -> SalesOrder:
+    # 1. Find or create Customer
+    customer = db.query(Customer).filter(
+        (Customer.email == portal_in.customer_email) | (Customer.name == portal_in.customer_company)
+    ).first()
+    
+    if not customer:
+        clean_code = "CUST-" + "".join(c for c in portal_in.customer_company.upper() if c.isalnum())[:6]
+        count = db.query(Customer).filter(Customer.code.like(f"{clean_code}%")).count()
+        if count > 0:
+            clean_code = f"{clean_code}{count + 1}"
+            
+        customer = Customer(
+            code=clean_code,
+            name=portal_in.customer_company,
+            contact_person=portal_in.customer_name,
+            email=portal_in.customer_email,
+            phone=portal_in.customer_phone,
+            address=portal_in.delivery_destination or "Standard Delivery Hub",
+            payment_terms_days=30,
+            is_active=True,
+        )
+        db.add(customer)
+        db.flush()
+        
+    # 2. Generate unique order number SO-2026-XXX
+    existing_count = db.query(SalesOrder).count()
+    order_num = f"SO-2026-{existing_count + 1:03d}"
+    while db.query(SalesOrder).filter(SalesOrder.order_number == order_num).first():
+        existing_count += 1
+        order_num = f"SO-2026-{existing_count + 1:03d}"
+        
+    # 3. Process line items
+    total_amount = 0.0
+    items_to_add = []
+    for item in portal_in.items:
+        line_total = round(item.target_quantity * item.unit_price, 2)
+        total_amount += line_total
+        items_to_add.append(
+            SalesOrderItem(
+                fabric_type=item.fabric_type,
+                color_code=item.color_code,
+                gsm=item.gsm,
+                width_inches=item.width_inches,
+                target_quantity=item.target_quantity,
+                unit=item.unit,
+                unit_price=item.unit_price,
+                total_price=line_total,
+                notes=item.notes,
+            )
+        )
+        
+    sales_order = SalesOrder(
+        order_number=order_num,
+        customer_id=customer.id,
+        order_date=date.today(),
+        required_delivery_date=portal_in.required_delivery_date,
+        status=OrderStatus.CONFIRMED,
+        priority=portal_in.priority,
+        currency=portal_in.currency,
+        total_amount=round(total_amount, 2),
+        notes=f"Placed via Buyer Portal | PO: {portal_in.customer_po or 'N/A'} | Destination: {portal_in.delivery_destination or 'Default'} | {portal_in.notes or ''}",
+        items=items_to_add,
+    )
+    db.add(sales_order)
+    db.flush()
+    
+    first_user = db.query(User).first()
+    log_audit_event(
+        db=db,
+        actor_id=first_user.id if first_user else 1,
+        action="portal_order_placed",
+        entity_type="sales_order",
+        entity_id=str(sales_order.id),
+        changes_summary={
+            "order_number": sales_order.order_number,
+            "buyer_company": portal_in.customer_company,
+            "total_amount": total_amount,
+            "currency": portal_in.currency,
+        },
     )
     
     db.commit()

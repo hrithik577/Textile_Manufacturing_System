@@ -4,11 +4,21 @@ import { mockFinishedRolls, mockDispatches } from './mock-data';
 
 export const dispatchService = {
   async getFinishedGoods(): Promise<{ data: FinishedGoodsRoll[]; isSimulated: boolean }> {
-    return request<FinishedGoodsRoll[]>('/dispatch/finished-goods', { method: 'GET' }, mockFinishedRolls);
+    // Backend now serves /dispatch/finished-goods in the FinishedGoodsRoll shape
+    return request<FinishedGoodsRoll[]>(
+      '/dispatch/finished-goods',
+      { method: 'GET', allowReadFallback: true },
+      mockFinishedRolls
+    );
   },
 
   async getDispatches(): Promise<{ data: DispatchRecord[]; isSimulated: boolean }> {
-    return request<DispatchRecord[]>('/dispatch/records', { method: 'GET' }, mockDispatches);
+    // Backend now serves /dispatch/records in the DispatchRecord shape
+    return request<DispatchRecord[]>(
+      '/dispatch/records',
+      { method: 'GET', allowReadFallback: true },
+      mockDispatches
+    );
   },
 
   async createDispatch(dispatch: Partial<DispatchRecord>): Promise<{ data: DispatchRecord; isSimulated: boolean }> {

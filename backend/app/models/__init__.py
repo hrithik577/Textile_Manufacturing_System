@@ -17,6 +17,7 @@ from app.models.production import (
 from app.models.workforce import Shift, Worker, AttendanceRecord
 from app.models.quality import FabricRoll, QualityInspection, RollStatus, InspectionResult, RollGrade
 from app.models.dispatch import Shipment, ShipmentItem, ShipmentStatus
+from app.models.audit import AuditLog
 from app.models.finance import CostEntry, Invoice, Payment, CostCategory, InvoiceStatus, PaymentMethod
 from app.models.alert import (
     Alert,
@@ -27,7 +28,23 @@ from app.models.alert import (
     ApprovalStatus,
     ExecutionStatus,
 )
-from app.models.audit import AuditLog
+from app.models.yarniq import (
+    YarnSpecification,
+    YarnPurchaseOrder,
+    YarnPurchaseOrderLine,
+    YarnGoodsReceipt,
+    YarnGoodsReceiptLine,
+    YarnLot,
+    YarnReservation,
+    YarnStockLedgerEntry,
+    YarnRecommendation,
+    YarnAuditEvent,
+    QualityStatus,
+    POStatus,
+    ReadinessStatus,
+    StockTransactionType,
+    RecommendationStatus,
+)
 
 __all__ = [
     "Base",
@@ -78,4 +95,19 @@ __all__ = [
     "ApprovalStatus",
     "ExecutionStatus",
     "AuditLog",
+    "YarnSpecification",
+    "YarnPurchaseOrder",
+    "YarnPurchaseOrderLine",
+    "YarnGoodsReceipt",
+    "YarnGoodsReceiptLine",
+    "YarnLot",
+    "YarnReservation",
+    "YarnStockLedgerEntry",
+    "YarnRecommendation",
+    "YarnAuditEvent",
+    "QualityStatus",
+    "POStatus",
+    "ReadinessStatus",
+    "StockTransactionType",
+    "RecommendationStatus",
 ]

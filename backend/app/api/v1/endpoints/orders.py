@@ -8,6 +8,7 @@ from app.models.order import OrderStatus, OrderPriority
 from app.schemas.order import (
     SalesOrderRead,
     SalesOrderCreate,
+    PortalOrderPlacementCreate,
     SalesOrderUpdate,
     SalesOrderListResponse,
     OrderTimelineResponse,
@@ -17,12 +18,23 @@ from app.services.order_service import (
     get_orders,
     get_order_by_id,
     create_order,
+    place_portal_order,
     update_order_status,
     get_order_timeline,
     get_order_cost_summary,
 )
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
+
+
+@router.post("/place", response_model=SalesOrderRead, status_code=status.HTTP_201_CREATED, summary="Place order via Buyer / Client Portal")
+def place_order_from_portal(
+    portal_in: PortalOrderPlacementCreate,
+    db: Session = Depends(get_db),
+):
+    """Client/Buyer portal order placement endpoint. Automatically finds/creates client account, calculates totals, and creates sales order."""
+    order = place_portal_order(db=db, portal_in=portal_in)
+    return SalesOrderRead.model_validate(order)
 
 
 @router.get("", response_model=SalesOrderListResponse, summary="List sales orders")

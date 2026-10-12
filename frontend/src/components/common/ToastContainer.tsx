@@ -1,10 +1,12 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { CheckCircle2, AlertTriangle, AlertCircle, Info, X } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, AlertCircle, Info, X, ExternalLink } from 'lucide-react';
 import { clsx } from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 export const ToastContainer: React.FC = () => {
   const { toasts, removeToast } = useApp();
+  const navigate = useNavigate();
 
   if (toasts.length === 0) return null;
 
@@ -29,7 +31,7 @@ export const ToastContainer: React.FC = () => {
           <div
             key={toast.id}
             className={clsx(
-              'pointer-events-auto flex items-start gap-3 rounded-xl border p-4 shadow-xl text-slate-100 transition-all duration-300 animate-in slide-in-from-bottom-5',
+              'pointer-events-auto flex items-start gap-3 rounded-xl border p-4 shadow-2xl text-slate-100 transition-all duration-300 animate-in slide-in-from-bottom-5',
               bgColors[toast.type]
             )}
           >
@@ -39,10 +41,23 @@ export const ToastContainer: React.FC = () => {
               {toast.message && (
                 <p className="mt-0.5 text-xs text-slate-300 leading-relaxed break-words">{toast.message}</p>
               )}
+              {toast.actionUrl && (
+                <button
+                  onClick={() => {
+                    removeToast(toast.id);
+                    navigate(toast.actionUrl!);
+                  }}
+                  className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-teal-400 hover:text-teal-300 underline underline-offset-2"
+                >
+                  <span>{toast.actionLabel || 'View Details'}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              )}
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-slate-400 hover:text-white p-1 rounded transition-colors"
+              className="text-slate-400 hover:text-white p-1 rounded transition-colors shrink-0"
+              aria-label="Dismiss toast"
             >
               <X className="w-4 h-4" />
             </button>

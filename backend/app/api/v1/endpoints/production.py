@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from app.schemas.production import (
     ProductionOrderCreate,
     ProductionEventCreate,
     ProductionEventRead,
+    PlantOEEResponse,
 )
 from app.services.production_service import (
     get_production_orders,
@@ -17,6 +19,7 @@ from app.services.production_service import (
     create_production_order,
     record_production_event,
 )
+from app.services.oee_service import calculate_plant_oee
 
 router = APIRouter(prefix="/production", tags=["Production"])
 
@@ -77,3 +80,20 @@ def add_production_event(
 ):
     event, _ = record_production_event(db, event_in, current_user)
     return ProductionEventRead.model_validate(event)
+
+
+@router.get("/oee", response_model=PlantOEEResponse, summary="Get standard industrial OEE calculation and machine breakdown")
+def get_plant_oee(
+    start_time: Optional[datetime] = Query(None, description="Window start timestamp (ISO 8601)"),
+    end_time: Optional[datetime] = Query(None, description="Window end timestamp (ISO 8601)"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """
+    Standard Defensible OEE calculation: Availability × Performance × Quality.
+    - Availability: Run Time / Planned Time (merges overlapping downtime events).
+    - Performance: Actual Output / (rated_speed_mpm × Run Time).
+    - Quality: First-Pass Good Output / Total Inspected Output (reworks excluded).
+    """
+    return calculate_plant_oee(db, start_dt=start_time, end_dt=end_time)
+

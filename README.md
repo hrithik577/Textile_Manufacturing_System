@@ -2,15 +2,20 @@
 
 Everest Textile OS replaces fragmented spreadsheets, paper production slips, and disconnected phone calls with a centralized, real-time textile manufacturing control tower and automated operations triage system.
 
+This repository is maintained by a 3-member engineering team:
+* **Member 1 (Frontend & Dashboard Lead)**: React Frontend, Dashboards, Rescue Engine UI, Charts, and Operational Tables.
+* **Member 2 (Backend & Database Lead)**: FastAPI Backend, PostgreSQL Database, REST APIs, and Authentication.
+* **Member 3 (Simulator & Rescue Lead)**: Virtual Factory Simulator, Operational Event Generation, Anomaly & Bottleneck Detection, Deadline Risk Forecasting, and the Everest Rescue Engine.
+
 ---
 
 ## 🏛️ Team Architecture & Responsibilities
 
 | Team Member | Exclusive Domain & Ownership | Tech Stack |
 | :--- | :--- | :--- |
-| **Member 1 (Frontend & Dashboard Lead)** | Enterprise Dashboard, Machine Telemetry Grid, Rescue Engine UX, Quality & Dispatch Consoles, Component Design System, Client API Services | React 19, TypeScript, Vite, Tailwind CSS v4, React Router, Recharts, Lucide Icons |
-| **Member 2 (Backend & Database Lead)** | REST APIs, Authentication, PostgreSQL Database, Order Management, Material Inventory, Quality Audits, Shipment Dispatch, Costings | FastAPI, PostgreSQL, SQLAlchemy, Pydantic, Alembic |
-| **Member 3 (Simulator & Rescue Lead)** | Virtual Factory Simulator, Machine Event Telemetry Generation, Bottleneck Detection, Autonomous Heuristic Triage, Recovery Plan Optimizers | Python Simulator, Event Stream, Heuristic Engine |
+| **Member 1** | Enterprise Dashboard, Machine Telemetry Grid, Rescue Engine UX, Quality & Dispatch Consoles, Component Design System, Client API Services | React 19, TypeScript, Vite, Tailwind CSS v4, React Router, Recharts, Lucide Icons |
+| **Member 2** | REST APIs, Authentication, PostgreSQL Database, Order Management, Material Inventory, Quality Audits, Shipment Dispatch, Costings | FastAPI, PostgreSQL, SQLAlchemy, Pydantic, Alembic |
+| **Member 3** | Virtual Factory Simulator, Machine Event Telemetry Generation, Bottleneck Detection, Autonomous Heuristic Triage, Recovery Plan Optimizers | Python Simulator, Event Stream, Heuristic Engine |
 
 ---
 
@@ -48,11 +53,7 @@ The frontend connects to Member 2's FastAPI service via `src/services/api-client
 
 ## 💻 Quickstart & Local Development
 
-### Prerequisites
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-
-### Running the Frontend
+### Running the Frontend (Member 1)
 ```bash
 # 1. Navigate to frontend
 cd frontend
@@ -66,8 +67,18 @@ npm run dev
 
 The application will be available at `http://localhost:3000` (or `http://localhost:5173`).
 
-### Building for Production
+### Running the Simulator & Rescue Engine (Member 3)
 ```bash
-cd frontend
-npm run build
+# Run Automated Tests
+python3 -m pytest -v
+
+# Run Live End-to-End Demonstration
+python3 demo_rescue_flow.py
+
+# Start Local API Server (Simulator Endpoints)
+uvicorn server:app --reload --host 0.0.0.0 --port 8000
 ```
+
+### Documentation & Payloads (Member 3)
+- Architecture & REST API Contracts: `docs/intelligence-design.md`
+- Member 1 Frontend Fixtures: `fixtures/`
